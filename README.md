@@ -61,13 +61,13 @@ biocred-registry/
 
 ## Five Axes (Phase 2 — Locked)
 
-| ID | Axis | Sublabels |
-|----|------|-----------|
-| KG | Knowledge Generation | Research, Publications, Methods |
-| OC | Organizational / Coordination | Project Leadership, Integration |
-| BR | Biological Resolution | Species, Ecology, Field Decisions |
-| ABP | Applied Biological Practice | Habitat Work, Monitoring, Restoration |
-| GOV | Governance | Advisory, Strategy, Regulation Design |
+| ID  | Axis                                 | Sublabels                                  |
+|-----|--------------------------------------|--------------------------------------------|
+| KR  | Knowledge & Research                 | Research · Methods · Synthesis             |
+| LOC | Leadership & Operational Coordination| Leadership · Coordination · Integration    |
+| SHS | Species & Habitat Specialization     | Species · Habitat · Ecology                |
+| FAP | Field & Applied Practice             | Field Work · Lab Work · Implementation     |
+| RP  | Regulation & Policy                  | Regulation · Compliance · Policy           |
 
 ## Pipeline: CV → BioCred Profile
 
