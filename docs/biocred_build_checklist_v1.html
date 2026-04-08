@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioCred — Build Checklist & Project Status</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--g9:#0E2F22;--g7:#1F6A46;--g5:#2d8a58;--g3:#7fcf8d;--g1:#d9f6df;--g0:#f0f9f2;--t:#1a2e1a;--ts:#4a6a4a;--tm:#7a9a7a;--bd:#c8ddc8;--bg:#f4f6f4;--card:#fff}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;padding:48px 24px;line-height:1.6}
+.page{max-width:800px;margin:0 auto;display:flex;flex-direction:column;gap:32px}
+.doc-header{background:var(--g9);border-radius:16px;padding:40px 48px;color:var(--g1);display:flex;flex-direction:column;gap:10px}
+.doc-header .brand{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;opacity:.6}
+.doc-header h1{font-size:28px;font-weight:700;letter-spacing:-.5px;color:#fff}
+.doc-header p{font-size:14px;opacity:.7;max-width:520px}
+.doc-meta{display:flex;gap:24px;margin-top:8px}
+.doc-meta span{font-size:12px;opacity:.5}
+.doc-meta strong{opacity:.8;font-weight:600}
+.summary-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.sc{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:6px}
+.sc .num{font-size:32px;font-weight:700;color:var(--g7);line-height:1}
+.sc .lbl{font-size:12px;color:var(--ts);line-height:1.4}
+.badge{display:inline-flex;align-items:center;background:var(--g1);color:var(--g7);font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;margin-top:4px;width:fit-content}
+.section{display:flex;flex-direction:column}
+.sh{display:flex;align-items:center;gap:12px;padding:16px 20px;border-radius:12px 12px 0 0;border:1px solid var(--bd);border-bottom:none}
+.sh.done{background:var(--g0)}
+.sh.pa{background:#f0f4ff;border-color:#c5d0f5}
+.sh.pb{background:#fff8f0;border-color:#f0dcc5}
+.si{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.si.done{background:var(--g1)}.si.pa{background:#dde5ff}.si.pb{background:#ffe8cc}
+.st h2{font-size:15px;font-weight:700;color:var(--t)}
+.st p{font-size:12px;color:var(--ts);margin-top:1px}
+.pt{margin-left:auto;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.pt.done{background:var(--g1);color:var(--g7)}
+.pt.pa{background:#dde5ff;color:#3a52c4}
+.pt.pb{background:#ffe8cc;color:#b06a10}
+.item-list{border:1px solid var(--bd);border-radius:0 0 12px 12px;overflow:hidden;background:var(--card)}
+.item{display:flex;align-items:flex-start;gap:14px;padding:14px 20px;border-bottom:1px solid #f0f4f0}
+.item.pa{border-bottom-color:#eef1ff}.item.pb{border-bottom-color:#fff3e8}
+.item:last-child{border-bottom:none}
+.ic{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;font-size:11px}
+.ic.done{background:var(--g5);color:#fff}
+.ic.pend{background:#e8edf8;color:#8a9ac8;border:1.5px solid #c5d0f5}
+.ic.fut{background:#fce9d4;color:#c07830;border:1.5px solid #f0dcc5}
+.it{font-size:13px;font-weight:600;color:var(--t)}
+.id{font-size:12px;color:var(--ts);margin-top:2px;line-height:1.5}
+.note{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--g5);border-radius:8px;padding:16px 20px;font-size:13px;color:var(--ts);line-height:1.6}
+.note strong{color:var(--t)}
+.footer{text-align:center;font-size:11px;color:var(--tm);padding-bottom:16px}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="doc-header">
+    <div class="brand">BioCred Registry</div>
+    <h1>Build Checklist &amp; Project Status</h1>
+    <p>Current state of the system, priorities for a fast traditional-first launch, and the optional heatmap layer.</p>
+    <div class="doc-meta">
+      <span><strong>Prepared by</strong> Ainoa Figueroa Vidal</span>
+      <span><strong>For</strong> Alexander Funk</span>
+      <span><strong>Date</strong> March 2026</span>
+      <span><strong>Version</strong> v1.0</span>
+    </div>
+  </div>
+
+  <div class="summary-row">
+    <div class="sc"><div class="num">440</div><div class="lbl">Automated tests passing — 0 failures</div><div class="badge">✓ All passing</div></div>
+    <div class="sc"><div class="num">1</div><div class="lbl">Supabase database — both flows, one project</div><div class="badge">✓ Designed & ready</div></div>
+    <div class="sc"><div class="num">5</div><div class="lbl">Major components already built</div><div class="badge">✓ No rework needed</div></div>
+  </div>
+
+  <div class="section">
+    <div class="sh done"><div class="si done">✅</div><div class="st"><h2>Already Built — No Rework Needed</h2><p>Core system components that are complete, tested, and ready to wire into production.</p></div><div class="pt done">Complete</div></div>
+    <div class="item-list">
+      <div class="item"><div class="ic done">✓</div><div><div class="it">Database schema + security rules</div><div class="id">1 Supabase project — tables for profiles, credentials, evidence, audit log. Roles: biologist / reviewer / admin. RLS policies fully designed.</div></div></div>
+      <div class="item"><div class="ic done">✓</div><div><div class="it">CV translation pipeline</div><div class="id">Accepts PDF, DOCX, and TXT. Extracts engagements, credentials, and context. Maps to 5 domains with deterministic, testable output.</div></div></div>
+      <div class="item"><div class="ic done">✓</div><div><div class="it">Translation Engine v1.0 (Alexander's TE Spec)</div><div class="id">Base vectors, activity modifiers, role modifiers, intensity formula fully implemented. 105 acceptance tests passing.</div></div></div>
+      <div class="item"><div class="ic done">✓</div><div><div class="it">Profile Insights generator</div><div class="id">Generates 4–6 neutral descriptive bullets per profile. No scoring, no ranking language. 19 tests passing.</div></div></div>
+      <div class="item"><div class="ic done">✓</div><div><div class="it">Heatmap renderer (pentagon chart)</div><div class="id">Vanilla JS — embeddable in Webflow. Density map, labels, grid rings, evidence points, click interaction. Ready as optional layer.</div></div></div>
+      <div class="item"><div class="ic done">✓</div><div><div class="it">Profile page layout</div><div class="id">Header, identity block, chart card, profile summary, core metrics, insights, mini-map, disclaimer — closely mirrors the draft pages.</div></div></div>
+      <div class="item"><div class="ic done">✓</div><div><div class="it">Storage bucket specs</div><div class="id">Private buckets for credential and evidence documents. Signed URL access for reviewers. No public direct browsing.</div></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sh pa"><div class="si pa">🔧</div><div class="st"><h2>Phase A — Traditional Flow First</h2><p>Fastest path to a public, working product. Agencies review documents the traditional way. No heatmap required.</p></div><div class="pt pa">Priority</div></div>
+    <div class="item-list">
+      <div class="item pa"><div class="ic pend">1</div><div><div class="it">Deploy Supabase project (live)</div><div class="id">Create the production project, run schema migrations, apply RLS policies, configure auth.</div></div></div>
+      <div class="item pa"><div class="ic pend">2</div><div><div class="it">Biologist upload flow</div><div class="id">Account creation → draft profile → upload credential and evidence documents → submit for review. Controlled, step-by-step onboarding.</div></div></div>
+      <div class="item pa"><div class="ic pend">3</div><div><div class="it">Reviewer / agency interface</div><div class="id">Reviewers access submitted documents, approve or reject with notes, full audit trail. No heatmap required to complete a review.</div></div></div>
+      <div class="item pa"><div class="ic pend">4</div><div><div class="it">Public profile page (live)</div><div class="id">Displays verified credentials + profile summary, closely matching your draft design. Clean, neutral, no scoring language.</div></div></div>
+      <div class="item pa"><div class="ic pend">5</div><div><div class="it">Webflow frontend wired to Supabase</div><div class="id">Public-facing pages connected to live data. Auth flow, profile routes, document access via signed URLs.</div></div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="sh pb"><div class="si pb">🗺️</div><div class="st"><h2>Phase B — Heatmap as Optional Layer</h2><p>Added after Phase A is live. Agencies can opt out. Biologists opt in. No paywalls, no premium tiers needed.</p></div><div class="pt pb">After Phase A</div></div>
+    <div class="item-list">
+      <div class="item pb"><div class="ic fut">6</div><div><div class="it">Connect translation engine to live data</div><div class="id">Run the pipeline on verified uploaded documents to generate the render payload. Server-side only — browser never computes the math.</div></div></div>
+      <div class="item pb"><div class="ic fut">7</div><div><div class="it">Heatmap view toggle on profile page</div><div class="id">Optional display layer — off by default, toggled on by choice. Agencies can stay in traditional review mode at any time.</div></div></div>
+      <div class="item pb"><div class="ic fut">8</div><div><div class="it">Final visual polish on pentagon chart</div><div class="id">Cosmetic refinements aligned with the established visual grammar. Confirmed readable and consistent.</div></div></div>
+      <div class="item pb"><div class="ic fut">9</div><div><div class="it">"What-if" query prototype (future feature)</div><div class="id">Exploratory — e.g. "what if I completed a PhD in X?" Simulated profile shift. Informational only, no scoring implied.</div></div></div>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>One database throughout.</strong> Both flows — traditional document review and optional heatmap — run inside the same single Supabase project with clear table separation and role-based access. No duplication, no extra cost. Everything that has been built carries forward into production without rework.
+  </div>
+
+  <div class="footer">BioCred Registry — Build Checklist v1.0 · Prepared by Ainoa Figueroa Vidal · March 2026</div>
+
+</div>
+</body>
+</html>

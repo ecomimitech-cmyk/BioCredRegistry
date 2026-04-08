@@ -1,0 +1,11 @@
+-- BioCred Registry — Seed Data Loader
+-- Run individual seed files in order:
+--   \i database/seed/01_field_specialist.sql
+--   \i database/seed/02_regulatory_specialist.sql
+--   \i database/seed/03_academic_lead.sql
+--   \i database/seed/04_species_specialist.sql
+--   \i database/seed/05_multi_vector_expert.sql
+--   \i database/seed/06_audit_log.sql
+--
+-- Or run all at once via shell:
+--   for f in database/seed/*.sql; do psql -f "$f"; done

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioCred — Profile Page v1</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg:        #f4f6f4;
+    --card:      #ffffff;
+    --border:    #d4ddd4;
+    --text:      #1a2e1a;
+    --text-sub:  #4a6a4a;
+    --text-mute: #7a9a7a;
+    --green-dk:  #123b2a;
+    --green-md:  #3f8f57;
+    --green-lt:  #d8ffe1;
+    --accent:    #2d6a3f;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 48px 0;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .identity-block { display: flex; flex-direction: column; gap: 3px; }
+  .identity-block .name {
+    font-size: 20px; font-weight: 700; color: var(--text);
+  }
+  .identity-block .role-line {
+    font-size: 13px; color: var(--text-sub);
+  }
+  .identity-block .role-line span { font-weight: 600; }
+
+  .title-block {
+    text-align: center;
+    background: #f0f7f2;
+    border: 1px solid #c8ddc8;
+    border-radius: 8px;
+    padding: 10px 20px;
+  }
+  .title-block .page-title {
+    font-size: 14px; font-weight: 700; color: var(--accent);
+    letter-spacing: 0.3px;
+  }
+  .title-block .page-subtitle {
+    font-size: 11px; color: var(--text-sub); margin-top: 2px;
+  }
+
+  .header-right {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+  }
+  .theme-toggle {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 5px 14px;
+    font-size: 12px; cursor: pointer; color: var(--text-sub);
+  }
+  .region-tag {
+    font-size: 11px; color: var(--text-mute);
+  }
+
+  /* ── MAIN ROW ── */
+  .main-row {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 24px auto 0;
+    padding: 0 24px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  /* chart card */
+  .chart-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .chart-wrap {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    max-width: 520px;
+    min-height: 480px;
+  }
+  #biocred-chart { width: 100%; height: 100%; display: block; }
+
+  /* right column */
+  .right-col { display: flex; flex-direction: column; gap: 16px; }
+
+  .legend-box { display: flex; flex-direction: column; gap: 6px; }
+  .legend-box .legend-title {
+    font-size: 11px; font-weight: 600; color: var(--text-sub);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .legend-bar {
+    height: 12px; border-radius: 3px;
+    background: linear-gradient(to right, #123b2a, #1f5a3a, #3f8f57, #7fcf8d, #d8ffe1);
+    border: 1px solid var(--border);
+  }
+  .legend-labels {
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--text-mute);
+  }
+
+  .summary-box {}
+  .box-title {
+    font-size: 11px; font-weight: 600; color: var(--text-sub);
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .summary-line {
+    font-size: 13px; color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .summary-line span { font-weight: 600; color: var(--accent); }
+
+  .metrics-box {}
+  .metric-row {
+    display: flex; justify-content: space-between;
+    font-size: 12px; color: var(--text);
+    padding: 5px 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .metric-row:last-child { border-bottom: none; }
+  .metric-label { color: var(--text-sub); }
+  .metric-value { font-weight: 600; color: var(--text); }
+
+  /* ── PROFILE TYPE BANNER ── */
+  .profile-type-banner {
+    max-width: 1200px;
+    margin: 20px auto 0;
+    padding: 0 24px;
+  }
+  .banner-inner {
+    background: var(--green-dk);
+    color: #d8ffe1;
+    border-radius: 8px;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .banner-label {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    opacity: 0.7;
+  }
+  .banner-value {
+    font-size: 15px; font-weight: 700;
+  }
+
+  /* ── INSIGHTS + MINIMAP ROW ── */
+  .insights-row {
+    display: grid;
+    grid-template-columns: 1fr 180px;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 20px auto 0;
+    padding: 0 24px;
+  }
+
+  .insights-box {}
+  .insights-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .insights-list li {
+    font-size: 13px; color: var(--text);
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .insights-list li::before {
+    content: "•";
+    position: absolute; left: 0;
+    color: var(--green-md);
+    font-weight: 700;
+  }
+
+  /* mini-map */
+  .minimap-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .minimap-wrap {
+    width: 120px; height: 120px;
+  }
+  #biocred-minimap { width: 100%; height: 100%; }
+  .minimap-caption {
+    font-size: 10px; color: var(--text-mute);
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* ── DISCLAIMER ── */
+  .disclaimer {
+    max-width: 1200px;
+    margin: 20px auto 0;
+    padding: 0 24px;
+    font-size: 11px;
+    color: var(--text-mute);
+    text-align: center;
+  }
+
+  /* ── VERIFIED BADGE ── */
+  .verified-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #e6f4ea; color: #2d6a3f;
+    font-size: 10px; font-weight: 600;
+    padding: 3px 8px; border-radius: 12px;
+    margin-top: 4px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="page-header">
+  <div class="identity-block">
+    <div class="name">Alexander Funk</div>
+    <div class="role-line">Current Role: <span>Environmental Scientist</span></div>
+    <div class="role-line">Current Employer: <span>California Department of Fish &amp; Wildlife</span></div>
+    <div class="verified-badge">✓ Documentation Verified</div>
+  </div>
+
+  <div class="title-block">
+    <div class="page-title">BioCred Engagement Profile</div>
+    <div class="page-subtitle">Distribution of Verified Engagement Across Five Domains</div>
+  </div>
+
+  <div class="header-right">
+    <button class="theme-toggle" onclick="toggleTheme()">☀ Light</button>
+    <div class="region-tag">California</div>
+  </div>
+</header>
+
+<!-- ══════════════ MAIN ROW ══════════════ -->
+<div class="main-row">
+
+  <!-- Chart card -->
+  <div class="card chart-card">
+    <div class="chart-wrap">
+      <div id="biocred-chart" style="width:100%;min-height:480px;"></div>
+    </div>
+  </div>
+
+  <!-- Right column -->
+  <div class="right-col">
+
+    <!-- Legend -->
+    <div class="card legend-box">
+      <div class="legend-title">Experience Density</div>
+      <div class="legend-bar"></div>
+      <div class="legend-labels">
+        <span>Low</span>
+        <span>High</span>
+      </div>
+    </div>
+
+    <!-- Profile Summary -->
+    <div class="card summary-box">
+      <div class="box-title">Profile Summary</div>
+      <div class="summary-line">Primary: <span id="summary-primary">Field &amp; Applied Practice</span></div>
+      <div class="summary-line">Secondary: <span id="summary-secondary">Species &amp; Habitat Specialization</span></div>
+      <div class="summary-line">Practice: <span id="summary-practice">Field-oriented ecological specialist</span></div>
+    </div>
+
+    <!-- Core Metrics -->
+    <div class="card metrics-box">
+      <div class="box-title">Core Metrics</div>
+      <div class="metric-row">
+        <span class="metric-label">Practice Span</span>
+        <span class="metric-value" id="metric-span">2010 – 2024</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Verified Experience Records</span>
+        <span class="metric-value" id="metric-evidence">63</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Verified Credential Records</span>
+        <span class="metric-value" id="metric-creds">12</span>
+      </div>
+      <div class="metric-row">
+        <span class="metric-label">Translation Engine</span>
+        <span class="metric-value" id="metric-te">TE_v1.0</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════ PROFILE TYPE BANNER ══════════════ -->
+<div class="profile-type-banner">
+  <div class="banner-inner">
+    <span class="banner-label">Profile Type</span>
+    <span class="banner-value" id="profile-type">Field-Oriented Species Specialist</span>
+  </div>
+</div>
+
+<!-- ══════════════ INSIGHTS + MINIMAP ══════════════ -->
+<div class="insights-row">
+
+  <div class="card insights-box">
+    <div class="box-title">Profile Insights</div>
+    <ul class="insights-list" id="insights-list">
+      <li>Primary participation concentration: Field &amp; Applied Practice</li>
+      <li>Secondary participation concentration: Species &amp; Habitat Specialization</li>
+      <li>Participation spread includes Knowledge &amp; Research with limited Regulation &amp; Policy and Leadership &amp; Operational Coordination</li>
+      <li>Recurrent species interaction across 4 documented modes including capture, handling, and monitoring</li>
+      <li>Project environments concentrated in terrestrial and hydrologic systems</li>
+      <li>Limited documented exposure in Leadership &amp; Operational Coordination</li>
+    </ul>
+  </div>
+
+  <div class="card minimap-box">
+    <div class="box-title" style="align-self:flex-start;width:100%">Concentration</div>
+    <div class="minimap-wrap">
+      <canvas id="biocred-minimap"></canvas>
+    </div>
+    <div class="minimap-caption">Center of experience concentration</div>
+  </div>
+
+</div>
+
+<!-- ══════════════ DISCLAIMER ══════════════ -->
+<div class="disclaimer">
+  Evidence distribution derived from verified documentation. Not scoring.
+</div>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script src="biocred-geometry.js"></script>
+<script src="biocred-renderer.js"></script>
+<script>
+// ── Demo payload (Alex archetype) ──
+var DEMO_PAYLOAD = {
+  profile_id: "BC-ALEX-001",
+  translation_engine_version: "TE_v1.0",
+  render_version: "BPP_v1.0",
+  theme_mode: "light",
+  profile_meta: {
+    display_name: "Alexander Funk",
+    professional_title: "Environmental Scientist",
+    organization: "California Department of Fish & Wildlife",
+    state: "California",
+    documented_practice_span: { start_year: 2010, end_year: 2024 },
+    verified_experience_records: 63,
+    verified_credential_records: 12
+  },
+  evidence_units: [
+    // FAP-heavy cluster (field surveys, 14 years of fieldwork)
+    { domain_weights: { KR: 0.05, SHS: 0.35, FAP: 0.60, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.2 },
+    { domain_weights: { KR: 0.05, SHS: 0.30, FAP: 0.65, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.1 },
+    { domain_weights: { KR: 0.05, SHS: 0.25, FAP: 0.70, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.0 },
+    { domain_weights: { KR: 0.00, SHS: 0.30, FAP: 0.70, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.9 },
+    { domain_weights: { KR: 0.05, SHS: 0.35, FAP: 0.60, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.0 },
+    { domain_weights: { KR: 0.10, SHS: 0.20, FAP: 0.70, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.1 },
+    { domain_weights: { KR: 0.00, SHS: 0.40, FAP: 0.55, RP: 0.05, LOC: 0.00 }, intensity_weight: 0.95 },
+    { domain_weights: { KR: 0.05, SHS: 0.25, FAP: 0.65, RP: 0.05, LOC: 0.00 }, intensity_weight: 1.05 },
+    { domain_weights: { KR: 0.00, SHS: 0.35, FAP: 0.65, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.85 },
+    { domain_weights: { KR: 0.10, SHS: 0.30, FAP: 0.60, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.15 },
+    { domain_weights: { KR: 0.00, SHS: 0.20, FAP: 0.75, RP: 0.00, LOC: 0.05 }, intensity_weight: 0.8 },
+    { domain_weights: { KR: 0.05, SHS: 0.45, FAP: 0.50, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.0 },
+    // SHS cluster (species handling, ecology, monitoring)
+    { domain_weights: { KR: 0.30, SHS: 0.70, FAP: 0.00, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.1 },
+    { domain_weights: { KR: 0.00, SHS: 0.70, FAP: 0.30, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.0 },
+    { domain_weights: { KR: 0.00, SHS: 0.65, FAP: 0.35, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.9 },
+    { domain_weights: { KR: 0.10, SHS: 0.75, FAP: 0.15, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.05 },
+    { domain_weights: { KR: 0.05, SHS: 0.80, FAP: 0.15, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.95 },
+    { domain_weights: { KR: 0.15, SHS: 0.60, FAP: 0.25, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.85 },
+    { domain_weights: { KR: 0.20, SHS: 0.55, FAP: 0.20, RP: 0.05, LOC: 0.00 }, intensity_weight: 0.75 },
+    { domain_weights: { KR: 0.00, SHS: 0.60, FAP: 0.30, RP: 0.10, LOC: 0.00 }, intensity_weight: 0.70 },
+    // FAP-SHS bridge (captures, handling in field)
+    { domain_weights: { KR: 0.00, SHS: 0.50, FAP: 0.50, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.1 },
+    { domain_weights: { KR: 0.05, SHS: 0.45, FAP: 0.50, RP: 0.00, LOC: 0.00 }, intensity_weight: 1.0 },
+    { domain_weights: { KR: 0.10, SHS: 0.40, FAP: 0.45, RP: 0.05, LOC: 0.00 }, intensity_weight: 0.9 },
+    { domain_weights: { KR: 0.00, SHS: 0.55, FAP: 0.45, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.95 },
+    { domain_weights: { KR: 0.05, SHS: 0.50, FAP: 0.40, RP: 0.05, LOC: 0.00 }, intensity_weight: 0.85 },
+    // KR cluster (methods, analysis, research)
+    { domain_weights: { KR: 0.65, SHS: 0.35, FAP: 0.00, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.8 },
+    { domain_weights: { KR: 0.60, SHS: 0.40, FAP: 0.00, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.7 },
+    { domain_weights: { KR: 0.70, SHS: 0.20, FAP: 0.10, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.65 },
+    { domain_weights: { KR: 0.55, SHS: 0.30, FAP: 0.15, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.75 },
+    { domain_weights: { KR: 0.50, SHS: 0.35, FAP: 0.10, RP: 0.05, LOC: 0.00 }, intensity_weight: 0.6 },
+    // KR-SHS bridge (education, species research)
+    { domain_weights: { KR: 0.45, SHS: 0.50, FAP: 0.05, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.7 },
+    { domain_weights: { KR: 0.40, SHS: 0.55, FAP: 0.05, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.65 },
+    // RP scattered (regulatory exposure)
+    { domain_weights: { KR: 0.00, SHS: 0.35, FAP: 0.05, RP: 0.60, LOC: 0.00 }, intensity_weight: 0.6 },
+    { domain_weights: { KR: 0.05, SHS: 0.20, FAP: 0.10, RP: 0.55, LOC: 0.10 }, intensity_weight: 0.5 },
+    { domain_weights: { KR: 0.10, SHS: 0.15, FAP: 0.00, RP: 0.65, LOC: 0.10 }, intensity_weight: 0.45 },
+    { domain_weights: { KR: 0.00, SHS: 0.25, FAP: 0.15, RP: 0.50, LOC: 0.10 }, intensity_weight: 0.55 },
+    // LOC scattered (coordination, team lead)
+    { domain_weights: { KR: 0.00, SHS: 0.00, FAP: 0.35, RP: 0.00, LOC: 0.65 }, intensity_weight: 0.5 },
+    { domain_weights: { KR: 0.00, SHS: 0.10, FAP: 0.25, RP: 0.05, LOC: 0.60 }, intensity_weight: 0.45 },
+    { domain_weights: { KR: 0.05, SHS: 0.00, FAP: 0.30, RP: 0.10, LOC: 0.55 }, intensity_weight: 0.4 },
+    // Education units (spread towards KR)
+    { domain_weights: { KR: 0.80, SHS: 0.15, FAP: 0.05, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.5 },
+    { domain_weights: { KR: 0.75, SHS: 0.20, FAP: 0.05, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.45 },
+    { domain_weights: { KR: 0.85, SHS: 0.10, FAP: 0.05, RP: 0.00, LOC: 0.00 }, intensity_weight: 0.4 }
+  ]
+};
+
+// ── Render main chart ──
+window.addEventListener('load', function() {
+  BioCred.renderFromPayload("biocred-chart", DEMO_PAYLOAD);
+  renderMiniMap();
+});
+
+// ── Render mini-map ──
+function renderMiniMap() {
+  var Geo = window.BioCredGeo;
+  var canvas = document.getElementById("biocred-minimap");
+  var dpr = window.devicePixelRatio || 1;
+  var size = 120;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  canvas.style.width = size + "px";
+  canvas.style.height = size + "px";
+
+  var ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, size, size);
+
+  var cx = size / 2, cy = size / 2;
+  var r = size * 0.38;
+  var verts = Geo.pentagonVertices(cx, cy, r, -90);
+
+  // draw pentagon outline
+  ctx.beginPath();
+  ctx.moveTo(verts[0].x, verts[0].y);
+  for (var i = 1; i < 5; i++) ctx.lineTo(verts[i].x, verts[i].y);
+  ctx.closePath();
+  ctx.strokeStyle = "#c8d8c8";
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // compute centroid of evidence
+  var units = DEMO_PAYLOAD.evidence_units;
+  var sumX = 0, sumY = 0, totalW = 0;
+  for (var u = 0; u < units.length; u++) {
+    var pt = Geo.barycentricXY(units[u].domain_weights, verts);
+    var w = units[u].intensity_weight || 1;
+    sumX += pt.x * w;
+    sumY += pt.y * w;
+    totalW += w;
+  }
+  var ballX = sumX / totalW;
+  var ballY = sumY / totalW;
+
+  // draw black ball
+  ctx.beginPath();
+  ctx.arc(ballX, ballY, 7, 0, 2 * Math.PI);
+  ctx.fillStyle = "#1a2e1a";
+  ctx.fill();
+}
+
+// ── Theme toggle ──
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+  var btn = document.querySelector(".theme-toggle");
+  btn.textContent = document.body.classList.contains("dark") ? "☾ Dark" : "☀ Light";
+}
+</script>
+</body>
+</html>

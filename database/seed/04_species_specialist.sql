@@ -1,0 +1,83 @@
+-- Profile 4: Species Specialist — DEMO DATA / NOT A REAL PERSON
+
+INSERT INTO biologist_profile (
+    id, registry_id, full_name, professional_title, organization,
+    state, city, geographic_region, years_experience,
+    primary_discipline, taxonomic_focus, bio_summary,
+    visibility_status, verification_status
+) VALUES (
+    'a1000000-0000-0000-0000-000000000004',
+    'FC2404',
+    'Demo Profile D (Species Specialist)',
+    'Senior Wildlife Biologist — Avian Specialist',
+    'Pacific Coast Environmental',
+    'California', 'San Diego', 'southwest', 16,
+    'Ornithology', 'avian',
+    'Sixteen years focused on avian ecology with deep specialization in raptors and listed shorebirds along the California coast. Authorized handler for California least tern, western snowy plover, and California gnatcatcher. Over 200 protocol-level bird surveys across southern California.',
+    'active', 'verified'
+);
+
+INSERT INTO credential_record (id, profile_id, credential_type, title,
+    issuing_authority, year_issued, verification_status,
+    verification_method, verified_by)
+VALUES
+('b1000000-0000-0000-0000-000000000011',
+ 'a1000000-0000-0000-0000-000000000004', 'degree',
+ 'M.S. Wildlife Ecology', 'San Diego State University',
+ 2010, 'verified', 'document_review', 'Admin Team'),
+('b1000000-0000-0000-0000-000000000012',
+ 'a1000000-0000-0000-0000-000000000004', 'degree',
+ 'B.S. Biology', 'UC San Diego',
+ 2008, 'verified', 'document_review', 'Admin Team'),
+('b1000000-0000-0000-0000-000000000013',
+ 'a1000000-0000-0000-0000-000000000004', 'permit',
+ 'USFWS California Gnatcatcher Survey Authorization',
+ 'U.S. Fish and Wildlife Service',
+ 2012, 'verified', 'issuer_verification', 'Admin Team'),
+('b1000000-0000-0000-0000-000000000014',
+ 'a1000000-0000-0000-0000-000000000004', 'permit',
+ 'California Least Tern / Snowy Plover Handling Permit',
+ 'CDFW / USFWS',
+ 2014, 'verified', 'issuer_verification', 'Admin Team');
+
+INSERT INTO experience_evidence (profile_id, domain_category,
+    activity_type, species_or_system, habitat_context,
+    project_type, years_applied, role_level,
+    evidence_source, is_verified)
+VALUES
+('a1000000-0000-0000-0000-000000000004', 'species_depth',
+ 'California gnatcatcher protocol surveys',
+ 'Polioptila californica californica', 'Coastal sage scrub',
+ 'Compliance survey', 12, 'lead',
+ 'Survey reports / USFWS authorization', true),
+('a1000000-0000-0000-0000-000000000004', 'species_depth',
+ 'Least tern and snowy plover nesting monitoring',
+ 'Sternula antillarum browni / Charadrius nivosus',
+ 'Coastal beach / dune', 'Conservation monitoring',
+ 10, 'lead', 'Annual monitoring reports', true),
+('a1000000-0000-0000-0000-000000000004', 'species_depth',
+ 'Raptor nesting surveys', 'Multiple raptor species',
+ 'Various', 'Pre-construction',
+ 14, 'lead', 'Survey reports', true),
+('a1000000-0000-0000-0000-000000000004', 'species_depth',
+ 'Avian point count surveys',
+ 'Passerines / shorebirds',
+ 'Coastal / riparian / grassland', 'Baseline inventory',
+ 16, 'lead', 'Project records', true),
+('a1000000-0000-0000-0000-000000000004', 'field_experience',
+ 'Protocol-level bird surveys (200+)',
+ 'Avian — multiple species',
+ 'Southern California habitats', 'Survey',
+ 14, 'lead', 'Survey database', true),
+('a1000000-0000-0000-0000-000000000004', 'field_experience',
+ 'Habitat assessment for listed species', NULL,
+ 'Coastal sage scrub / wetland', 'Pre-construction',
+ 10, 'lead', 'Assessment reports', true),
+('a1000000-0000-0000-0000-000000000004', 'regulatory_experience',
+ 'CEQA biological resource sections', NULL, NULL,
+ 'Environmental review', 8, 'contributor',
+ 'Report co-authorship', true),
+('a1000000-0000-0000-0000-000000000004', 'leadership_scope',
+ 'Survey team coordination', NULL, NULL,
+ 'Field operations', 10, 'lead',
+ 'Employer records', true);

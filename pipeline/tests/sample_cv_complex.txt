@@ -1,0 +1,63 @@
+Marcus Chen, Ph.D.
+marcus.chen@ecology.edu | (415) 555-0123
+Oakland, CA
+
+PROFESSIONAL EXPERIENCE
+
+Senior Ecologist | Bay Area Environmental Consulting | January 2018 – December 2020
+1. Led biological assessments for CEQA and NEPA compliance across 12 infrastructure projects.
+   - Coordinated with CDFW and USFWS on species surveys and habitat assessments.
+   - Managed field crews of 4–6 biologists for pre-construction clearance.
+2. Authored biological resource sections for environmental impact reports.
+3. Conducted protocol surveys for California red-legged frog and San Francisco garter snake.
+
+Research Assistant at Stanford University | Spring 2015 – Fall 2017
+1. Supported long-term population monitoring of coastal sage scrub bird communities.
+2. Processed acoustic data for automated species identification.
+3. Contributed to two peer-reviewed publications on habitat fragmentation effects.
+
+Consulting Ecologist | Pacific Habitat Associates | March 2016 – Ongoing
+Overlapping with Stanford role. Provided part-time wetland delineation and habitat assessments.
+1. Performed rapid assessments for small-scale development projects.
+   - Vegetation mapping using ArcGIS and field verification.
+   - Jurisdictional wetland delineation per USACE methodology.
+2. Prepared biological constraints memos for planning applications.
+
+Field Biologist | Point Reyes Bird Observatory | Summer 2014 – Winter 2015
+Conducted point count surveys and banding operations for migratory bird research.
+Led multiple wetland restoration and habitat enhancement projects across the North Bay region.
+1. Trained volunteers in standardized survey protocols.
+   - Developed training materials for coastal bird identification.
+   - Supervised 15+ volunteers during fall migration season.
+2. Maintained database of 2,000+ banding records and resightings.
+3. Contributed data to regional population trend analyses.
+
+EDUCATION AND CERTIFICATIONS
+
+Ph.D. Ecology and Evolutionary Biology, UC Santa Cruz, 2019
+M.S. Conservation Biology, Stanford University, 2016
+B.S. Wildlife Biology, UC Berkeley, 2014
+
+USFWS Migratory Bird Survey Authorization, 2017
+CDFW Scientific Collecting Permit, 2018
+Wetland Delineation Training (40-hour), 2016
+
+PUBLICATIONS
+
+Chen, M. et al. (2019). Habitat connectivity and avian diversity in fragmented landscapes.
+Conservation Biology, 33(4), 892-905.
+
+Chen, M. & Williams, K. (2017). Acoustic monitoring of secretive marsh birds.
+Journal of Wildlife Management, 81(2), 312-325.
+
+SKILLS
+
+ArcGIS, QGIS, R, Python for spatial analysis and statistical modeling.
+Database management (Access, PostgreSQL), report writing, field instrumentation.
+Vegetation classification, wetland delineation, protocol survey design.
+Statistical analysis, population modeling, acoustic monitoring software.
+
+PROFESSIONAL AFFILIATIONS
+
+Society for Conservation Biology, 2015–Present
+California Native Plant Society, 2014–Present

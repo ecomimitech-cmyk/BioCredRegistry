@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Node
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Environment & secrets
+.env
+.env.*
+*.env
+supabase/.env
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.cursor/
+.vscode/
+
+# Logs
+*.log
+.playwright-mcp/
+
+# Test artifacts
+test_browser_check.js
+test_renderer_validation.js
+test_renderer_validation2.js
+
+# Large binaries / PDFs in root (keep in Drive)
+*.pdf
+*.png
+biocred_*.png
+phase1_*.html
+phase1_*.css

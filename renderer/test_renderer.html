@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioCred Renderer — Test</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #F1F5F9; color: #1E293B; padding: 32px;
+  }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+  .subtitle { color: #64748B; font-size: 14px; margin-bottom: 24px; }
+  .card {
+    background: #fff; border-radius: 12px; padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08); max-width: 640px; margin: 0 auto;
+  }
+  .badge {
+    display: inline-block; background: #DBEAFE; color: #1D4ED8;
+    font-size: 11px; font-weight: 600; padding: 3px 10px;
+    border-radius: 20px; margin-bottom: 16px; letter-spacing: 0.3px;
+  }
+  #biocred-profile { width: 100%; min-height: 480px; }
+  .controls { text-align: center; margin-top: 16px; }
+  .controls button {
+    background: #0284C7; color: #fff; border: none; padding: 8px 20px;
+    border-radius: 6px; font-size: 13px; cursor: pointer; margin: 0 4px;
+  }
+  .controls button:hover { background: #0369A1; }
+  .controls button.secondary {
+    background: #E2E8F0; color: #475569;
+  }
+  .controls button.secondary:hover { background: #CBD5E1; }
+</style>
+</head>
+<body>
+<div class="card">
+  <span class="badge">Documentation Verified</span>
+  <h1>Demo Profile A (Field Specialist Archetype)</h1>
+  <p class="subtitle">Senior Wildlife Biologist &mdash; Western US</p>
+  <div id="biocred-profile"></div>
+  <div class="controls">
+    <button onclick="loadField()">Field Specialist</button>
+    <button onclick="loadRegulatory()">Regulatory Expert</button>
+    <button onclick="loadAcademic()">Academic/PI</button>
+    <button class="secondary" onclick="loadEmpty()">Empty Profile</button>
+  </div>
+</div>
+
+<script src="biocred-geometry.js"></script>
+<script src="biocred-renderer.js"></script>
+<script>
+var fieldPayload = {
+  profile_version: "1.0",
+  biologist_id: "BCR-DEMO-A",
+  evidence_units: [
+    { id: "ev_1_0", domain_weights: { KG: 0.04, OC: 0.08, BR: 0.16, ABP: 0.62, GOV: 0.10 }, intensity_weight: 0.85, contexts: { species_interaction_modes: ["survey", "monitoring"] } },
+    { id: "ev_2_0", domain_weights: { KG: 0.03, OC: 0.07, BR: 0.22, ABP: 0.55, GOV: 0.13 }, intensity_weight: 0.72, contexts: { species_interaction_modes: ["capture", "handling"] } },
+    { id: "ev_3_0", domain_weights: { KG: 0.06, OC: 0.12, BR: 0.14, ABP: 0.58, GOV: 0.10 }, intensity_weight: 0.65, contexts: { working_environments: ["hydrologic_systems"] } },
+    { id: "ev_4_0", domain_weights: { KG: 0.05, OC: 0.09, BR: 0.18, ABP: 0.56, GOV: 0.12 }, intensity_weight: 0.90, contexts: { species_interaction_modes: ["survey"] } },
+    { id: "ev_5_0", domain_weights: { KG: 0.08, OC: 0.15, BR: 0.10, ABP: 0.50, GOV: 0.17 }, intensity_weight: 0.55, contexts: { regulatory_interactions: ["wildlife_agency_coordination"] } },
+    { id: "ev_6_0", domain_weights: { KG: 0.04, OC: 0.06, BR: 0.25, ABP: 0.58, GOV: 0.07 }, intensity_weight: 0.78, contexts: { species_interaction_modes: ["relocation"] } },
+    { id: "ev_7_0", domain_weights: { KG: 0.10, OC: 0.11, BR: 0.12, ABP: 0.55, GOV: 0.12 }, intensity_weight: 0.60, contexts: { methods_tools: ["gis", "field_instrumentation"] } },
+    { id: "ev_8_0", domain_weights: { KG: 0.03, OC: 0.08, BR: 0.20, ABP: 0.60, GOV: 0.09 }, intensity_weight: 0.95, contexts: { species_interaction_modes: ["monitoring"] } }
+  ],
+  translation_version: "TE_v1.0"
+};
+
+var regulatoryPayload = {
+  profile_version: "1.0",
+  biologist_id: "BCR-DEMO-B",
+  evidence_units: [
+    { id: "ev_r1", domain_weights: { KG: 0.12, OC: 0.18, BR: 0.04, ABP: 0.08, GOV: 0.58 }, intensity_weight: 0.90, contexts: { regulatory_interactions: ["environmental_review_coordination"] } },
+    { id: "ev_r2", domain_weights: { KG: 0.08, OC: 0.22, BR: 0.05, ABP: 0.10, GOV: 0.55 }, intensity_weight: 0.80, contexts: { regulatory_interactions: ["interagency_consultation"] } },
+    { id: "ev_r3", domain_weights: { KG: 0.15, OC: 0.14, BR: 0.06, ABP: 0.12, GOV: 0.53 }, intensity_weight: 0.70, contexts: { regulatory_interactions: ["water_boards_coordination"] } },
+    { id: "ev_r4", domain_weights: { KG: 0.10, OC: 0.20, BR: 0.03, ABP: 0.07, GOV: 0.60 }, intensity_weight: 0.85, contexts: { regulatory_interactions: ["wildlife_agency_coordination", "environmental_review_coordination"] } },
+    { id: "ev_r5", domain_weights: { KG: 0.06, OC: 0.25, BR: 0.04, ABP: 0.05, GOV: 0.60 }, intensity_weight: 0.75, contexts: { project_types: ["mitigation_compliance"] } },
+    { id: "ev_r6", domain_weights: { KG: 0.09, OC: 0.16, BR: 0.08, ABP: 0.15, GOV: 0.52 }, intensity_weight: 0.65, contexts: {} }
+  ],
+  translation_version: "TE_v1.0"
+};
+
+var academicPayload = {
+  profile_version: "1.0",
+  biologist_id: "BCR-DEMO-C",
+  evidence_units: [
+    { id: "ev_a1", domain_weights: { KG: 0.62, OC: 0.12, BR: 0.10, ABP: 0.11, GOV: 0.05 }, intensity_weight: 0.95, contexts: { methods_tools: ["statistics_modeling", "lab_methods"] } },
+    { id: "ev_a2", domain_weights: { KG: 0.58, OC: 0.10, BR: 0.15, ABP: 0.12, GOV: 0.05 }, intensity_weight: 0.80, contexts: { methods_tools: ["gis"] } },
+    { id: "ev_a3", domain_weights: { KG: 0.55, OC: 0.15, BR: 0.08, ABP: 0.14, GOV: 0.08 }, intensity_weight: 0.70, contexts: { project_types: ["research_program"] } },
+    { id: "ev_a4", domain_weights: { KG: 0.60, OC: 0.08, BR: 0.12, ABP: 0.13, GOV: 0.07 }, intensity_weight: 0.88, contexts: { methods_tools: ["lab_methods"] } },
+    { id: "ev_a5", domain_weights: { KG: 0.50, OC: 0.18, BR: 0.07, ABP: 0.10, GOV: 0.15 }, intensity_weight: 0.60, contexts: {} }
+  ],
+  translation_version: "TE_v1.0"
+};
+
+function loadField() {
+  document.querySelector('h1').textContent = 'Demo Profile A (Field Specialist Archetype)';
+  document.querySelector('.subtitle').textContent = 'Senior Wildlife Biologist — Western US';
+  BioCred.renderFromPayload('biocred-profile', fieldPayload);
+}
+
+function loadRegulatory() {
+  document.querySelector('h1').textContent = 'Demo Profile B (Regulatory Specialist Archetype)';
+  document.querySelector('.subtitle').textContent = 'Environmental Compliance Manager — California';
+  BioCred.renderFromPayload('biocred-profile', regulatoryPayload);
+}
+
+function loadAcademic() {
+  document.querySelector('h1').textContent = 'Demo Profile C (Academic/PI Archetype)';
+  document.querySelector('.subtitle').textContent = 'Associate Professor, Conservation Biology';
+  BioCred.renderFromPayload('biocred-profile', academicPayload);
+}
+
+function loadEmpty() {
+  document.querySelector('h1').textContent = 'Empty Profile';
+  document.querySelector('.subtitle').textContent = 'No evidence submitted';
+  BioCred.renderFromPayload('biocred-profile', { evidence_units: [] });
+}
+
+loadField();
+</script>
+</body>
+</html>

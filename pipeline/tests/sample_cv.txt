@@ -1,0 +1,53 @@
+JANE M. DOE, M.S.
+Senior Wildlife Biologist
+San Diego, California
+
+PROFESSIONAL EXPERIENCE
+
+Environmental Scientist | CDFW | 2018–Present
+Prepared CEQA biological resources sections and coordinated with agencies.
+Conducted protocol surveys for California gnatcatcher and least Bell's vireo.
+Led field crews for pre-construction clearance surveys.
+Managed compliance monitoring for large infrastructure projects.
+Authored biological assessments and environmental review documents.
+Supervised junior biologists and trained new field staff.
+
+Wildlife Biologist | Pacific Environmental Services | 2014–2018
+Conducted burrowing owl monitoring and desert tortoise surveys.
+Performed wetland delineation and habitat assessments.
+Assisted with CEQA/NEPA environmental document preparation.
+Species handling and relocation for listed reptile species.
+GIS mapping and data analysis for project reports.
+Point count bird surveys and small mammal trapping.
+
+Research Assistant | UC San Diego | 2012–2014
+Conducted mark-recapture population studies on coastal lizards.
+Statistical analysis of population dynamics data using R programming.
+Published two peer-reviewed papers on reptile ecology.
+Laboratory specimen processing and genetics work.
+Teaching assistant for undergraduate ecology courses.
+
+EDUCATION
+
+M.S. Wildlife Ecology, San Diego State University, 2014
+B.S. Biology, UC San Diego, 2012
+
+CERTIFICATIONS AND PERMITS
+
+USFWS California Gnatcatcher Survey Authorization, 2016
+Desert Tortoise Council Approved Surveyor, 2015
+CDFW Scientific Collecting Permit, 2017
+
+PUBLICATIONS
+
+Doe, J.M. et al. (2014). Population dynamics of coastal horned lizards.
+Journal of Herpetology, 48(3), 234-241.
+
+Doe, J.M. & Smith, R.K. (2013). Habitat selection in urban-edge reptile
+communities. Ecological Applications, 23(7), 1502-1511.
+
+SKILLS
+
+GIS (ArcGIS, QGIS), R programming, statistical modeling,
+field instrumentation, database management, report writing,
+habitat assessment, vegetation mapping, wetland delineation

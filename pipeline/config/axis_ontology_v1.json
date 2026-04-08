@@ -1,0 +1,60 @@
+{
+  "version": "2.0",
+  "note": "Domain names updated to BPP_v1.0 spec. KG→KR, OC→LOC, BR→SHS, ABP→FAP, GOV→RP",
+  "axes": [
+    {
+      "id": "KR",
+      "name": "Knowledge & Research",
+      "descriptor": "Research • Methods • Synthesis",
+      "sublabels": ["Education", "Research", "Methods"],
+      "orientation_degrees": 90
+    },
+    {
+      "id": "LOC",
+      "name": "Leadership & Operational Coordination",
+      "descriptor": "Leadership • Coordination • Integration",
+      "sublabels": ["Leadership", "Coordination", "Integration"],
+      "orientation_degrees": 162
+    },
+    {
+      "id": "SHS",
+      "name": "Species & Habitat Specialization",
+      "descriptor": "Species • Habitat • Ecology",
+      "sublabels": ["Species", "Habitat", "Ecology"],
+      "orientation_degrees": 234
+    },
+    {
+      "id": "FAP",
+      "name": "Field & Applied Practice",
+      "descriptor": "Field Work • Lab Work • Implementation",
+      "sublabels": ["Field Work", "Lab Work", "Implementation"],
+      "orientation_degrees": 306
+    },
+    {
+      "id": "RP",
+      "name": "Regulation & Policy",
+      "descriptor": "Regulation • Compliance • Policy",
+      "sublabels": ["Regulation", "Compliance", "Policy"],
+      "orientation_degrees": 18
+    }
+  ],
+  "domain_order": ["KR", "SHS", "FAP", "RP", "LOC"],
+  "layout": {
+    "pentagon_orientation": {
+      "KR":  90,
+      "SHS": 18,
+      "FAP": -54,
+      "RP":  -126,
+      "LOC": 162
+    },
+    "label_positions": {
+      "KR":  "top-center",
+      "SHS": "upper-right",
+      "FAP": "lower-right",
+      "RP":  "lower-left",
+      "LOC": "upper-left"
+    },
+    "rotation_degrees": -90,
+    "label_persistence": true
+  }
+}

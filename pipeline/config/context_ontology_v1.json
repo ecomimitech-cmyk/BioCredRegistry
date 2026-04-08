@@ -1,0 +1,47 @@
+{
+  "version": "1.0",
+  "contexts": {
+    "regulatory_interactions": [
+      "wildlife_agency_coordination",
+      "water_boards_coordination",
+      "flood_control_coordination",
+      "land_management_coordination",
+      "infrastructure_permitting_coordination",
+      "environmental_review_coordination",
+      "interagency_consultation"
+    ],
+    "working_environments": [
+      "hydrologic_systems",
+      "terrestrial_natural_systems",
+      "coastal_marine_systems",
+      "managed_engineered_landscapes",
+      "transitional_ecotonal_systems"
+    ],
+    "species_interaction_modes": [
+      "observation",
+      "survey",
+      "monitoring",
+      "capture",
+      "handling",
+      "relocation",
+      "oversight"
+    ],
+    "project_types": [
+      "infrastructure",
+      "restoration_implementation",
+      "mitigation_compliance",
+      "monitoring_program",
+      "research_program",
+      "captive_rearing_breeding",
+      "environmental_review_support"
+    ],
+    "methods_tools": [
+      "gis",
+      "statistics_modeling",
+      "lab_methods",
+      "field_instrumentation",
+      "report_writing",
+      "database_management"
+    ]
+  }
+}

@@ -1,0 +1,83 @@
+-- Profile 3: Academic Lead — DEMO DATA / NOT A REAL PERSON
+
+INSERT INTO biologist_profile (
+    id, registry_id, full_name, professional_title, organization,
+    state, city, geographic_region, years_experience,
+    primary_discipline, taxonomic_focus, bio_summary,
+    visibility_status, verification_status
+) VALUES (
+    'a1000000-0000-0000-0000-000000000003',
+    'FC2403',
+    'Demo Profile C (Academic Lead)',
+    'Associate Professor of Conservation Biology',
+    'University of Arizona',
+    'Arizona', 'Tucson', 'southwest', 22,
+    'Conservation Biology', 'amphibian',
+    'Twenty-two years in conservation biology research with emphasis on amphibian population dynamics in arid ecosystems. Author of 34 peer-reviewed publications. PI on three NSF-funded research projects.',
+    'active', 'verified'
+);
+
+INSERT INTO credential_record (id, profile_id, credential_type, title,
+    issuing_authority, year_issued, verification_status,
+    verification_method, verified_by)
+VALUES
+('b1000000-0000-0000-0000-000000000007',
+ 'a1000000-0000-0000-0000-000000000003', 'degree',
+ 'Ph.D. Conservation Biology', 'University of Florida',
+ 2006, 'verified', 'document_review', 'Admin Team'),
+('b1000000-0000-0000-0000-000000000008',
+ 'a1000000-0000-0000-0000-000000000003', 'degree',
+ 'M.S. Ecology', 'University of Florida',
+ 2003, 'verified', 'document_review', 'Admin Team'),
+('b1000000-0000-0000-0000-000000000009',
+ 'a1000000-0000-0000-0000-000000000003', 'degree',
+ 'B.S. Biology (Honors)', 'University of New Mexico',
+ 2000, 'verified', 'document_review', 'Admin Team'),
+('b1000000-0000-0000-0000-000000000010',
+ 'a1000000-0000-0000-0000-000000000003', 'publication',
+ '34 peer-reviewed journal articles',
+ 'Various — indexed in Google Scholar',
+ 2004, 'verified', 'document_review', 'Admin Team');
+
+INSERT INTO experience_evidence (profile_id, domain_category,
+    activity_type, species_or_system, habitat_context,
+    project_type, years_applied, role_level,
+    evidence_source, is_verified)
+VALUES
+('a1000000-0000-0000-0000-000000000003', 'academic_technical',
+ 'Peer-reviewed publication authorship',
+ 'Amphibians — multiple species', 'Desert riparian',
+ 'Research', 20, 'principal_investigator',
+ 'Google Scholar profile', true),
+('a1000000-0000-0000-0000-000000000003', 'academic_technical',
+ 'NSF-funded research (3 grants)', 'Amphibian populations',
+ 'Arid ecosystems', 'Funded research',
+ 12, 'principal_investigator', 'NSF award records', true),
+('a1000000-0000-0000-0000-000000000003', 'academic_technical',
+ 'Graduate student mentorship and curriculum', NULL, NULL,
+ 'Academic', 16, 'oversight', 'University records', true),
+('a1000000-0000-0000-0000-000000000003', 'academic_technical',
+ 'Statistical modeling and GIS analysis', NULL, NULL,
+ 'Research methodology', 18, 'lead',
+ 'Publication methods sections', true),
+('a1000000-0000-0000-0000-000000000003', 'species_depth',
+ 'Chiricahua leopard frog population monitoring',
+ 'Lithobates chiricahuensis', 'Desert springs / cienegas',
+ 'Conservation', 14, 'principal_investigator',
+ 'Research publications', true),
+('a1000000-0000-0000-0000-000000000003', 'species_depth',
+ 'Sonoran desert toad surveys', 'Incilius alvarius',
+ 'Desert riparian', 'Research',
+ 8, 'lead', 'Field notes / publications', true),
+('a1000000-0000-0000-0000-000000000003', 'field_experience',
+ 'Long-term field monitoring stations', 'Amphibians',
+ 'Riparian / springs', 'Research',
+ 16, 'principal_investigator', 'Research records', true),
+('a1000000-0000-0000-0000-000000000003', 'leadership_scope',
+ 'Principal Investigator on federal grants', NULL, NULL,
+ 'Research management', 12, 'principal_investigator',
+ 'Grant records', true),
+('a1000000-0000-0000-0000-000000000003', 'regulatory_experience',
+ 'Agency consultation on conservation protocols', NULL, NULL,
+ 'Advisory', 6, 'contributor',
+ 'Agency correspondence', true);

@@ -1,0 +1,83 @@
+{
+  "version": "2.0",
+  "note": "Domain names updated to BPP_v1.0 spec. KG→KR, OC→LOC, BR→SHS, ABP→FAP, GOV→RP",
+  "axes": {
+    "RP": [
+      "permit", "regulatory", "compliance", "policy",
+      "consultation", "authorization", "environmental review",
+      "ceqa", "nepa", "cesa", "esa", "clean water act",
+      "section 404", "incidental take", "biological opinion",
+      "streambed alteration", "mitigation measures",
+      "agency coordination", "permitting", "reporting",
+      "environmental impact", "habitat conservation plan",
+      "permit compliance review", "regulatory documentation",
+      "permit authorization strategy", "agency review",
+      "policy rule interpretation", "compliance determination",
+      "mitigation requirement design", "formal biological review",
+      "environmental review nepa ceqa", "permit monitoring oversight",
+      "regulatory negotiation", "policy governance design"
+    ],
+    "LOC": [
+      "lead", "manage", "coordinate", "mentor",
+      "supervise", "direct", "principal investigator",
+      "oversight", "team lead", "project manager",
+      "qa/qc", "quality assurance", "budget",
+      "training", "client coordination", "multi-team",
+      "crew supervision", "reporting authority",
+      "stakeholder", "contract management",
+      "project coordination", "team leadership",
+      "stakeholder coordination", "multi-agency integration",
+      "field logistics coordination", "implementation oversight",
+      "mentoring staff development", "interdisciplinary integration",
+      "meeting workshop facilitation", "resource budget coordination",
+      "program initiative management"
+    ],
+    "KR": [
+      "research", "analyze", "publish", "model",
+      "statistical", "teaching", "method development",
+      "peer-reviewed", "journal", "thesis", "dissertation",
+      "curriculum", "laboratory", "gis", "data analysis",
+      "publication", "manuscript", "literature review",
+      "experimental design", "hypothesis", "methodology",
+      "r programming", "python", "database", "bioinformatics",
+      "formal education", "study design", "data synthesis",
+      "evidence synthesis", "presentation scientific communication",
+      "technical writing", "modeling simulation",
+      "continuing education", "knowledge generation"
+    ],
+    "SHS": [
+      "taxonomy", "species identification", "genetics",
+      "population monitoring", "ecology", "specimen",
+      "listed species", "endangered", "threatened",
+      "handling", "capture", "relocation", "translocation",
+      "nesting", "breeding", "migration", "tagging",
+      "mark-recapture", "population estimate",
+      "taxa", "morphology", "phylogenetics",
+      "protocol survey", "presence/absence",
+      "species ecology interpretation",
+      "population analysis", "trophic systems ecology",
+      "biological impact assessment", "habitat suitability",
+      "ecological modeling", "monitoring interpretation",
+      "diagnostic ecology", "condition assessment",
+      "species status risk evaluation", "behavioral analysis",
+      "community assemblage analysis", "biological resolution"
+    ],
+    "FAP": [
+      "fieldwork", "sampling", "restoration", "survey",
+      "monitoring", "deployment", "habitat assessment",
+      "biological monitoring", "construction monitoring",
+      "vegetation mapping", "wetland delineation",
+      "trapping", "transect", "plot", "quadrat",
+      "point count", "camera trap", "telemetry",
+      "habitat restoration", "revegetation",
+      "erosion control", "site assessment",
+      "field inventory", "baseline survey",
+      "field survey observation", "monitoring implementation",
+      "restoration mitigation implementation", "wildlife species handling",
+      "lab bench technical lab", "equipment instrument deployment",
+      "habitat management action", "field logistics site operations",
+      "protocol execution", "compliance monitoring in practice",
+      "restoration monitoring follow-up"
+    ]
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "version": "2.0",
+  "note": "Updated to BPP_v1.0 spec. Hex grid, green-only color scale (bright=more events), light theme.",
+  "canvas": {
+    "width": 1400,
+    "height": 1000,
+    "safe_margin": 80,
+    "background": "#FFFFFF"
+  },
+  "theme": {
+    "mode": "light",
+    "options": ["light", "dark"]
+  },
+  "geometry": {
+    "pentagon_outline_opacity": 0.12,
+    "axis_rays_opacity": 0.55,
+    "axis_rays_width_px": 2,
+    "internal_grid_opacity": 0.06,
+    "center_marker": "none",
+    "aspect_ratio": "1/1",
+    "chart_size_percent": 65,
+    "pentagon_orientation": {
+      "KR":  90,
+      "SHS": 18,
+      "FAP": -54,
+      "RP":  -126,
+      "LOC": 162
+    },
+    "label_positions": {
+      "KR":  "top-center",
+      "SHS": "upper-right",
+      "FAP": "lower-right",
+      "RP":  "lower-left",
+      "LOC": "upper-left"
+    }
+  },
+  "grid": {
+    "type": "hex",
+    "resolution": 42,
+    "hex_size_radius_fraction": 0.035
+  },
+  "density": {
+    "kernel": "gaussian",
+    "kernel_shape": "isotropic",
+    "sigma": {
+      "inner": 0.12,
+      "mid": 0.15,
+      "outer": 0.11,
+      "secondary_multiplier": 0.9
+    },
+    "truncation_sigma": 3.0,
+    "density_threshold": 0.06,
+    "brightness_gamma": 0.65,
+    "clip_to_pentagon": true,
+    "peak_color_rule": "no_white_glare",
+    "brightness_rule": "bright_equals_more_events"
+  },
+  "boundary": {
+    "enabled": true,
+    "opacity": 0.45,
+    "width_px": 2
+  },
+  "color": {
+    "strategy": "green_only_brightness",
+    "note": "bright = more events, dark = less activity. No brown. No other hues.",
+    "palette_name": "biocred_green_registry",
+    "scale": {
+      "no_activity": "#0a1f14",
+      "min": "#123b2a",
+      "low": "#1f5a3a",
+      "mid": "#3f8f57",
+      "high": "#7fcf8d",
+      "peak": "#d8ffe1"
+    },
+    "density_gradient": [
+      "#123b2a",
+      "#1f5a3a",
+      "#3f8f57",
+      "#7fcf8d",
+      "#d8ffe1"
+    ]
+  },
+  "labels": {
+    "always_visible": true,
+    "title_size": 40,
+    "axis_name_size": 26,
+    "sublabel_size": 18,
+    "show_sublabels": true
+  },
+  "legend": {
+    "title": "Experience Density",
+    "low_label": "Low",
+    "high_label": "High",
+    "brightness_rule": "bright_equals_more_events"
+  }
+}
