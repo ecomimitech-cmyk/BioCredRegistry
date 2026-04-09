@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioCred — Upload Documents</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--g9:#0E2F22;--g7:#1F6A46;--g5:#2d8a58;--g1:#d9f6df;--g0:#f0f9f2;--t:#1a2e1a;--ts:#4a6a4a;--tm:#7a9a7a;--bd:#c8ddc8;--bg:#f4f6f4;--card:#fff}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;padding:40px 20px}
+.page{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+.page-header{background:var(--g9);border-radius:14px;padding:32px 36px;color:var(--g1)}
+.page-header .brand{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;opacity:.55;margin-bottom:6px}
+.page-header h1{font-size:22px;font-weight:700;color:#fff}
+.page-header p{font-size:13px;opacity:.65;margin-top:4px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:28px 32px;display:flex;flex-direction:column;gap:20px}
+.card-title{font-size:14px;font-weight:700;color:var(--t);border-bottom:1px solid var(--bd);padding-bottom:12px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12px;font-weight:600;color:var(--ts)}
+.field input,.field select,.field textarea{
+  border:1px solid var(--bd);border-radius:8px;padding:10px 12px;
+  font-size:13px;font-family:inherit;color:var(--t);background:#fff;
+  transition:border-color .15s;outline:none;width:100%
+}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--g5)}
+.field textarea{resize:vertical;min-height:72px}
+.field .hint{font-size:11px;color:var(--tm)}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+/* conditional sections */
+.conditional{display:none;flex-direction:column;gap:16px;padding:16px;background:var(--g0);border:1px solid var(--bd);border-radius:8px}
+.conditional.visible{display:flex}
+.conditional-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--g7);margin-bottom:4px}
+/* upload zone */
+.upload-zone{border:2px dashed var(--bd);border-radius:10px;padding:32px 20px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
+.upload-zone:hover{border-color:var(--g5);background:var(--g0)}
+.upload-zone .icon{font-size:28px;margin-bottom:8px}
+.upload-zone p{font-size:13px;color:var(--ts)}
+.upload-zone span{font-size:11px;color:var(--tm)}
+.upload-zone input{display:none}
+.file-selected{font-size:12px;color:var(--g7);font-weight:600;margin-top:8px}
+/* certification */
+.cert-box{background:#f9fff9;border:1px solid var(--g5);border-radius:8px;padding:16px;display:flex;gap:12px;align-items:flex-start}
+.cert-box input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:var(--g7);flex-shrink:0}
+.cert-box p{font-size:12px;color:var(--ts);line-height:1.6}
+/* submit */
+.btn-submit{background:var(--g7);color:#fff;border:none;border-radius:8px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;align-self:flex-end}
+.btn-submit:hover{background:var(--g9)}
+.btn-submit:disabled{background:var(--bd);cursor:not-allowed}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-header">
+    <div class="brand">BioCred Registry</div>
+    <h1>Upload Credential Documents</h1>
+    <p>All submissions are reviewed before appearing on your public profile.</p>
+  </div>
+
+  <form id="upload-form" autocomplete="off">
+
+    <!-- Document type -->
+    <div class="card">
+      <div class="card-title">Document Type</div>
+      <div class="field">
+        <label for="category">Category *</label>
+        <select id="category" name="category" required onchange="handleCategory(this.value)">
+          <option value="">— Select category —</option>
+          <option value="resume">Resume / CV</option>
+          <option value="transcript">Academic Transcript</option>
+          <option value="degree">Degree Certificate / Diploma</option>
+          <option value="certification">Professional Certification</option>
+          <option value="continuing_education">Continuing Education (CE)</option>
+          <option value="reference_letter">Reference / Reference Letter</option>
+          <option value="award">Award or Recognition</option>
+          <option value="license">Professional License</option>
+          <option value="permit">Permit (e.g. handling permit, MOU)</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="document_title">Document Title *</label>
+        <input type="text" id="document_title" name="document_title" placeholder="e.g. B.S. Wildlife Biology, UC Davis" required>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label for="issuing_authority">Issuing Authority</label>
+          <input type="text" id="issuing_authority" name="issuing_authority" placeholder="e.g. UC Davis, CDFW, TWS">
+        </div>
+        <div class="field">
+          <label for="issue_date">Issue Date</label>
+          <input type="date" id="issue_date" name="issue_date">
+        </div>
+      </div>
+    </div>
+
+    <!-- CE credits (conditional) -->
+    <div class="conditional" id="section-ce">
+      <div class="conditional-title">Continuing Education Details</div>
+      <div class="row-2">
+        <div class="field">
+          <label for="ce_provider">Provider *</label>
+          <select id="ce_provider" name="ce_provider">
+            <option value="">— Select provider —</option>
+            <option>Cornell Online</option>
+            <option>The Wildlife Society (TWS)</option>
+            <option>National Wildlife Training Initiative (NWTI)</option>
+            <option>ESRI / GIS Training</option>
+            <option>Society for Ecological Restoration (SER)</option>
+            <option>NASBR</option>
+            <option>AFS — American Fisheries Society</option>
+            <option>State Fish & Wildlife Agency</option>
+            <option>University Extension Program</option>
+            <option value="other_provider">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="ce_hours">Credit Hours *</label>
+          <input type="number" id="ce_hours" name="ce_hours" min="0.5" max="999" step="0.5" placeholder="e.g. 12.5">
+        </div>
+      </div>
+      <div class="field">
+        <label for="ce_subject">Subject / Course Title *</label>
+        <input type="text" id="ce_subject" name="ce_subject" placeholder="e.g. GIS for Wildlife Management, NEPA Compliance">
+      </div>
+      <div class="field">
+        <label for="ce_completion_date">Completion Date</label>
+        <input type="date" id="ce_completion_date" name="ce_completion_date">
+      </div>
+    </div>
+
+    <!-- Reference (conditional) -->
+    <div class="conditional" id="section-ref">
+      <div class="conditional-title">Reference Details</div>
+      <div class="row-2">
+        <div class="field">
+          <label for="reference_name">Reference Name *</label>
+          <input type="text" id="reference_name" name="reference_name" placeholder="Full name">
+        </div>
+        <div class="field">
+          <label for="reference_title">Title / Position</label>
+          <input type="text" id="reference_title" name="reference_title" placeholder="e.g. Senior Biologist">
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label for="reference_org">Organization</label>
+          <input type="text" id="reference_org" name="reference_org" placeholder="e.g. USFWS">
+        </div>
+        <div class="field">
+          <label for="reference_email">Email</label>
+          <input type="email" id="reference_email" name="reference_email" placeholder="contact@org.gov">
+        </div>
+      </div>
+    </div>
+
+    <!-- Permit / license (conditional) -->
+    <div class="conditional" id="section-permit">
+      <div class="conditional-title">Permit / License Details</div>
+      <div class="row-3">
+        <div class="field">
+          <label for="permit_type">Permit / License Type</label>
+          <input type="text" id="permit_type" name="permit_type" placeholder="e.g. Section 10(a)(1)(A) ESA">
+        </div>
+        <div class="field">
+          <label for="permit_number">Number / ID</label>
+          <input type="text" id="permit_number" name="permit_number" placeholder="e.g. TE-12345">
+        </div>
+        <div class="field">
+          <label for="expiry_date">Expiry Date</label>
+          <input type="date" id="expiry_date" name="expiry_date">
+        </div>
+      </div>
+      <div class="field">
+        <label for="jurisdiction">Jurisdiction</label>
+        <input type="text" id="jurisdiction" name="jurisdiction" placeholder="e.g. California, Federal">
+      </div>
+    </div>
+
+    <!-- File upload -->
+    <div class="card">
+      <div class="card-title">Attach Document</div>
+      <label class="upload-zone" id="drop-zone">
+        <div class="icon">📄</div>
+        <p>Click to select or drag & drop your file</p>
+        <span>PDF, DOC, DOCX, JPG, PNG — max 20 MB</span>
+        <div class="file-selected" id="file-label"></div>
+        <input type="file" id="file-input" name="file"
+               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+               onchange="handleFile(this)">
+      </label>
+    </div>
+
+    <!-- Certification -->
+    <div class="card">
+      <div class="card-title">Certification</div>
+      <div class="cert-box">
+        <input type="checkbox" id="certified" name="certified" required onchange="toggleSubmit()">
+        <p>I certify that all information and documents submitted are <strong>true, accurate, and complete</strong> to the best of my knowledge. I understand that submitting false or misleading information may result in removal from the BioCred Registry.</p>
+      </div>
+      <button type="submit" class="btn-submit" id="btn-submit" disabled>Submit Document</button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+function handleCategory(val) {
+  var sections = { ce: "section-ce", ref: "section-ref", permit: "section-permit", license: "section-permit" };
+  ["section-ce","section-ref","section-permit"].forEach(function(id) {
+    document.getElementById(id).classList.remove("visible");
+  });
+  if (val === "continuing_education") document.getElementById("section-ce").classList.add("visible");
+  if (val === "reference_letter")     document.getElementById("section-ref").classList.add("visible");
+  if (val === "permit" || val === "license") document.getElementById("section-permit").classList.add("visible");
+}
+
+function handleFile(input) {
+  var label = document.getElementById("file-label");
+  label.textContent = input.files.length ? "✓ " + input.files[0].name : "";
+}
+
+function toggleSubmit() {
+  document.getElementById("btn-submit").disabled = !document.getElementById("certified").checked;
+}
+
+document.getElementById("upload-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+  alert("Document submitted for review. You will be notified when it has been verified.");
+});
+</script>
+</body>
+</html>
