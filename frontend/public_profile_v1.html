@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioCred — Sarah Mitchell · BCR-042</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --g9:#0E2F22;--g7:#1F6A46;--g5:#2d8a58;--g3:#7fcf8d;--g1:#d9f6df;--g0:#f0f9f2;
+  --t:#1a2e1a;--ts:#4a6a4a;--tm:#7a9a7a;--bd:#c8ddc8;--bg:#f4f6f4;--card:#fff;
+  --amber:#d97706;--blue:#1d4ed8;--red:#dc2626
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t);line-height:1.5}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--g9);padding:12px 40px;display:flex;align-items:center;gap:12px}
+.topbar .logo{font-size:14px;font-weight:700;color:#fff;letter-spacing:-.2px}
+.topbar .sep{color:rgba(255,255,255,.2);font-size:16px}
+.topbar .breadcrumb{font-size:12px;color:rgba(255,255,255,.5)}
+.topbar .spacer{flex:1}
+.topbar .heatmap-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:12px;font-weight:500;padding:6px 14px;border-radius:20px;cursor:pointer;transition:background .15s}
+.topbar .heatmap-btn:hover{background:rgba(255,255,255,.18)}
+
+/* ── IDENTITY HEADER ── */
+.identity-header{background:var(--card);border-bottom:1px solid var(--bd);padding:28px 40px}
+.identity-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:start}
+.id-name{font-size:26px;font-weight:700;color:var(--t);letter-spacing:-.3px}
+.id-title{font-size:14px;color:var(--ts);margin-top:4px}
+.id-meta{display:flex;gap:16px;margin-top:10px;flex-wrap:wrap}
+.id-meta span{font-size:12px;color:var(--tm);display:flex;align-items:center;gap:4px}
+.id-meta strong{color:var(--ts)}
+.trust-block{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.verified-badge{display:inline-flex;align-items:center;gap:6px;background:var(--g1);border:1px solid var(--g3);color:var(--g7);font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px}
+.verified-badge::before{content:"✓";font-weight:900}
+.trust-meta{font-size:11px;color:var(--tm);text-align:right;line-height:1.8}
+
+/* ── MAIN ── */
+.main{max-width:1100px;margin:32px auto;padding:0 40px;display:flex;flex-direction:column;gap:24px}
+
+/* ── CARD ── */
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+.card-header{padding:18px 24px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between}
+.card-header h2{font-size:14px;font-weight:700;color:var(--t)}
+.card-header .card-sub{font-size:12px;color:var(--tm)}
+.card-body{padding:24px}
+
+/* ── INSIGHTS ── */
+.insights-list{display:flex;flex-direction:column;gap:10px;list-style:none}
+.insights-list li{display:flex;gap:10px;font-size:13px;color:var(--ts);line-height:1.5}
+.insights-list li::before{content:"·";color:var(--g5);font-size:18px;line-height:1.2;flex-shrink:0}
+
+/* ── FILTER CHIPS ── */
+.chips{display:flex;gap:8px;flex-wrap:wrap;padding:16px 24px;border-bottom:1px solid var(--bd);background:var(--g0)}
+.chip{border:1px solid var(--bd);background:var(--card);color:var(--ts);font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;cursor:pointer;transition:all .15s}
+.chip:hover,.chip.active{background:var(--g7);color:#fff;border-color:var(--g7)}
+.chip-label{font-size:11px;color:var(--tm);align-self:center}
+
+/* ── CREDENTIAL TABLE ── */
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--g0)}
+th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--tm);padding:11px 16px;text-align:left;border-bottom:1px solid var(--bd)}
+tbody tr{border-bottom:1px solid #f0f4f0;transition:background .1s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:#f8fbf8}
+td{font-size:13px;padding:12px 16px;color:var(--t);vertical-align:middle}
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px}
+.pill.verified{background:var(--g1);color:var(--g7)}
+.pill.pending{background:#fef3c7;color:var(--amber)}
+.pill.partial{background:#e0f2fe;color:var(--blue)}
+.doc-link{font-size:12px;color:var(--g7);text-decoration:none;font-weight:500}
+.doc-link:hover{text-decoration:underline}
+
+/* ── EXPERIENCE DOMAINS ── */
+.domain-group{border-bottom:1px solid var(--bd)}
+.domain-group:last-child{border-bottom:none}
+.domain-toggle{width:100%;background:none;border:none;padding:14px 24px;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left;transition:background .1s}
+.domain-toggle:hover{background:var(--g0)}
+.domain-name{font-size:13px;font-weight:600;color:var(--t);flex:1}
+.domain-count{font-size:11px;color:var(--tm);background:#f0f4f0;padding:2px 8px;border-radius:10px}
+.domain-chevron{font-size:12px;color:var(--tm);transition:transform .2s}
+.domain-chevron.open{transform:rotate(90deg)}
+.domain-records{display:none;padding:0 24px 16px;flex-direction:column;gap:8px}
+.domain-records.open{display:flex}
+.ev-item{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:var(--g0);border-radius:8px;cursor:pointer;transition:background .15s}
+.ev-item:hover{background:var(--g1)}
+.ev-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.ev-body{flex:1}
+.ev-title{font-size:12px;font-weight:600;color:var(--t)}
+.ev-meta{font-size:11px;color:var(--tm);margin-top:2px}
+.ev-badges{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap}
+
+/* ── EXPANDABLE DETAIL ── */
+.ev-detail{display:none;padding:12px 16px;background:#fff;border:1px solid var(--bd);border-radius:8px;margin-top:4px}
+.ev-detail.open{display:block}
+.ev-detail p{font-size:12px;color:var(--ts);line-height:1.6}
+.ev-detail .ev-audit{font-size:11px;color:var(--tm);margin-top:8px;border-top:1px solid var(--bd);padding-top:8px}
+
+/* ── HEATMAP PANEL (hidden by default) ── */
+.heatmap-panel{display:none;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:24px}
+.heatmap-panel.visible{display:block}
+.heatmap-panel .chart-wrap{min-height:420px;background:var(--g0);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.heatmap-panel .chart-wrap #biocred-chart{width:100%;min-height:420px}
+
+/* ── DISCLAIMER ── */
+.disclaimer{text-align:center;font-size:11px;color:var(--tm);padding:24px 40px 40px;max-width:800px;margin:0 auto;line-height:1.7}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="logo">BioCred Registry</div>
+  <div class="sep">/</div>
+  <div class="breadcrumb">Public Profile · BCR-042</div>
+  <div class="spacer"></div>
+  <button class="heatmap-btn" onclick="toggleHeatmap()">⬡ View Experience Map</button>
+</div>
+
+<!-- IDENTITY HEADER (always above the fold) -->
+<div class="identity-header">
+  <div class="identity-inner">
+    <div>
+      <div class="id-name">Sarah Mitchell</div>
+      <div class="id-title">Wildlife Biologist · Field & Species Specialist</div>
+      <div class="id-meta">
+        <span>📍 <strong>California, USA</strong></span>
+        <span>📅 <strong>Practice span:</strong> 2010 – 2024</span>
+        <span>📄 <strong>63</strong> verified experience records</span>
+        <span>🎓 <strong>12</strong> verified credentials</span>
+        <span>🔄 Profile derived <strong>Apr 9, 2026</strong></span>
+      </div>
+    </div>
+    <div class="trust-block">
+      <div class="verified-badge">Documentation Verified</div>
+      <div class="trust-meta">
+        Last verification: Apr 8, 2026<br>
+        Registry ID: BCR-042<br>
+        Translation Engine: TE_v1.0
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- HEATMAP (optional layer, hidden by default) -->
+  <div class="heatmap-panel" id="heatmap-panel">
+    <div class="card-header" style="padding:0 0 16px">
+      <h2>BioCred Experience Profile</h2>
+      <span class="card-sub">Verified experience density map · <em>Optional layer</em></span>
+    </div>
+    <div class="chart-wrap">
+      <div id="biocred-chart"></div>
+    </div>
+    <p style="font-size:11px;color:var(--tm);margin-top:12px;text-align:center">
+      This visualization shows where verified experience has accumulated across the five BioCred domains. It is not a score.
+    </p>
+  </div>
+
+  <!-- PROFILE INSIGHTS -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Profile Insights</h2>
+      <span class="card-sub">Derived from verified documentation · No evaluative language</span>
+    </div>
+    <div class="card-body">
+      <ul class="insights-list">
+        <li>Primary participation concentration in Field &amp; Applied Practice, spanning 14 years of documented fieldwork across terrestrial and hydrologic environments.</li>
+        <li>Secondary concentration in Species &amp; Habitat Specialization, with recurrent species interaction across four documented modes including capture, handling, monitoring, and behavioral observation.</li>
+        <li>Distributed participation in Knowledge &amp; Research, with documented analytical and methods contributions across seven projects.</li>
+        <li>Limited documented exposure in Leadership &amp; Operational Coordination; participation recorded at contributor level in three records.</li>
+        <li>Regulatory &amp; Policy participation sparse — four records with CEQA and permit compliance context.</li>
+        <li>Project environments concentrated in coastal sage scrub, riparian corridors, and freshwater wetlands.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- QUICK FILTERS -->
+  <div class="card">
+    <div class="chips">
+      <span class="chip-label">Filter by:</span>
+      <span class="chip active" onclick="toggleChip(this)">All records</span>
+      <span class="chip" onclick="toggleChip(this)">Species handling</span>
+      <span class="chip" onclick="toggleChip(this)">CEQA / NEPA</span>
+      <span class="chip" onclick="toggleChip(this)">Aquatic</span>
+      <span class="chip" onclick="toggleChip(this)">Restoration</span>
+      <span class="chip" onclick="toggleChip(this)">Monitoring</span>
+      <span class="chip" onclick="toggleChip(this)">Verified only</span>
+    </div>
+
+    <!-- CREDENTIAL TABLE -->
+    <div class="card-header" style="border-top:1px solid var(--bd)">
+      <h2>Credential History</h2>
+      <span class="card-sub">12 verified records</span>
+    </div>
+    <table>
+      <thead><tr>
+        <th>Type</th><th>Title</th><th>Issuer</th><th>Year</th><th>Status</th><th>Document</th>
+      </tr></thead>
+      <tbody>
+        <tr><td>Degree</td><td>B.S. Wildlife Biology</td><td>UC Davis</td><td>2010</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
+        <tr><td>Degree</td><td>M.S. Conservation Ecology</td><td>UC Santa Barbara</td><td>2013</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
+        <tr><td>License</td><td>CA Professional Biologist (CPB)</td><td>California Biologist Board</td><td>2014</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
+        <tr><td>Permit</td><td>Scientific Collection Permit</td><td>CDFW</td><td>2016</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
+        <tr><td>Permit</td><td>Section 10(a)(1)(A) ESA Take Permit</td><td>USFWS</td><td>2018</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
+        <tr><td>CE Credit</td><td>GIS for Wildlife Management · 24h</td><td>Cornell Online</td><td>2022</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
+        <tr><td>CE Credit</td><td>NEPA Compliance Training · 16h</td><td>DOI Training Center</td><td>2023</td><td><span class="pill partial">◐ Partial</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
+        <tr><td>Award</td><td>Outstanding Field Biologist Award</td><td>The Wildlife Society</td><td>2021</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- EXPERIENCE EVIDENCE -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Experience Evidence</h2>
+      <span class="card-sub">63 records · grouped by domain · click any record to expand</span>
+    </div>
+
+    <div class="domain-group">
+      <button class="domain-toggle" onclick="toggleDomain(this)">
+        <span class="domain-name">Field &amp; Applied Practice</span>
+        <span class="domain-count">28 records</span>
+        <span class="domain-chevron">▶</span>
+      </button>
+      <div class="domain-records">
+        <div class="ev-item" onclick="toggleEvDetail(this)">
+          <span class="ev-icon">🌿</span>
+          <div class="ev-body">
+            <div class="ev-title">Breeding Bird Point Count Surveys — CDFW</div>
+            <div class="ev-meta">2014 – 2019 · Lead · Terrestrial monitoring</div>
+            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
+          </div>
+        </div>
+        <div class="ev-detail">
+          <p>Conducted systematic point count surveys for breeding passerines and raptors across 42 sites in the Central Valley. Designed field protocols, trained two junior biologists, and submitted annual reports to CDFW.</p>
+          <div class="ev-audit">Verification method: Document review + issuer confirmation · Verified Apr 2, 2026 · Audit ref: AUD-0241</div>
+        </div>
+        <div class="ev-item" onclick="toggleEvDetail(this)">
+          <span class="ev-icon">🐟</span>
+          <div class="ev-body">
+            <div class="ev-title">Salmonid Habitat Assessment — NOAA contract</div>
+            <div class="ev-meta">2016 – 2018 · Contributor · Aquatic / riparian</div>
+            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
+          </div>
+        </div>
+        <div class="ev-detail">
+          <p>Assisted in habitat suitability assessments for Coho salmon and steelhead in coastal streams. Collected substrate, canopy cover, and large woody debris data across 18 stream reaches.</p>
+          <div class="ev-audit">Verification method: Document review · Verified Mar 28, 2026 · Audit ref: AUD-0198</div>
+        </div>
+        <div class="ev-item" onclick="toggleEvDetail(this)">
+          <span class="ev-icon">🌾</span>
+          <div class="ev-body">
+            <div class="ev-title">Vernal Pool Botanical Surveys — Army Corps</div>
+            <div class="ev-meta">2019 – 2021 · Lead · Wetland / restoration</div>
+            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
+          </div>
+        </div>
+        <div class="ev-detail">
+          <p>Led protocol-level surveys for federally listed vernal pool plants including Orcuttia spp. and Navarretia spp. Produced delineation reports submitted to Army Corps of Engineers.</p>
+          <div class="ev-audit">Verification method: Document review · Verified Apr 1, 2026 · Audit ref: AUD-0217</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="domain-group">
+      <button class="domain-toggle" onclick="toggleDomain(this)">
+        <span class="domain-name">Species &amp; Habitat Specialization</span>
+        <span class="domain-count">18 records</span>
+        <span class="domain-chevron">▶</span>
+      </button>
+      <div class="domain-records">
+        <div class="ev-item" onclick="toggleEvDetail(this)">
+          <span class="ev-icon">🦅</span>
+          <div class="ev-body">
+            <div class="ev-title">Raptor Handling &amp; Banding — USFWS permit</div>
+            <div class="ev-meta">2015 – 2024 · Lead · Capture / handling</div>
+            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
+          </div>
+        </div>
+        <div class="ev-detail">
+          <p>Operated under federal banding permit to capture, band, and release raptors at three migration monitoring stations. Total of 340+ individuals processed across nine species.</p>
+          <div class="ev-audit">Verification method: Federal permit review · Verified Apr 3, 2026 · Audit ref: AUD-0229</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="domain-group">
+      <button class="domain-toggle" onclick="toggleDomain(this)">
+        <span class="domain-name">Knowledge &amp; Research</span>
+        <span class="domain-count">9 records</span>
+        <span class="domain-chevron">▶</span>
+      </button>
+      <div class="domain-records">
+        <div class="ev-item" onclick="toggleEvDetail(this)">
+          <span class="ev-icon">📊</span>
+          <div class="ev-body">
+            <div class="ev-title">Occupancy Modeling — M.S. thesis research</div>
+            <div class="ev-meta">2011 – 2013 · Principal · Statistical methods</div>
+            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
+          </div>
+        </div>
+        <div class="ev-detail">
+          <p>Designed and executed multi-season occupancy study for the California tiger salamander. Applied program MARK and R for detection-corrected occupancy estimates across 60 wetland sites.</p>
+          <div class="ev-audit">Verification method: Thesis document review · Verified Mar 30, 2026 · Audit ref: AUD-0204</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="domain-group">
+      <button class="domain-toggle" onclick="toggleDomain(this)">
+        <span class="domain-name">Regulation &amp; Policy</span>
+        <span class="domain-count">5 records</span>
+        <span class="domain-chevron">▶</span>
+      </button>
+      <div class="domain-records">
+        <div class="ev-item" onclick="toggleEvDetail(this)">
+          <span class="ev-icon">📋</span>
+          <div class="ev-body">
+            <div class="ev-title">CEQA Biological Resources Report — Caltrans</div>
+            <div class="ev-meta">2020 – 2021 · Contributor · Regulatory compliance</div>
+            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
+          </div>
+        </div>
+        <div class="ev-detail">
+          <p>Contributed biological resources sections to CEQA Initial Study for SR-99 corridor project. Conducted focused surveys for special-status species and prepared mitigation measure summaries.</p>
+          <div class="ev-audit">Verification method: Document review · Verified Apr 4, 2026 · Audit ref: AUD-0233</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="domain-group">
+      <button class="domain-toggle" onclick="toggleDomain(this)">
+        <span class="domain-name">Leadership &amp; Operational Coordination</span>
+        <span class="domain-count">3 records</span>
+        <span class="domain-chevron">▶</span>
+      </button>
+      <div class="domain-records">
+        <div class="ev-item" onclick="toggleEvDetail(this)">
+          <span class="ev-icon">👥</span>
+          <div class="ev-body">
+            <div class="ev-title">Field Team Coordination — CDFW multi-site project</div>
+            <div class="ev-meta">2022 – 2023 · Lead · Team coordination</div>
+            <div class="ev-badges"><span class="pill partial">◐ Partial</span></div>
+          </div>
+        </div>
+        <div class="ev-detail">
+          <p>Coordinated scheduling and logistics for a 4-person field team across 12 survey sites. Managed data QA/QC and submitted weekly progress reports to agency project manager.</p>
+          <div class="ev-audit">Verification method: Document review (partial) · Audit ref: AUD-0251</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  BioCred Registry documents and organizes verified biological credentials and field experience for informational purposes only.
+  This profile does not constitute an endorsement, ranking, or evaluation of any individual.
+  No scores, ratings, or comparative assessments are made or implied.
+  All information is derived from submitted and verified documentation.
+</div>
+
+<script src="../renderer/biocred-geometry.js"></script>
+<script src="../renderer/biocred-renderer.js"></script>
+<script src="../renderer/profile_page_v1_demo.js"></script>
+<script>
+function toggleHeatmap() {
+  var panel = document.getElementById("heatmap-panel");
+  var btn = document.querySelector(".heatmap-btn");
+  var isVisible = panel.classList.toggle("visible");
+  btn.textContent = isVisible ? "✕ Hide Experience Map" : "⬡ View Experience Map";
+  if (isVisible && !document.getElementById("biocred-chart").hasChildNodes()) {
+    BioCred.renderFromPayload("biocred-chart", DEMO_PAYLOAD);
+  }
+}
+
+function toggleDomain(btn) {
+  var records = btn.nextElementSibling;
+  var chevron = btn.querySelector(".domain-chevron");
+  records.classList.toggle("open");
+  chevron.classList.toggle("open");
+}
+
+function toggleEvDetail(item) {
+  var detail = item.nextElementSibling;
+  if (detail && detail.classList.contains("ev-detail"))
+    detail.classList.toggle("open");
+}
+
+function toggleChip(chip) {
+  document.querySelectorAll(".chip").forEach(function(c) { c.classList.remove("active"); });
+  chip.classList.add("active");
+}
+</script>
+</body>
+</html>
