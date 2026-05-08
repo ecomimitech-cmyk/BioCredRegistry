@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioCred — Secure Payment</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--g9:#0E2F22;--g7:#1F6A46;--g5:#2d8a58;--g1:#d9f6df;--g0:#f0f9f2;--t:#1a2e1a;--ts:#4a6a4a;--tm:#7a9a7a;--bd:#c8ddc8;--bg:#f4f6f4;--card:#fff}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;padding:40px 20px}
+
+.page{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
+
+/* ── LEFT: PLAN SUMMARY ── */
+.plan-col{display:flex;flex-direction:column;gap:20px}
+
+.page-brand{font-size:13px;font-weight:700;color:var(--g7);letter-spacing:.3px;margin-bottom:4px}
+.page-title{font-size:22px;font-weight:700;color:var(--t);letter-spacing:-.3px}
+.page-sub{font-size:13px;color:var(--ts);margin-top:4px}
+
+.plan-card{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+.plan-header{background:var(--g9);padding:20px 24px;color:#fff}
+.plan-header .plan-name{font-size:13px;font-weight:600;opacity:.65;letter-spacing:.5px;text-transform:uppercase}
+.plan-header .plan-price{font-size:32px;font-weight:700;margin-top:4px}
+.plan-header .plan-price span{font-size:14px;font-weight:400;opacity:.65}
+.plan-header .plan-desc{font-size:12px;opacity:.6;margin-top:4px}
+.plan-features{padding:20px 24px;display:flex;flex-direction:column;gap:10px}
+.feature{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--ts)}
+.feature::before{content:"✓";color:var(--g5);font-weight:700;flex-shrink:0;margin-top:1px}
+
+.plan-switcher{display:flex;flex-direction:column;gap:8px}
+.plan-option{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1.5px solid var(--bd);border-radius:10px;cursor:pointer;transition:all .15s;background:var(--card)}
+.plan-option:hover{border-color:var(--g5);background:var(--g0)}
+.plan-option.selected{border-color:var(--g7);background:var(--g0)}
+.plan-option input[type=radio]{accent-color:var(--g7);width:16px;height:16px;flex-shrink:0}
+.plan-option-body{flex:1}
+.plan-option-name{font-size:13px;font-weight:600;color:var(--t)}
+.plan-option-desc{font-size:11px;color:var(--tm);margin-top:1px}
+.plan-option-price{font-size:14px;font-weight:700;color:var(--g7);white-space:nowrap}
+.plan-save{font-size:10px;font-weight:700;background:var(--g1);color:var(--g7);padding:2px 7px;border-radius:10px;margin-left:6px}
+
+.security-note{display:flex;gap:8px;align-items:center;font-size:11px;color:var(--tm);padding:12px 16px;background:var(--g0);border:1px solid var(--bd);border-radius:8px}
+.security-note .lock{font-size:16px}
+
+/* ── RIGHT: PAYMENT FORM ── */
+.pay-col{display:flex;flex-direction:column;gap:0}
+.pay-card{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden}
+.pay-card-header{padding:18px 24px;border-bottom:1px solid var(--bd)}
+.pay-card-header h2{font-size:14px;font-weight:700;color:var(--t)}
+.pay-card-body{padding:24px;display:flex;flex-direction:column;gap:18px}
+
+/* Apple Pay / Google Pay buttons */
+.express-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.express-btn{display:flex;align-items:center;justify-content:center;gap:6px;border:1.5px solid var(--bd);border-radius:8px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;background:#fff;color:var(--t)}
+.express-btn:hover{border-color:#888;background:#f9f9f9}
+.express-btn .icon{font-size:17px}
+.express-btn.apple{background:#000;color:#fff;border-color:#000}
+.express-btn.apple:hover{background:#222}
+
+.divider{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--tm)}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--bd)}
+
+/* Form fields */
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:11px;font-weight:600;color:var(--ts)}
+.field input,.field select{border:1.5px solid var(--bd);border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;color:var(--t);background:#fff;outline:none;width:100%;transition:border-color .15s}
+.field input:focus,.field select:focus{border-color:var(--g5)}
+.field input.card-input{letter-spacing:1px}
+.row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.row-3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+
+/* Card visual */
+.card-visual{background:linear-gradient(135deg,var(--g9),var(--g5));border-radius:10px;padding:18px 20px;color:#fff;position:relative;overflow:hidden;min-height:96px}
+.card-visual::after{content:"";position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
+.card-visual .chip{width:32px;height:24px;background:linear-gradient(135deg,#d4a847,#f0c060);border-radius:4px;margin-bottom:10px}
+.card-visual .card-num{font-size:15px;letter-spacing:2px;font-weight:500;opacity:.9}
+.card-visual .card-meta{display:flex;gap:24px;margin-top:8px;font-size:11px;opacity:.6}
+
+/* Summary line */
+.pay-summary{background:var(--g0);border-top:1px solid var(--bd);padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
+.pay-summary .label{font-size:13px;color:var(--ts)}
+.pay-summary .amount{font-size:20px;font-weight:700;color:var(--g7)}
+
+/* Submit */
+.btn-pay{width:100%;background:var(--g7);color:#fff;border:none;border-radius:8px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;transition:background .15s;margin-top:4px}
+.btn-pay:hover{background:var(--g9)}
+
+.pay-legal{font-size:10px;color:var(--tm);text-align:center;line-height:1.6;padding:0 4px}
+
+/* ── CONFIRMATION STATE ── */
+.confirmation{display:none;text-align:center;padding:40px 24px;flex-direction:column;align-items:center;gap:14px}
+.confirmation.visible{display:flex}
+.conf-icon{font-size:48px}
+.conf-title{font-size:20px;font-weight:700;color:var(--g7)}
+.conf-sub{font-size:13px;color:var(--ts);max-width:280px;line-height:1.6}
+.conf-ref{font-size:11px;color:var(--tm);background:var(--g0);padding:6px 14px;border-radius:20px;margin-top:4px}
+
+@media(max-width:700px){
+  .page{grid-template-columns:1fr}
+  .plan-col{order:2}.pay-col{order:1}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- LEFT: PLAN SUMMARY -->
+  <div class="plan-col">
+    <div>
+      <div class="page-brand">BioCred Registry</div>
+      <div class="page-title">Secure Checkout</div>
+      <div class="page-sub">All payments processed securely. No SSNs or sensitive personal data stored.</div>
+    </div>
+
+    <!-- Plan switcher -->
+    <div class="plan-switcher">
+      <label class="plan-option selected" id="opt-annual">
+        <input type="radio" name="plan" value="annual" checked onchange="selectPlan('annual')">
+        <div class="plan-option-body">
+          <div class="plan-option-name">Annual Plan <span class="plan-save">SAVE 20%</span></div>
+          <div class="plan-option-desc">Billed once per year · cancel anytime</div>
+        </div>
+        <div class="plan-option-price">$79<span style="font-size:11px;font-weight:400">/yr</span></div>
+      </label>
+      <label class="plan-option" id="opt-monthly">
+        <input type="radio" name="plan" value="monthly" onchange="selectPlan('monthly')">
+        <div class="plan-option-body">
+          <div class="plan-option-name">Monthly Plan</div>
+          <div class="plan-option-desc">Billed monthly · cancel anytime</div>
+        </div>
+        <div class="plan-option-price">$8<span style="font-size:11px;font-weight:400">/mo</span></div>
+      </label>
+    </div>
+
+    <!-- What's included -->
+    <div class="plan-card">
+      <div class="plan-header">
+        <div class="plan-name">BioCred Verified Profile</div>
+        <div class="plan-price">$79 <span>/ year</span></div>
+        <div class="plan-desc">Full access for biologists — upload, verify, share</div>
+      </div>
+      <div class="plan-features">
+        <div class="feature">Verified credential profile page</div>
+        <div class="feature">Unlimited document uploads</div>
+        <div class="feature">Agency-facing traditional review</div>
+        <div class="feature">Optional experience map (heatmap)</div>
+        <div class="feature">Secure document storage</div>
+        <div class="feature">Shareable profile link</div>
+      </div>
+    </div>
+
+    <div class="security-note">
+      <span class="lock">🔒</span>
+      <span>256-bit SSL encryption. Payments handled by Stripe. BioCred does not store card numbers. No Social Security Numbers collected.</span>
+    </div>
+  </div>
+
+  <!-- RIGHT: PAYMENT FORM -->
+  <div class="pay-col">
+    <div class="pay-card">
+      <div class="pay-card-header"><h2>Payment details</h2></div>
+
+      <!-- Form -->
+      <div class="pay-card-body" id="pay-form">
+
+        <!-- Express checkout -->
+        <div class="express-row">
+          <button class="express-btn apple" onclick="expressCheckout('apple')">
+            <span class="icon">🍎</span> Apple Pay
+          </button>
+          <button class="express-btn" onclick="expressCheckout('google')">
+            <span class="icon">G</span> Google Pay
+          </button>
+        </div>
+
+        <div class="divider">or pay with card</div>
+
+        <!-- Card visual -->
+        <div class="card-visual">
+          <div class="chip"></div>
+          <div class="card-num" id="card-display">•••• •••• •••• ••••</div>
+          <div class="card-meta">
+            <span id="name-display">FULL NAME</span>
+            <span id="exp-display">MM/YY</span>
+          </div>
+        </div>
+
+        <!-- Card fields -->
+        <div class="field">
+          <label>Name on card</label>
+          <input type="text" placeholder="Sarah Mitchell" oninput="updateCard('name',this.value)">
+        </div>
+        <div class="field">
+          <label>Card number</label>
+          <input type="text" class="card-input" placeholder="1234 5678 9012 3456" maxlength="19"
+                 oninput="formatCard(this)" onchange="updateCard('num',this.value)">
+        </div>
+        <div class="row-2">
+          <div class="field">
+            <label>Expiry date</label>
+            <input type="text" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+          </div>
+          <div class="field">
+            <label>CVC</label>
+            <input type="text" placeholder="123" maxlength="4">
+          </div>
+        </div>
+
+        <div class="divider">billing address</div>
+
+        <div class="field">
+          <label>Country</label>
+          <select>
+            <option>United States</option>
+            <option>Canada</option>
+            <option>Spain</option>
+            <option>United Kingdom</option>
+            <option>Australia</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>ZIP / Postal code</label>
+          <input type="text" placeholder="94103">
+        </div>
+
+      </div>
+
+      <!-- Confirmation (hidden) -->
+      <div class="confirmation" id="confirmation">
+        <div class="conf-icon">✅</div>
+        <div class="conf-title">Payment successful</div>
+        <div class="conf-sub">Your BioCred verified profile is now active. Check your email for a receipt and next steps.</div>
+        <div class="conf-ref" id="conf-ref">Ref: —</div>
+      </div>
+
+      <!-- Total + submit -->
+      <div class="pay-summary" id="pay-summary">
+        <span class="label">Total due today</span>
+        <span class="amount" id="total-display">$79.00</span>
+      </div>
+      <div style="padding:16px 24px;display:flex;flex-direction:column;gap:10px" id="pay-actions">
+        <button class="btn-pay" onclick="submitPayment()">Pay $79.00 securely</button>
+        <div class="pay-legal">
+          By completing this purchase you agree to BioCred's Terms of Service and Privacy Policy.
+          Subscription renews automatically. Cancel anytime from your account.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+var plans = { annual: { price: "$79.00", label: "Pay $79.00 securely" }, monthly: { price: "$8.00", label: "Pay $8.00 securely" } };
+var currentPlan = "annual";
+
+function selectPlan(plan) {
+  currentPlan = plan;
+  document.getElementById("opt-annual").classList.toggle("selected", plan === "annual");
+  document.getElementById("opt-monthly").classList.toggle("selected", plan === "monthly");
+  document.getElementById("total-display").textContent = plans[plan].price;
+  document.querySelector(".btn-pay").textContent = plans[plan].label;
+}
+
+function updateCard(field, val) {
+  if (field === "name") document.getElementById("name-display").textContent = val.toUpperCase() || "FULL NAME";
+  if (field === "num") {
+    var masked = val.replace(/\s/g,"").replace(/(.{4})/g,"$1 ").trim();
+    document.getElementById("card-display").textContent = masked || "•••• •••• •••• ••••";
+  }
+}
+
+function formatCard(input) {
+  var v = input.value.replace(/\D/g,"").slice(0,16);
+  input.value = v.replace(/(.{4})/g,"$1 ").trim();
+  updateCard("num", input.value);
+}
+
+function formatExpiry(input) {
+  var v = input.value.replace(/\D/g,"").slice(0,4);
+  if (v.length >= 3) v = v.slice(0,2) + " / " + v.slice(2);
+  input.value = v;
+  document.getElementById("exp-display").textContent = v || "MM/YY";
+}
+
+function expressCheckout(type) {
+  submitPayment();
+}
+
+function submitPayment() {
+  document.getElementById("pay-form").style.display = "none";
+  document.getElementById("pay-actions").style.display = "none";
+  document.getElementById("pay-summary").style.display = "none";
+  document.getElementById("confirmation").classList.add("visible");
+  document.getElementById("conf-ref").textContent = "Ref: BCR-" + Math.random().toString(36).slice(2,8).toUpperCase();
+}
+</script>
+</body>
+</html>
