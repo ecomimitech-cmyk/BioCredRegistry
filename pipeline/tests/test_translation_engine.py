@@ -117,7 +117,6 @@ sample_record = {
     "role_level": "lead",
     "years_applied": 10,
     "verification_status": "verified",
-    "is_verified": True,
 }
 
 units = translate_record(sample_record)

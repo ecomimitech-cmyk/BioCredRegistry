@@ -45,14 +45,17 @@ biocred-registry/
 │       ├── test_careers.py          # 44 extreme career & neutrality tests
 │       ├── test_translation_engine.py # 105 TE Spec v1.0 acceptance tests
 │       ├── test_profile_insights.py # 19 insights generator tests
+│       ├── test_axis_contract.py    # 28 cross-language axis-contract guard tests
 │       ├── sample_cv.txt
 │       ├── sample_cv_minimal.txt   # Edge case: unclassified fallback
 │       ├── sample_cv_complex.txt   # Edge cases: combined headers, dates, bullets
 │       └── sample_cv_government.txt # Government biologist archetype
 ├── renderer/               # Phase 2E: Vanilla JS pentagon renderer
-│   ├── biocred-geometry.js # Geometry & KDE utilities
-│   ├── biocred-renderer.js # Canvas renderer (Webflow-embeddable)
-│   └── test_renderer.html  # Interactive test with 3 archetypes
+│   ├── biocred-geometry.js # Geometry & KDE utilities + centroid()
+│   ├── biocred-renderer.js # Canvas renderer (Webflow-embeddable) with black centroid dot
+│   ├── test_renderer.html  # Interactive test with 3 archetypes (KR/LOC/SHS/FAP/RP)
+│   ├── test_centroid_visual.js # Headless-Chrome pixel-sampling test (7 assertions)
+│   └── capture_archetypes.js   # One-shot screenshot generator for review
 ├── mockups/                # Visual references (read-only)
 ├── tests/                  # Phase 1 validation tests
 ├── phase1_preview.html     # Client-facing Phase 1 preview
@@ -69,6 +72,12 @@ biocred-registry/
 | FAP | Field & Applied Practice             | Field Work · Lab Work · Implementation     |
 | RP  | Regulation & Policy                  | Regulation · Compliance · Policy           |
 
+The canonical (logical) order is `KR, LOC, SHS, FAP, RP`. The visual
+(geometric) order on the pentagon is `KR, SHS, FAP, RP, LOC` clockwise
+from the top vertex. These two orders must never be interchanged. See
+`docs/axis_contract_v1.md` for the locked contract and the bridge rule
+that prevents index swaps between Python and JavaScript.
+
 ## Pipeline: CV → BioCred Profile
 
 ```
@@ -83,34 +92,48 @@ No AI evaluation, no scoring, no ranking — translation only.
 ## Running Tests
 
 ```bash
-python3 tests/test_schema.py                    # Phase 1: 79 tests
-python3 pipeline/tests/test_pipeline.py          # Phase 2: 80 end-to-end tests
-python3 pipeline/tests/test_parser_extractor.py  # Parser & extractor: 40 unit tests
-python3 pipeline/tests/test_classifier_context.py  # Classifier & context_matcher: 73 unit tests
-python3 pipeline/tests/test_careers.py            # Extreme career archetypes & neutrality: 44 tests
+python3 tests/test_schema.py                       # Phase 1: 79 tests
+python3 pipeline/tests/test_pipeline.py            # Phase 2: 80 end-to-end tests
+python3 pipeline/tests/test_parser_extractor.py    # Parser & extractor: 40 unit tests
+python3 pipeline/tests/test_classifier_context.py  # Classifier & context: 73 unit tests
+python3 pipeline/tests/test_careers.py             # Extreme career archetypes: 44 tests
 python3 pipeline/tests/test_translation_engine.py  # TE Spec v1.0 acceptance: 105 tests
-python3 pipeline/tests/test_profile_insights.py   # Profile insights generator: 19 tests
+python3 pipeline/tests/test_profile_insights.py    # Profile insights: 19 tests
+python3 pipeline/tests/test_axis_contract.py       # Axis contract guard: 28 tests
+node     renderer/test_centroid_visual.js          # Centroid visual: 7 tests (headless Chrome)
 ```
 
-**Total: 440 tests, 0 failures**
+**Total: 475 tests, 0 failures.**
 
-## Status
+## Status (per Alexander Funk's status language)
 
-- Phase 1: Data Foundation — Complete (79 tests)
-- Phase 2A-C: Pipeline — Complete (237 tests)
-- Translation Engine v1.0 — Complete (105 tests)
-- Profile Insights Generator — Complete (19 tests)
-- Supabase RLS Policies — Complete
-- Pentagon Renderer (vanilla JS) — Complete
-- Webflow Integration — Pending (landing page + profile page)
+- Phase 1: Data Foundation — **Core foundation built** (79 tests).
+- Phase 2A-C: Pipeline — **Core foundation built** (237 tests).
+- Translation Engine v1.0 — **Core foundation built** (105 tests).
+- Profile Insights Generator — **Core foundation built** (19 tests).
+- Supabase RLS Policies — **Prototype complete; requires live integration.**
+- Pentagon Renderer (vanilla JS) — **Core foundation built**, with
+  black centroid dot and locked axis contract (28 + 7 tests).
+- Block 1 — Foundation lock — **Complete this slice** (May 2026).
+- Block 2 — Live vertical slice — **Requires live integration**.
+- Block 3 — Public profile wiring — **Requires production hardening**.
 
-## Latest Update
+## Latest Update — May 2026 (Block 1 slice, 3h)
 
-- Renderer visual tuning pass applied in `renderer/biocred-renderer.js`:
-  - smoother KDE blending with low-density suppression
-  - label placement clamped to canvas bounds to avoid text clipping
-  - reduced point-marker noise for a cleaner chart look
-  - stronger pentagon visual structure and richer green tonal gradient
-  - click interaction on evidence points with highlight feedback
-  - larger label typography with white halo for readability over density
-  - reduced density curvature artifacts with rebalanced KDE blend
+- Locked axis contract end-to-end. Single source of truth in
+  `pipeline/te_constants.py` and mirrored in
+  `renderer/biocred-geometry.js`; full doc in
+  `docs/axis_contract_v1.md`. Cross-language guard test asserts
+  Python ≈ JS within 1e-6 over five axis-mix fixtures.
+- Fixed a silent index-swap bug in
+  `pentagon_mapper.map_trajectory()` that was rotating LOC, SHS,
+  FAP, RP weights onto the wrong vertices. Tests had been
+  passing because every misrouting still produced a point inside
+  the pentagon.
+- Added the black centroid dot (with directional dashed line from
+  centre when off-centre) to the renderer; validated by sampling
+  canvas pixels in headless Chrome for the Field, Regulatory and
+  Academic archetypes.
+- Drafted `docs/production_migration_checklist_v1.md` and
+  `docs/storage_policy_plan_v1.md` so the Block 2 wiring work can
+  start the moment funding picks up.

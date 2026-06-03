@@ -13,8 +13,12 @@ from pathlib import Path
 
 from context_matcher import match_contexts, calculate_intensity
 
+try:
+    from pipeline.te_constants import AXIS_ORDER
+except ImportError:
+    from te_constants import AXIS_ORDER
+
 CONFIG_DIR = Path(__file__).parent / "config"
-AXIS_ORDER = ["KR", "LOC", "SHS", "FAP", "RP"]
 
 
 def load_keyword_ontology() -> dict:
@@ -142,11 +146,8 @@ def expand_to_yearly(classified: dict) -> list:
         yearly.append({
             "year": year,
             "vector": [
-                classified["domain_weights"].get("KR", 0),
-                classified["domain_weights"].get("LOC", 0),
-                classified["domain_weights"].get("SHS", 0),
-                classified["domain_weights"].get("FAP", 0),
-                classified["domain_weights"].get("RP", 0),
+                classified["domain_weights"].get(axis, 0)
+                for axis in AXIS_ORDER
             ],
             "source_role": classified["role"],
         })

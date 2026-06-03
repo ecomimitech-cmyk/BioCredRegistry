@@ -1,5 +1,106 @@
 # BioCred Registry — Changelog
 
+## [0.9.0] - 2026-06-03
+
+### Block 1 — June week 1 (foundation gaps closed)
+
+- **experience_evidence.verification_status** — replaces `is_verified`; seeds + RLS aligned.
+- **public.profile_render_v1** — `registry_id` → `render_payload_json` for verified active profiles.
+- **public.profile_public_v1**, **credential_public_v1**, **evidence_public_v1** — public-safe views.
+- **Audit triggers** — auto-insert `verification_audit_log` on status changes.
+- **Verified-record edit lock** — blocks silent edits to core fields when status is `verified`.
+- **database/seed/07_render_payload_demo.sql** — demo payload for `FC2401`.
+- **docs/staging_deploy_block1_v1.md** — staging apply order + smoke SQL.
+- **frontend/public_profile_supabase_v1.js** — Supabase fetch by `registry_id`.
+
+Migration: `database/migrations/2026_06_block1_evidence_status_and_public_views.sql`
+
+## [0.8.0] - 2026-05-06
+
+### Added — Block 1 axis contract lock + visible centroid + production planning docs
+Scope: 3-hour Block 1 slice agreed with Alexander on May 4 ("axis contract,
+centroid dot, production migration checklist, storage policy plan").
+Funding: 3h. Status: complete, suite green at 475 tests.
+
+- **docs/axis_contract_v1.md** — single source of truth for axis identifiers,
+  canonical (logical) order, visual (geometric) order, pentagon orientation
+  angles, the bridge rule that bans index-zip across the two orders, and the
+  procedure to add or rename an axis.
+- **pipeline/te_constants.py** — promoted to authoritative constants module.
+  Now also exposes `PENTAGON_VISUAL_ORDER` and `PENTAGON_ORIENTATION` so
+  every other module imports a single definition.
+- **pipeline/pentagon_mapper.py** — imports axis order from `te_constants`,
+  decouples logical iteration from visual vertex layout, adds
+  `vertex_for_axis(axis, verts)`, fixes silent LOC↔SHS↔FAP↔RP swap inside
+  `map_trajectory()`. Output payload now also reports `visual_order`.
+- **pipeline/pentagon_mapper._on_segment** — tolerance widened from 1e-9 to
+  1e-4 so points that fall exactly on a pentagon edge (now reachable after
+  the swap fix) are correctly classified inside.
+- **pipeline/classifier.py** — yearly vector layout uses
+  `te_constants.AXIS_ORDER` instead of a literal axis list.
+- **pipeline/profile_insights.py** — drops local AXIS_ORDER copy and imports
+  from `te_constants`.
+- **renderer/biocred-geometry.js** — mirrors the Python contract. Adds
+  `PENTAGON_VISUAL_ORDER`, `PENTAGON_ORIENTATION`, `vertexForAxis()` and
+  `centroid()`. `barycentricXY()` now indexes by axis name (not by array
+  position) so renderer payloads are immune to caller order.
+- **renderer/biocred-renderer.js** — black centroid dot drawn over the
+  density blob (filled black inside white halo), with a dashed line from
+  centre when the centroid sits more than 6 % of the radius from origin
+  (visible deliverable per Alexander's mockups). Labels iterate
+  `PENTAGON_VISUAL_ORDER` (visual placement) instead of AXIS_ORDER.
+- **renderer/test_renderer.html** — three demo payloads ported from the
+  deprecated `KG/OC/BR/ABP/GOV` axis ids to the locked BPP_v1.0 ids
+  `KR/LOC/SHS/FAP/RP`. The page was previously rendering a
+  visually-correct-but-axis-blind pentagon because every weight key was
+  unknown to the renderer; it now renders real archetype distributions.
+- **pipeline/tests/test_axis_contract.py** — 28-assertion cross-language
+  guard test. Validates Python self-consistency, geometric placement,
+  order-agnostic mapping, the trajectory-swap regression, and Python ↔ JS
+  parity (structural always, runtime via Node when `node` is on PATH).
+- **renderer/test_centroid_visual.js** — headless-Chrome test that loads
+  `test_renderer.html`, samples canvas pixels, and asserts the black
+  centroid lands within 6 px of the geometric mean of evidence points
+  for the Field, Regulatory and Academic archetypes; also verifies the
+  empty-profile fallback. Uses system Chrome at
+  `/Applications/Google Chrome.app/...` so it works without
+  `puppeteer browsers install`.
+- **renderer/capture_archetypes.js** — one-shot screenshot generator
+  for review (writes `renderer/screenshots/archetype_field.png`,
+  `archetype_regulatory.png`, `archetype_academic.png`).
+- **docs/production_migration_checklist_v1.md** — draft for Alexander.
+  Sequenced from §0 axis pre-flight through §11 rollback plan; encodes
+  Block 2 vertical-slice acceptance criteria (login → upload → reviewer →
+  audit → public profile from live data) and lists the schema gaps
+  Alexander flagged (registry_id↔profile_id, evidence verification status,
+  audit triggers, verified-record edit lock, public-safe views).
+- **docs/storage_policy_plan_v1.md** — draft for Alexander. Defines the two
+  private buckets (`credentials_docs`, `evidence_docs`), full Storage RLS
+  SQL anchored on `storage_profile_id(name)`, the signed-URL flow via an
+  Edge Function (10-minute expiry), bucket smoke-tests, and four open
+  questions with proposed defaults.
+- **Test totals**: 475 (79 schema + 80 pipeline + 40 parser/extractor +
+  73 classifier/context + 44 careers + 105 translation engine +
+  19 profile insights + 28 axis contract + 7 centroid visual), 0 failures.
+
+### Fixed — pre-existing bugs surfaced by the contract lock
+- `pentagon_mapper.map_trajectory()` was silently routing LOC weight onto
+  the SHS vertex, SHS onto FAP, FAP onto RP, and RP onto LOC, because it
+  zipped a canonical-order yearly vector with a visual-order vertex list.
+  Tests passed because convex combinations of pentagon vertices are
+  always inside the pentagon, regardless of which weight ends up on
+  which vertex. Now fixed and regression-tested.
+- `pentagon_mapper._on_segment` was too strict (1e-9). After the swap fix,
+  KR-heavy weights correctly land on the KR–SHS edge, where the previous
+  tolerance produced a false-negative "outside polygon". Tolerance is now
+  1e-4 (looser than the 6-decimal vertex rounding upstream). 44/44
+  archetype career tests pass.
+- `renderer/test_renderer.html` demo payloads had been stale since v0.7.0
+  (March migration to BPP_v1.0). Renderer was treating every weight key
+  as missing → falling back to equal weights → equal-density blob in the
+  centre. Demos now reflect the intended Field / Regulatory / Academic
+  archetypes.
+
 ## [0.7.3] - 2026-03-03
 
 ### Changed — Label Readability + Density Shape Cleanup

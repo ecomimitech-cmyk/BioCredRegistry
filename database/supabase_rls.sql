@@ -122,7 +122,7 @@ ALTER TABLE experience_evidence ENABLE ROW LEVEL SECURITY;
 CREATE POLICY evidence_public_read ON experience_evidence
     FOR SELECT TO anon, authenticated
     USING (
-        is_verified = TRUE
+        verification_status IN ('verified', 'partial')
         AND EXISTS (
             SELECT 1 FROM biologist_profile bp
             WHERE bp.id = experience_evidence.profile_id

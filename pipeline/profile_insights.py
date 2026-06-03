@@ -13,7 +13,10 @@ Language rules (from Alexander's Profile Page Spec):
 from __future__ import annotations
 from collections import Counter
 
-AXIS_ORDER = ["KR", "LOC", "SHS", "FAP", "RP"]
+try:
+    from pipeline.te_constants import AXIS_ORDER
+except ImportError:
+    from te_constants import AXIS_ORDER
 
 AXIS_NAMES = {
     "KR":  "Knowledge & Research",

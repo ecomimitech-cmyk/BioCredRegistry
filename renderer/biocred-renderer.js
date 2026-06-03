@@ -17,6 +17,7 @@
 
   var Geo = root.BioCredGeo;
   var AXIS_ORDER = Geo.AXIS_ORDER;
+  var PENTAGON_VISUAL_ORDER = Geo.PENTAGON_VISUAL_ORDER;
 
   var AXIS_LABELS = {
     KR:  { full: "Knowledge & Research",                  short: "KR",  descriptor: "Research • Methods • Synthesis" },
@@ -47,7 +48,9 @@
     point:        "rgba(220,250,225,0.62)",
     pointStroke:  "rgba(50,110,60,0.30)",
     pointActive:  "#F3FFF5",
-    pointActiveStroke: "#2E7A48"
+    pointActiveStroke: "#2E7A48",
+    centroid:     "#000000",
+    centroidRing: "rgba(255,255,255,0.85)"
   };
 
   /* ── Drawing functions ── */
@@ -111,7 +114,7 @@
     for (var i = 0; i < 5; i++) {
       var v = verts[i], dx = v.x - cx, dy = v.y - cy, d = Math.sqrt(dx * dx + dy * dy);
       var lx = v.x + (dx / d) * off, ly = v.y + (dy / d) * off;
-      var info = AXIS_LABELS[AXIS_ORDER[i]];
+      var info = AXIS_LABELS[PENTAGON_VISUAL_ORDER[i]];
       ctx.textAlign = "center";
       ctx.font = "bold 15px " + font; var w0 = ctx.measureText(info.short).width;
       ctx.font = "11px " + font; var w1 = ctx.measureText(info.full).width;
@@ -237,6 +240,34 @@
     ctx.setLineDash([]);
   }
 
+  function drawCentroid(ctx, points, cx, cy, radius) {
+    if (!points || points.length === 0) return;
+    var c = Geo.centroid(points);
+    if (!c) return;
+    var rOuter = Math.max(3.6, radius * 0.022);
+    var rInner = Math.max(2.2, radius * 0.014);
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, rOuter, 0, 2 * Math.PI);
+    ctx.fillStyle = P.centroidRing;
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, rInner, 0, 2 * Math.PI);
+    ctx.fillStyle = P.centroid;
+    ctx.fill();
+    var dx = c.x - cx, dy = c.y - cy;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist > radius * 0.06) {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(c.x, c.y);
+      ctx.strokeStyle = "rgba(0,0,0,0.55)";
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  }
+
   /* ── Main render ── */
 
   function render(container, payload) {
@@ -289,6 +320,7 @@
       drawDensity(ctx, points, verts, cx, cy, radius);
       drawContour(ctx, points);
       drawPoints(ctx, points, selectedIdx);
+      drawCentroid(ctx, points, cx, cy, radius);
       drawLabels(ctx, verts, radius, width);
     }
 

@@ -153,14 +153,14 @@ CREATE TABLE experience_evidence (
     years_applied       INTEGER CHECK (years_applied >= 0),
     role_level          role_level DEFAULT 'participant',
     evidence_source     TEXT,
-    is_verified         BOOLEAN DEFAULT FALSE,
+    verification_status verification_status DEFAULT 'submitted',
     translation_version TEXT,
     created_at          TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE INDEX idx_evidence_profile ON experience_evidence(profile_id);
 CREATE INDEX idx_evidence_domain ON experience_evidence(domain_category);
-CREATE INDEX idx_evidence_verified ON experience_evidence(is_verified);
+CREATE INDEX idx_evidence_verification ON experience_evidence(verification_status);
 
 -- ============================================================
 -- VERIFICATION AUDIT LOG

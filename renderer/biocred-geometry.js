@@ -1,11 +1,29 @@
 /**
  * BioCred Renderer — Geometry & KDE utilities
  * Extracted for modularity. Used by biocred-renderer.js.
+ *
+ * Axis contract — see docs/axis_contract_v1.md.
+ *   AXIS_ORDER  (logical / data layout): KR, LOC, SHS, FAP, RP
+ *   PENTAGON_VISUAL_ORDER (clockwise from top, geometry only):
+ *                                         KR, SHS, FAP, RP, LOC
+ *
+ * pentagonVertices() returns vertices in PENTAGON_VISUAL_ORDER so KR
+ * is at the top vertex and the polygon walks clockwise. Data lookups
+ * (barycentricXY, centroid) iterate by axis name so they are immune
+ * to any ordering mismatch on the caller side.
  */
 (function (root) {
   "use strict";
 
-  var AXIS_ORDER = ["KR", "SHS", "FAP", "RP", "LOC"];
+  var AXIS_ORDER = ["KR", "LOC", "SHS", "FAP", "RP"];
+  var PENTAGON_VISUAL_ORDER = ["KR", "SHS", "FAP", "RP", "LOC"];
+  var PENTAGON_ORIENTATION = {
+    KR:  90,
+    SHS: 18,
+    FAP: -54,
+    RP:  -126,
+    LOC: 162
+  };
 
   function pentagonVertices(cx, cy, radius, rotDeg) {
     var rot = (rotDeg !== undefined ? rotDeg : -90) * Math.PI / 180;
@@ -20,17 +38,44 @@
     return verts;
   }
 
+  function vertexForAxis(axis, verts) {
+    return verts[PENTAGON_VISUAL_ORDER.indexOf(axis)];
+  }
+
   function barycentricXY(weights, verts) {
-    var vals = AXIS_ORDER.map(function (a) { return weights[a] || 0; });
-    var sum = vals.reduce(function (s, v) { return s + v; }, 0);
-    if (sum <= 0) vals = [0.2, 0.2, 0.2, 0.2, 0.2];
-    else vals = vals.map(function (v) { return v / sum; });
+    var raw = {}, sum = 0;
+    for (var i = 0; i < AXIS_ORDER.length; i++) {
+      var ax = AXIS_ORDER[i];
+      var v = Math.max(0, Number(weights[ax]) || 0);
+      raw[ax] = v;
+      sum += v;
+    }
+    var norm = {};
+    if (sum > 0) {
+      for (var j = 0; j < AXIS_ORDER.length; j++) {
+        norm[AXIS_ORDER[j]] = raw[AXIS_ORDER[j]] / sum;
+      }
+    } else {
+      for (var k = 0; k < AXIS_ORDER.length; k++) norm[AXIS_ORDER[k]] = 0.2;
+    }
     var x = 0, y = 0;
-    for (var i = 0; i < 5; i++) {
-      x += vals[i] * verts[i].x;
-      y += vals[i] * verts[i].y;
+    for (var m = 0; m < AXIS_ORDER.length; m++) {
+      var ax2 = AXIS_ORDER[m];
+      var vert = vertexForAxis(ax2, verts);
+      x += norm[ax2] * vert.x;
+      y += norm[ax2] * vert.y;
     }
     return { x: x, y: y };
+  }
+
+  function centroid(points) {
+    if (!points || points.length === 0) return null;
+    var sx = 0, sy = 0;
+    for (var i = 0; i < points.length; i++) {
+      sx += points[i].x;
+      sy += points[i].y;
+    }
+    return { x: sx / points.length, y: sy / points.length };
   }
 
   function pointInPentagon(px, py, verts) {
@@ -102,11 +147,19 @@
 
   root.BioCredGeo = {
     AXIS_ORDER: AXIS_ORDER,
+    PENTAGON_VISUAL_ORDER: PENTAGON_VISUAL_ORDER,
+    PENTAGON_ORIENTATION: PENTAGON_ORIENTATION,
     pentagonVertices: pentagonVertices,
+    vertexForAxis: vertexForAxis,
     barycentricXY: barycentricXY,
+    centroid: centroid,
     pointInPentagon: pointInPentagon,
     buildDensityGrid: buildDensityGrid,
     convexHull: convexHull
   };
+
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = root.BioCredGeo;
+  }
 
 })(typeof window !== "undefined" ? window : this);

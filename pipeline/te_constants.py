@@ -12,7 +12,35 @@ Domain names per BPP_v1.0:
 """
 
 TRANSLATION_VERSION = "TE_v1.0"
+
+# ─── Axis contract (single source of truth) ───
+#
+# AXIS_ORDER is the *canonical / logical* order. It is used for ALL
+# data-structure indexing (yearly vectors, list-form payloads, tests,
+# JSON sums). Every list with one slot per axis is laid out in this
+# order. Renderer payloads keyed by axis name are unaffected.
+#
+# PENTAGON_VISUAL_ORDER is the *visual placement* order of axes around
+# the regular pentagon, going clockwise from the top vertex. It is
+# used only for geometry — vertex iteration, polygon construction,
+# label drawing — and never for data indexing.
+#
+# PENTAGON_ORIENTATION maps each axis to its math angle in degrees
+# (standard math convention, sin positive = up). The renderer flips
+# y for canvas coordinates.
+#
+# See docs/axis_contract_v1.md for the full contract and the rule
+# that bridges Python and JS.
+
 AXIS_ORDER = ["KR", "LOC", "SHS", "FAP", "RP"]
+PENTAGON_VISUAL_ORDER = ["KR", "SHS", "FAP", "RP", "LOC"]
+PENTAGON_ORIENTATION = {
+    "KR":  90,
+    "SHS": 18,
+    "FAP": -54,
+    "RP":  -126,
+    "LOC": 162,
+}
 
 # ─── Section 3.1: Base Vectors by Phase-1 Domain ───
 

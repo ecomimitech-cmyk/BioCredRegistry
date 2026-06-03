@@ -49,6 +49,16 @@ test("credential_record table",
      "CREATE TABLE credential_record" in schema)
 test("experience_evidence table",
      "CREATE TABLE experience_evidence" in schema)
+test("experience_evidence.verification_status column",
+     "experience_evidence" in schema
+     and "verification_status verification_status" in schema)
+test("Block 1 migration file present",
+     Path(__file__).parent.parent.joinpath(
+         "database/migrations/2026_06_block1_evidence_status_and_public_views.sql"
+     ).exists())
+test("profile_render_v1 view in migration",
+     "profile_render_v1" in read_file(
+         "database/migrations/2026_06_block1_evidence_status_and_public_views.sql"))
 test("translation_version column",
      "translation_version" in schema)
 test("verification_audit_log table",
@@ -147,10 +157,10 @@ test("Seeds have INSERTs", "INSERT INTO" in seeds)
 print("\n[16] Modular Seed Files")
 seed_dir = Path(__file__).parent.parent / "database" / "seed"
 seed_files = sorted(seed_dir.glob("*.sql"))
-test(f"6 seed files (found {len(seed_files)})",
-     len(seed_files) == 6)
+test(f"7 seed files (found {len(seed_files)})",
+     len(seed_files) >= 7)
 for expected in ["01_field", "02_regulatory", "03_academic",
-                 "04_species", "05_multi_vector", "06_audit"]:
+                 "04_species", "05_multi_vector", "06_audit", "07_render"]:
     test(f"File '{expected}' exists",
          any(expected in f.name for f in seed_files))
 
