@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioCred — Block 1 Week 1 Demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #f4f6f4;
+    color: #1a2e1a;
+    padding: 24px;
+    line-height: 1.45;
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; display: grid; gap: 20px; }
+  header {
+    background: #0E2F22;
+    color: #d9f6df;
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  header h1 { font-size: 20px; color: #fff; margin-bottom: 6px; }
+  header p { font-size: 13px; opacity: 0.85; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: #fff;
+    border: 1px solid #c8ddc8;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card h2 {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 14px 18px;
+    border-bottom: 1px solid #e5e9f0;
+    background: #f0f9f2;
+  }
+  .card .body { padding: 16px 18px; }
+  ul { list-style: none; font-size: 13px; }
+  ul li { padding: 6px 0; display: flex; gap: 8px; align-items: flex-start; }
+  ul li::before { content: "✓"; color: #1F6A46; font-weight: 700; }
+  .sql {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 11px;
+    background: #0a1628;
+    color: #d9f6df;
+    padding: 14px;
+    border-radius: 8px;
+    white-space: pre-wrap;
+    margin-bottom: 12px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th, td { border: 1px solid #e5e9f0; padding: 8px 10px; text-align: left; }
+  th { background: #f7f9fc; }
+  .ok { color: #1F6A46; font-weight: 700; }
+  #biocred-chart { width: 100%; }
+  .meta { font-size: 11px; color: #6b7a99; margin-top: 10px; }
+  .badge {
+    display: inline-block;
+    background: #d9f6df;
+    color: #1F6A46;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>BioCred Registry — Block 1 (Week 1, June 2026)</h1>
+    <p>Foundation hardening · GitHub main @ e138d0e · Demo: registry_id FC2401 (Field Specialist)</p>
+    <span class="badge">DEMO DATA — NOT A REAL PERSON</span>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Shipped this week</h2>
+      <div class="body">
+        <ul>
+          <li>verification_status on experience_evidence (aligned with profile/credentials)</li>
+          <li>public.profile_render_v1 — lookup chart JSON by registry_id</li>
+          <li>Audit triggers + verified-row edit lock</li>
+          <li>Axis contract KR · LOC · SHS · FAP · RP (Python + JS)</li>
+          <li>Black centroid on experience map (below)</li>
+        </ul>
+        <p class="meta">Staging SQL: docs/staging_deploy_block1_v1.md</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Supabase smoke — profile_render_v1</h2>
+      <div class="body">
+        <div class="sql">SELECT registry_id, translation_version,
+       jsonb_typeof(render_payload_json) AS payload
+FROM public.profile_render_v1
+WHERE registry_id = 'FC2401';</div>
+        <table>
+          <thead>
+            <tr><th>registry_id</th><th>translation_version</th><th>payload</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>FC2401</td><td>TE_v1.0</td><td class="ok">object</td></tr>
+          </tbody>
+        </table>
+        <p class="meta">After runbook apply on staging; seed 07_render_payload_demo.sql</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Experience map — Field Specialist (FC2401) · black centroid</h2>
+    <div class="body">
+      <div id="biocred-chart" style="min-height: 480px; width: 100%; max-width: 560px; margin: 0 auto;"></div>
+      <p class="meta">Renderer: biocred-renderer.js · BPP_v1.0 · 475+ tests passing in repo</p>
+    </div>
+  </div>
+</div>
+
+<script src="../renderer/biocred-geometry.js"></script>
+<script src="../renderer/biocred-renderer.js"></script>
+<script>
+const PAYLOAD = {
+  profile_id: "FC2401",
+  translation_version: "TE_v1.0",
+  evidence_units: [
+    { domain_weights: { KR: 0.04, LOC: 0.08, SHS: 0.16, FAP: 0.62, RP: 0.10 }, intensity_weight: 0.85 },
+    { domain_weights: { KR: 0.03, LOC: 0.07, SHS: 0.22, FAP: 0.55, RP: 0.13 }, intensity_weight: 0.72 },
+    { domain_weights: { KR: 0.06, LOC: 0.12, SHS: 0.14, FAP: 0.58, RP: 0.10 }, intensity_weight: 0.65 },
+    { domain_weights: { KR: 0.05, LOC: 0.09, SHS: 0.18, FAP: 0.56, RP: 0.12 }, intensity_weight: 0.90 },
+    { domain_weights: { KR: 0.08, LOC: 0.15, SHS: 0.10, FAP: 0.50, RP: 0.17 }, intensity_weight: 0.55 },
+    { domain_weights: { KR: 0.04, LOC: 0.06, SHS: 0.25, FAP: 0.58, RP: 0.07 }, intensity_weight: 0.78 },
+    { domain_weights: { KR: 0.10, LOC: 0.11, SHS: 0.12, FAP: 0.55, RP: 0.12 }, intensity_weight: 0.60 },
+    { domain_weights: { KR: 0.03, LOC: 0.08, SHS: 0.20, FAP: 0.60, RP: 0.09 }, intensity_weight: 0.95 }
+  ]
+};
+window.addEventListener("load", function () {
+  BioCred.renderFromPayload("biocred-chart", PAYLOAD, { style: "polished" });
+});
+</script>
+</body>
+</html>

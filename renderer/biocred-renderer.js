@@ -27,31 +27,59 @@
     RP:  { full: "Regulation & Policy",                   short: "RP",  descriptor: "Regulation • Compliance • Policy" }
   };
 
-  var P = {
-    bg:           "#FFFFFF",
-    pentagon:     "#EEF5EF",
-    pentagonLine: "#AFC3B1",
-    gridLine:     "rgba(120,170,130,0.26)",
-    axisRay:      "rgba(70,120,80,0.22)",
-    labelText:    "#1a3a1a",
-    labelSub:     "#4a7a4a",
-    density:      [
-      "#0E2F22",
-      "#174A33",
-      "#1F6A46",
-      "#2F8A58",
-      "#53AA70",
-      "#8DD6A0",
-      "#D9F6DF"
-    ],
-    contour:      "rgba(63,143,87,0.45)",
-    point:        "rgba(220,250,225,0.62)",
-    pointStroke:  "rgba(50,110,60,0.30)",
-    pointActive:  "#F3FFF5",
-    pointActiveStroke: "#2E7A48",
-    centroid:     "#000000",
-    centroidRing: "rgba(255,255,255,0.85)"
+  var STYLE_PRESETS = {
+    classic: {
+      palette: {
+        bg:           "#FFFFFF",
+        pentagon:     "#EEF5EF",
+        pentagonLine: "#AFC3B1",
+        gridLine:     "rgba(120,170,130,0.26)",
+        axisRay:      "rgba(70,120,80,0.22)",
+        labelText:    "#1a3a1a",
+        labelSub:     "#4a7a4a",
+        density:      ["#0E2F22", "#174A33", "#1F6A46", "#2F8A58", "#53AA70", "#8DD6A0", "#D9F6DF"],
+        contour:      "rgba(63,143,87,0.45)",
+        point:        "rgba(220,250,225,0.62)",
+        pointStroke:  "rgba(50,110,60,0.30)",
+        pointActive:  "#F3FFF5",
+        pointActiveStroke: "#2E7A48",
+        centroid:     "#000000",
+        centroidRing: "rgba(255,255,255,0.85)"
+      },
+      density: { gridSize: 240, bwFactor: 0.15, gamma: 0.62, centerBoost: 0.18, minA: 0.18, maxA: 0.72, thresh: 0.05 },
+      points: { show: true, maxShown: 24 },
+      contour: { show: true, width: 1.5, opacity: 0.45 },
+      centroid: { outerR: 0.022, innerR: 0.014, dashThresh: 0.06, lineAlpha: 0.55 },
+      labels: { descriptorAlpha: 0.6 }
+    },
+    polished: {
+      palette: {
+        bg:           "#F4FAF5",
+        pentagon:     "#E8F3EA",
+        pentagonLine: "#7FAF8C",
+        gridLine:     "rgba(90,140,100,0.18)",
+        axisRay:      "rgba(60,110,72,0.16)",
+        labelText:    "#14301a",
+        labelSub:     "#3d6b48",
+        density:      ["#0c281c", "#154a32", "#1a5c3d", "#247a50", "#3d9a62", "#6bc486", "#b8e8c4"],
+        contour:      "rgba(45,120,68,0.28)",
+        point:        "rgba(220,250,225,0.45)",
+        pointStroke:  "rgba(50,110,60,0.22)",
+        pointActive:  "#F3FFF5",
+        pointActiveStroke: "#2E7A48",
+        centroid:     "#1a1a1a",
+        centroidRing: "rgba(255,255,255,0.92)"
+      },
+      density: { gridSize: 360, bwFactor: 0.20, gamma: 0.48, centerBoost: 0, minA: 0.06, maxA: 0.82, thresh: 0.03 },
+      points: { show: false, maxShown: 0 },
+      contour: { show: true, width: 1, opacity: 0.28 },
+      centroid: { outerR: 0.014, innerR: 0.009, dashThresh: 0.05, lineAlpha: 0.32 },
+      labels: { descriptorAlpha: 0.5 }
+    }
   };
+
+  var activePreset = STYLE_PRESETS.polished;
+  var P = activePreset.palette;
 
   /* ── Drawing functions ── */
 
@@ -60,9 +88,9 @@
     ctx.moveTo(verts[0].x, verts[0].y);
     for (var i = 1; i < 5; i++) ctx.lineTo(verts[i].x, verts[i].y);
     ctx.closePath();
-    ctx.shadowColor = "rgba(50,95,60,0.10)";
-    ctx.shadowBlur = 10;
-    ctx.shadowOffsetY = 2;
+    ctx.shadowColor = "rgba(50,95,60,0.06)";
+    ctx.shadowBlur = 6;
+    ctx.shadowOffsetY = 1;
     ctx.fillStyle = P.pentagon;
     ctx.fill();
     ctx.shadowColor = "transparent";
@@ -128,7 +156,8 @@
       var y2 = top ? ly : (bottom ? ly + 30 : ly + 16);
       txt(info.short, lx, y0, "bold 15px", P.labelText);
       txt(info.full, lx, y1, "11px", P.labelSub);
-      txt(info.descriptor, lx, y2, "10px", "rgba(74,106,74,0.6)");
+      txt(info.descriptor, lx, y2, "10px",
+        "rgba(74,106,74," + activePreset.labels.descriptorAlpha + ")");
     }
   }
 
@@ -142,10 +171,11 @@
     ctx.closePath();
     ctx.clip();
 
-    var gridSize = 240;
-    var bw = radius * 0.15;
+    var D = activePreset.density;
+    var gridSize = D.gridSize;
+    var bw = radius * D.bwFactor;
     var bw2 = bw * bw;
-    var gamma = 0.62;
+    var gamma = D.gamma;
     var span = radius * 2.4;
     var step = span / gridSize;
     var ox = cx - radius * 1.2;
@@ -179,9 +209,9 @@
         var dxC = (ox + gx2 * step) - cx;
         var dyC = (oy + gy2 * step) - cy;
         var dCenter = Math.sqrt(dxC * dxC + dyC * dyC) / radius;
-        var centerBase = Math.max(0, 1 - dCenter) * 0.18;
+        var centerBase = Math.max(0, 1 - dCenter) * D.centerBoost;
         bright = Math.min(1, bright * 0.82 + centerBase);
-        if (bright < 0.05) continue;
+        if (bright < D.thresh) continue;
 
         var ci = bright * (P.density.length - 1);
         var lo = Math.floor(ci);
@@ -194,9 +224,9 @@
         var r = Math.round(r0 + (r1 - r0) * frac);
         var g = Math.round(g0 + (g1 - g0) * frac);
         var b = Math.round(b0 + (b1 - b0) * frac);
-        var a = 0.18 + bright * 0.72;
+        var a = D.minA + bright * (D.maxA - D.minA);
         ctx.fillStyle = "rgba(" + r + "," + g + "," + b + "," + a.toFixed(3) + ")";
-        ctx.fillRect(ox + gx2 * step, oy + gy2 * step, step + 0.5, step + 0.5);
+        ctx.fillRect(ox + gx2 * step, oy + gy2 * step, step + 1, step + 1);
       }
     }
 
@@ -204,7 +234,8 @@
   }
 
   function drawPoints(ctx, points, selectedIdx) {
-    var step = Math.max(1, Math.floor(points.length / 24));
+    if (!activePreset.points.show) return;
+    var step = Math.max(1, Math.floor(points.length / activePreset.points.maxShown));
     for (var i = 0; i < points.length; i += step) {
       var pt = points[i];
       var active = (selectedIdx === i);
@@ -226,7 +257,7 @@
   }
 
   function drawContour(ctx, points) {
-    if (points.length < 3) return;
+    if (!activePreset.contour.show || points.length < 3) return;
     var hull = Geo.convexHull(points);
     if (hull.length < 3) return;
     ctx.beginPath();
@@ -234,18 +265,21 @@
     for (var i = 1; i < hull.length; i++) ctx.lineTo(hull[i].x, hull[i].y);
     ctx.closePath();
     ctx.strokeStyle = P.contour;
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = activePreset.contour.width;
+    ctx.globalAlpha = activePreset.contour.opacity;
     ctx.setLineDash([4, 3]);
     ctx.stroke();
     ctx.setLineDash([]);
+    ctx.globalAlpha = 1;
   }
 
   function drawCentroid(ctx, points, cx, cy, radius) {
     if (!points || points.length === 0) return;
     var c = Geo.centroid(points);
     if (!c) return;
-    var rOuter = Math.max(3.6, radius * 0.022);
-    var rInner = Math.max(2.2, radius * 0.014);
+    var C = activePreset.centroid;
+    var rOuter = Math.max(2.8, radius * C.outerR);
+    var rInner = Math.max(1.8, radius * C.innerR);
     ctx.beginPath();
     ctx.arc(c.x, c.y, rOuter, 0, 2 * Math.PI);
     ctx.fillStyle = P.centroidRing;
@@ -256,12 +290,12 @@
     ctx.fill();
     var dx = c.x - cx, dy = c.y - cy;
     var dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist > radius * 0.06) {
+    if (dist > radius * C.dashThresh) {
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.lineTo(c.x, c.y);
-      ctx.strokeStyle = "rgba(0,0,0,0.55)";
-      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = "rgba(0,0,0," + C.lineAlpha + ")";
+      ctx.lineWidth = 1;
       ctx.setLineDash([3, 3]);
       ctx.stroke();
       ctx.setLineDash([]);
@@ -270,9 +304,14 @@
 
   /* ── Main render ── */
 
-  function render(container, payload) {
+  function render(container, payload, options) {
     if (typeof container === "string") container = document.getElementById(container);
     if (!container) { console.error("[BioCred] Container not found"); return; }
+
+    options = options || {};
+    var styleName = options.style === "classic" ? "classic" : "polished";
+    activePreset = STYLE_PRESETS[styleName] || STYLE_PRESETS.polished;
+    P = activePreset.palette;
 
     var units = payload.evidence_units || [];
     if (units.length === 0) {
@@ -349,7 +388,7 @@
   /* ── Public API ── */
 
   root.BioCred = {
-    renderFromPayload: function (id, payload) { render(id, payload); },
+    renderFromPayload: function (id, payload, options) { render(id, payload, options); },
 
     renderProfile: function (id, supabaseUrl, supabaseKey) {
       var el = document.getElementById(id);
@@ -385,7 +424,8 @@
 
     AXIS_ORDER: AXIS_ORDER,
     AXIS_LABELS: AXIS_LABELS,
-    version: "1.0.0"
+    STYLE_PRESETS: STYLE_PRESETS,
+    version: "1.1.0"
   };
 
 })(typeof window !== "undefined" ? window : this);

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioCred — Experience Map Before / After</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #eef2ee;
+    color: #1a2e1a;
+    padding: 28px;
+  }
+  h1 { font-size: 22px; margin-bottom: 6px; }
+  .sub { font-size: 13px; color: #4a6a4a; margin-bottom: 24px; max-width: 720px; }
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 1200px;
+  }
+  @media (max-width: 960px) { .row { grid-template-columns: 1fr; } }
+  .card {
+    background: #fff;
+    border: 1px solid #c8ddc8;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card h2 {
+    font-size: 13px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #e5e9f0;
+    background: #f7f9fc;
+  }
+  .card h2 span { font-weight: 400; color: #6b7a99; }
+  .chart { min-height: 500px; padding: 8px 4px 16px; }
+  .polished h2 { background: #e8f5eb; color: #0e2f22; }
+</style>
+</head>
+<body>
+  <h1>Experience map — visual refresh for Alex</h1>
+  <p class="sub">
+    Same FC2401 data. Left = previous renderer (scatter dots + denser grid).
+    Right = polished presentation style (smoother density, cleaner centroid, no dot noise).
+  </p>
+  <div class="row">
+    <div class="card">
+      <h2>Before <span>(style: classic)</span></h2>
+      <div id="chart-before" class="chart"></div>
+    </div>
+    <div class="card polished">
+      <h2>After <span>(style: polished — default going forward)</span></h2>
+      <div id="chart-after" class="chart"></div>
+    </div>
+  </div>
+
+<script src="../renderer/biocred-geometry.js"></script>
+<script src="../renderer/biocred-renderer.js"></script>
+<script>
+var PAYLOAD = {
+  profile_id: "FC2401",
+  translation_version: "TE_v1.0",
+  evidence_units: [
+    { domain_weights: { KR: 0.04, LOC: 0.08, SHS: 0.16, FAP: 0.62, RP: 0.10 }, intensity_weight: 0.85 },
+    { domain_weights: { KR: 0.03, LOC: 0.07, SHS: 0.22, FAP: 0.55, RP: 0.13 }, intensity_weight: 0.72 },
+    { domain_weights: { KR: 0.06, LOC: 0.12, SHS: 0.14, FAP: 0.58, RP: 0.10 }, intensity_weight: 0.65 },
+    { domain_weights: { KR: 0.05, LOC: 0.09, SHS: 0.18, FAP: 0.56, RP: 0.12 }, intensity_weight: 0.90 },
+    { domain_weights: { KR: 0.08, LOC: 0.15, SHS: 0.10, FAP: 0.50, RP: 0.17 }, intensity_weight: 0.55 },
+    { domain_weights: { KR: 0.04, LOC: 0.06, SHS: 0.25, FAP: 0.58, RP: 0.07 }, intensity_weight: 0.78 },
+    { domain_weights: { KR: 0.10, LOC: 0.11, SHS: 0.12, FAP: 0.55, RP: 0.12 }, intensity_weight: 0.60 },
+    { domain_weights: { KR: 0.03, LOC: 0.08, SHS: 0.20, FAP: 0.60, RP: 0.09 }, intensity_weight: 0.95 }
+  ]
+};
+window.addEventListener("load", function () {
+  BioCred.renderFromPayload("chart-before", PAYLOAD, { style: "classic" });
+  BioCred.renderFromPayload("chart-after", PAYLOAD, { style: "polished" });
+});
+</script>
+</body>
+</html>
