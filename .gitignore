@@ -17,7 +17,9 @@ package-lock.json
 # Environment & secrets
 .env
 .env.*
+!.env.example
 *.env
+!*.env.example
 supabase/.env
 
 # OS
@@ -43,3 +45,6 @@ test_renderer_validation2.js
 biocred_*.png
 phase1_*.html
 phase1_*.css
+
+# Local frontend secrets (copy from config.example.js)
+frontend/config.js
