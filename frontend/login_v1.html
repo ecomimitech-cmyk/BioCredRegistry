@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioCred — Sign in</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--g9:#0E2F22;--g7:#1F6A46;--g5:#2d8a58;--g1:#d9f6df;--t:#1a2e1a;--ts:#4a6a4a;--tm:#7a9a7a;--bd:#c8ddc8;--bg:#f4f6f4;--card:#fff;--err:#8b2e2e}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;padding:40px 20px}
+.page{max-width:420px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.page-header{background:var(--g9);border-radius:14px;padding:28px 32px;color:var(--g1)}
+.page-header .brand{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;opacity:.55;margin-bottom:6px}
+.page-header h1{font-size:22px;font-weight:700;color:#fff}
+.page-header p{font-size:13px;opacity:.65;margin-top:4px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:24px 28px;display:flex;flex-direction:column;gap:16px}
+.tabs{display:flex;gap:8px;margin-bottom:4px}
+.tabs button{flex:1;border:1px solid var(--bd);background:#fff;border-radius:8px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;color:var(--ts)}
+.tabs button.active{background:var(--g7);color:#fff;border-color:var(--g7)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12px;font-weight:600;color:var(--ts)}
+.field input{border:1px solid var(--bd);border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;outline:none}
+.field input:focus{border-color:var(--g5)}
+.btn{background:var(--g7);color:#fff;border:none;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer}
+.btn:disabled{background:var(--bd);cursor:not-allowed}
+.msg{font-size:12px;line-height:1.5;min-height:18px}
+.msg.err{color:var(--err)}
+.msg.ok{color:var(--g7)}
+.hint{font-size:11px;color:var(--tm)}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-header">
+    <div class="brand">BioCred Registry</div>
+    <h1>Biologist sign in</h1>
+    <p>Staging intake — Milestone 2</p>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button type="button" id="tab-signin" class="active">Sign in</button>
+      <button type="button" id="tab-signup">Create account</button>
+    </div>
+    <form id="auth-form">
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" type="email" required autocomplete="username">
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" type="password" required minlength="8" autocomplete="current-password">
+      </div>
+      <p class="hint" id="mode-hint">Use the account linked to your draft profile.</p>
+      <button class="btn" id="btn-submit" type="submit">Sign in</button>
+      <p class="msg" id="msg"></p>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="js/biocred_auth.js"></script>
+<script>
+(function () {
+  var mode = "signin";
+  var params = new URLSearchParams(location.search);
+  var next = params.get("next") || "upload_documents_v1.html";
+
+  function setMode(nextMode) {
+    mode = nextMode;
+    document.getElementById("tab-signin").classList.toggle("active", mode === "signin");
+    document.getElementById("tab-signup").classList.toggle("active", mode === "signup");
+    document.getElementById("btn-submit").textContent = mode === "signin" ? "Sign in" : "Create account";
+    document.getElementById("mode-hint").textContent = mode === "signin"
+      ? "Use the account linked to your draft profile."
+      : "Creates a Supabase Auth user and assigns the biologist role.";
+    document.getElementById("password").autocomplete = mode === "signin" ? "current-password" : "new-password";
+    document.getElementById("msg").textContent = "";
+  }
+
+  document.getElementById("tab-signin").onclick = function () { setMode("signin"); };
+  document.getElementById("tab-signup").onclick = function () { setMode("signup"); };
+
+  BioCred.getSession().then(function (session) {
+    if (session) location.replace(next);
+  }).catch(function () {});
+
+  document.getElementById("auth-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var email = document.getElementById("email").value.trim();
+    var password = document.getElementById("password").value;
+    var msg = document.getElementById("msg");
+    var btn = document.getElementById("btn-submit");
+    btn.disabled = true;
+    msg.className = "msg";
+    msg.textContent = "Working…";
+    try {
+      if (mode === "signin") {
+        await BioCred.signIn(email, password);
+        msg.className = "msg ok";
+        msg.textContent = "Signed in.";
+        location.href = next;
+      } else {
+        var data = await BioCred.signUp(email, password);
+        if (data.session) {
+          msg.className = "msg ok";
+          msg.textContent = "Account created.";
+          location.href = next;
+        } else {
+          msg.className = "msg ok";
+          msg.textContent = "Check your email to confirm, then sign in.";
+          setMode("signin");
+        }
+      }
+    } catch (err) {
+      msg.className = "msg err";
+      msg.textContent = err.message || String(err);
+    } finally {
+      btn.disabled = false;
+    }
+  });
+})();
+</script>
+</body>
+</html>
