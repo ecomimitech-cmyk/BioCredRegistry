@@ -6,13 +6,15 @@
 <title>BioCred — Upload Documents</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--g9:#0E2F22;--g7:#1F6A46;--g5:#2d8a58;--g1:#d9f6df;--g0:#f0f9f2;--t:#1a2e1a;--ts:#4a6a4a;--tm:#7a9a7a;--bd:#c8ddc8;--bg:#f4f6f4;--card:#fff}
+:root{--g9:#0E2F22;--g7:#1F6A46;--g5:#2d8a58;--g1:#d9f6df;--g0:#f0f9f2;--t:#1a2e1a;--ts:#4a6a4a;--tm:#7a9a7a;--bd:#c8ddc8;--bg:#f4f6f4;--card:#fff;--err:#8b2e2e}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;padding:40px 20px}
-.page{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
+.page{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:24px}
 .page-header{background:var(--g9);border-radius:14px;padding:32px 36px;color:var(--g1)}
 .page-header .brand{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;opacity:.55;margin-bottom:6px}
 .page-header h1{font-size:22px;font-weight:700;color:#fff}
 .page-header p{font-size:13px;opacity:.65;margin-top:4px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:12px;color:var(--ts)}
+.toolbar button{border:1px solid var(--bd);background:#fff;border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer;color:var(--ts)}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:28px 32px;display:flex;flex-direction:column;gap:20px}
 .card-title{font-size:14px;font-weight:700;color:var(--t);border-bottom:1px solid var(--bd);padding-bottom:12px}
 .field{display:flex;flex-direction:column;gap:6px}
@@ -27,11 +29,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .field .hint{font-size:11px;color:var(--tm)}
 .row-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-/* conditional sections */
 .conditional{display:none;flex-direction:column;gap:16px;padding:16px;background:var(--g0);border:1px solid var(--bd);border-radius:8px}
 .conditional.visible{display:flex}
 .conditional-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--g7);margin-bottom:4px}
-/* upload zone */
 .upload-zone{border:2px dashed var(--bd);border-radius:10px;padding:32px 20px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s}
 .upload-zone:hover{border-color:var(--g5);background:var(--g0)}
 .upload-zone .icon{font-size:28px;margin-bottom:8px}
@@ -39,14 +39,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .upload-zone span{font-size:11px;color:var(--tm)}
 .upload-zone input{display:none}
 .file-selected{font-size:12px;color:var(--g7);font-weight:600;margin-top:8px}
-/* certification */
 .cert-box{background:#f9fff9;border:1px solid var(--g5);border-radius:8px;padding:16px;display:flex;gap:12px;align-items:flex-start}
 .cert-box input[type=checkbox]{width:16px;height:16px;margin-top:2px;accent-color:var(--g7);flex-shrink:0}
 .cert-box p{font-size:12px;color:var(--ts);line-height:1.6}
-/* submit */
-.btn-submit{background:var(--g7);color:#fff;border:none;border-radius:8px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;align-self:flex-end}
+.btn-submit{background:var(--g7);color:#fff;border:none;border-radius:8px;padding:13px 28px;font-size:14px;font-weight:600;cursor:pointer;align-self:flex-end}
 .btn-submit:hover{background:var(--g9)}
 .btn-submit:disabled{background:var(--bd);cursor:not-allowed}
+.btn-secondary{background:#fff;color:var(--g7);border:1px solid var(--g7);border-radius:8px;padding:12px 20px;font-size:13px;font-weight:600;cursor:pointer}
+.btn-secondary:disabled{opacity:.45;cursor:not-allowed}
+.status{font-size:12px;line-height:1.5}
+.status.err{color:var(--err)}
+.status.ok{color:var(--g7)}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font-size:11px;font-weight:600;padding:6px 10px;border-radius:999px;background:var(--g0);color:var(--g7);border:1px solid var(--bd)}
+.pill.warn{background:#fff7e8;color:#8a5a10;border-color:#efd7a8}
+.hidden{display:none !important}
 </style>
 </head>
 <body>
@@ -54,29 +61,86 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
   <div class="page-header">
     <div class="brand">BioCred Registry</div>
-    <h1>Upload Credential Documents</h1>
-    <p>All submissions are reviewed before appearing on your public profile.</p>
+    <h1>Evidence intake</h1>
+    <p>Create a draft profile, upload credentials / experience docs, then submit for review.</p>
   </div>
 
-  <form id="upload-form" autocomplete="off">
+  <div class="toolbar">
+    <span id="session-label">Checking session…</span>
+    <button type="button" id="btn-signout">Sign out</button>
+  </div>
 
-    <!-- Document type -->
+  <!-- Profile bootstrap -->
+  <div class="card" id="card-profile">
+    <div class="card-title">Draft profile</div>
+    <div class="pill-row" id="profile-pills"></div>
+    <form id="profile-form">
+      <div class="row-2">
+        <div class="field">
+          <label for="full_name">Full name *</label>
+          <input id="full_name" required>
+        </div>
+        <div class="field">
+          <label for="professional_title">Professional title</label>
+          <input id="professional_title" placeholder="e.g. Wildlife Biologist">
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label for="organization">Organization</label>
+          <input id="organization">
+        </div>
+        <div class="field">
+          <label for="primary_discipline">Primary discipline</label>
+          <input id="primary_discipline" placeholder="e.g. Wetland ecology">
+        </div>
+      </div>
+      <div class="row-3">
+        <div class="field">
+          <label for="city">City</label>
+          <input id="city">
+        </div>
+        <div class="field">
+          <label for="state">State</label>
+          <input id="state" placeholder="CA">
+        </div>
+        <div class="field">
+          <label for="years_experience">Years experience</label>
+          <input id="years_experience" type="number" min="0" step="1">
+        </div>
+      </div>
+      <div class="field">
+        <label for="bio_summary">Summary</label>
+        <textarea id="bio_summary" placeholder="Short professional summary"></textarea>
+      </div>
+      <label class="cert-box" id="terms-box">
+        <input type="checkbox" id="terms_accepted">
+        <p>I accept the BioCred terms for staging intake and confirm this is my professional profile.</p>
+      </label>
+      <button type="submit" class="btn-submit" id="btn-save-profile">Save draft profile</button>
+      <p class="status" id="profile-status"></p>
+    </form>
+  </div>
+
+  <!-- Document upload -->
+  <form id="upload-form" class="hidden" autocomplete="off">
+
     <div class="card">
       <div class="card-title">Document Type</div>
       <div class="field">
         <label for="category">Category *</label>
         <select id="category" name="category" required onchange="handleCategory(this.value)">
           <option value="">— Select category —</option>
-          <option value="resume">Resume / CV</option>
-          <option value="transcript">Academic Transcript</option>
           <option value="degree">Degree Certificate / Diploma</option>
+          <option value="transcript">Academic Transcript</option>
           <option value="certification">Professional Certification</option>
-          <option value="continuing_education">Continuing Education (CE)</option>
-          <option value="reference_letter">Reference / Reference Letter</option>
-          <option value="award">Award or Recognition</option>
           <option value="license">Professional License</option>
-          <option value="permit">Permit (e.g. handling permit, MOU)</option>
-          <option value="other">Other</option>
+          <option value="permit">Permit</option>
+          <option value="continuing_education">Continuing Education (CE)</option>
+          <option value="award">Award or Recognition</option>
+          <option value="reference_letter">Reference / Reference Letter</option>
+          <option value="resume">Resume / CV</option>
+          <option value="other">Other credential</option>
         </select>
       </div>
       <div class="field">
@@ -95,139 +159,438 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
 
-    <!-- CE credits (conditional) -->
     <div class="conditional" id="section-ce">
       <div class="conditional-title">Continuing Education Details</div>
       <div class="row-2">
         <div class="field">
-          <label for="ce_provider">Provider *</label>
-          <select id="ce_provider" name="ce_provider">
-            <option value="">— Select provider —</option>
-            <option>Cornell Online</option>
-            <option>The Wildlife Society (TWS)</option>
-            <option>National Wildlife Training Initiative (NWTI)</option>
-            <option>ESRI / GIS Training</option>
-            <option>Society for Ecological Restoration (SER)</option>
-            <option>NASBR</option>
-            <option>AFS — American Fisheries Society</option>
-            <option>State Fish & Wildlife Agency</option>
-            <option>University Extension Program</option>
-            <option value="other_provider">Other</option>
-          </select>
+          <label for="ce_provider">Provider</label>
+          <input id="ce_provider" name="ce_provider" placeholder="Provider name">
         </div>
         <div class="field">
-          <label for="ce_hours">Credit Hours *</label>
-          <input type="number" id="ce_hours" name="ce_hours" min="0.5" max="999" step="0.5" placeholder="e.g. 12.5">
+          <label for="ce_hours">Credit Hours</label>
+          <input type="number" id="ce_hours" name="ce_hours" min="0.5" max="999" step="0.5">
         </div>
-      </div>
-      <div class="field">
-        <label for="ce_subject">Subject / Course Title *</label>
-        <input type="text" id="ce_subject" name="ce_subject" placeholder="e.g. GIS for Wildlife Management, NEPA Compliance">
-      </div>
-      <div class="field">
-        <label for="ce_completion_date">Completion Date</label>
-        <input type="date" id="ce_completion_date" name="ce_completion_date">
       </div>
     </div>
 
-    <!-- Reference (conditional) -->
     <div class="conditional" id="section-ref">
       <div class="conditional-title">Reference Details</div>
       <div class="row-2">
         <div class="field">
-          <label for="reference_name">Reference Name *</label>
-          <input type="text" id="reference_name" name="reference_name" placeholder="Full name">
+          <label for="reference_name">Reference Name</label>
+          <input type="text" id="reference_name" name="reference_name">
         </div>
-        <div class="field">
-          <label for="reference_title">Title / Position</label>
-          <input type="text" id="reference_title" name="reference_title" placeholder="e.g. Senior Biologist">
-        </div>
-      </div>
-      <div class="row-2">
         <div class="field">
           <label for="reference_org">Organization</label>
-          <input type="text" id="reference_org" name="reference_org" placeholder="e.g. USFWS">
-        </div>
-        <div class="field">
-          <label for="reference_email">Email</label>
-          <input type="email" id="reference_email" name="reference_email" placeholder="contact@org.gov">
+          <input type="text" id="reference_org" name="reference_org">
         </div>
       </div>
     </div>
 
-    <!-- Permit / license (conditional) -->
     <div class="conditional" id="section-permit">
       <div class="conditional-title">Permit / License Details</div>
-      <div class="row-3">
-        <div class="field">
-          <label for="permit_type">Permit / License Type</label>
-          <input type="text" id="permit_type" name="permit_type" placeholder="e.g. Section 10(a)(1)(A) ESA">
-        </div>
+      <div class="row-2">
         <div class="field">
           <label for="permit_number">Number / ID</label>
-          <input type="text" id="permit_number" name="permit_number" placeholder="e.g. TE-12345">
+          <input type="text" id="permit_number" name="permit_number">
         </div>
         <div class="field">
           <label for="expiry_date">Expiry Date</label>
           <input type="date" id="expiry_date" name="expiry_date">
         </div>
       </div>
-      <div class="field">
-        <label for="jurisdiction">Jurisdiction</label>
-        <input type="text" id="jurisdiction" name="jurisdiction" placeholder="e.g. California, Federal">
-      </div>
     </div>
 
-    <!-- File upload -->
     <div class="card">
       <div class="card-title">Attach Document</div>
       <label class="upload-zone" id="drop-zone">
         <div class="icon">📄</div>
         <p>Click to select or drag & drop your file</p>
-        <span>PDF, DOC, DOCX, JPG, PNG — max 20 MB</span>
+        <span>PDF, JPG, PNG — max 10 MB</span>
         <div class="file-selected" id="file-label"></div>
         <input type="file" id="file-input" name="file"
-               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+               accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
                onchange="handleFile(this)">
       </label>
     </div>
 
-    <!-- Certification -->
     <div class="card">
       <div class="card-title">Certification</div>
       <div class="cert-box">
         <input type="checkbox" id="certified" name="certified" required onchange="toggleSubmit()">
-        <p>I certify that all information and documents submitted are <strong>true, accurate, and complete</strong> to the best of my knowledge. I understand that submitting false or misleading information may result in removal from the BioCred Registry.</p>
+        <p>I certify that all information and documents submitted are <strong>true, accurate, and complete</strong> to the best of my knowledge.</p>
       </div>
-      <button type="submit" class="btn-submit" id="btn-submit" disabled>Submit Document</button>
+      <button type="submit" class="btn-submit" id="btn-submit" disabled>Save document</button>
+      <p class="status" id="upload-status"></p>
     </div>
-
   </form>
+
+  <!-- Experience quick-add -->
+  <div class="card hidden" id="card-experience">
+    <div class="card-title">Experience evidence (need ≥ 3 to submit)</div>
+    <form id="experience-form">
+      <div class="row-2">
+        <div class="field">
+          <label for="domain_category">Domain *</label>
+          <select id="domain_category" required>
+            <option value="field_experience">Field experience</option>
+            <option value="regulatory_experience">Regulatory experience</option>
+            <option value="academic_technical">Academic / technical</option>
+            <option value="species_depth">Species depth</option>
+            <option value="leadership_scope">Leadership scope</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="activity_type">Activity type *</label>
+          <input id="activity_type" required placeholder="e.g. Protocol surveys">
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label for="species_or_system">Species / system</label>
+          <input id="species_or_system">
+        </div>
+        <div class="field">
+          <label for="years_applied">Years applied</label>
+          <input id="years_applied" type="number" min="0" step="1">
+        </div>
+      </div>
+      <div class="row-2">
+        <div class="field">
+          <label for="role_level">Role level</label>
+          <select id="role_level">
+            <option value="participant">participant</option>
+            <option value="contributor">contributor</option>
+            <option value="lead">lead</option>
+            <option value="oversight">oversight</option>
+            <option value="principal_investigator">principal_investigator</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="evidence_source_text">Evidence source note</label>
+          <input id="evidence_source_text" placeholder="Optional note if no file yet">
+        </div>
+      </div>
+      <button type="submit" class="btn-submit">Add experience record</button>
+      <p class="status" id="experience-status"></p>
+    </form>
+  </div>
+
+  <!-- Submit for review -->
+  <div class="card hidden" id="card-submit-review">
+    <div class="card-title">Submit for review</div>
+    <div class="pill-row" id="gate-pills"></div>
+    <p class="field hint">Unlocks when you have ≥1 identity credential (degree / license / certification), ≥3 experience records, and ≥1 document path stored.</p>
+    <button type="button" class="btn-secondary" id="btn-submit-review" disabled>Submit profile for review</button>
+    <p class="status" id="submit-status"></p>
+  </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="js/biocred_auth.js"></script>
 <script>
+var profile = null;
+
 function handleCategory(val) {
-  var sections = { ce: "section-ce", ref: "section-ref", permit: "section-permit", license: "section-permit" };
   ["section-ce","section-ref","section-permit"].forEach(function(id) {
     document.getElementById(id).classList.remove("visible");
   });
   if (val === "continuing_education") document.getElementById("section-ce").classList.add("visible");
-  if (val === "reference_letter")     document.getElementById("section-ref").classList.add("visible");
+  if (val === "reference_letter") document.getElementById("section-ref").classList.add("visible");
   if (val === "permit" || val === "license") document.getElementById("section-permit").classList.add("visible");
 }
 
 function handleFile(input) {
-  var label = document.getElementById("file-label");
-  label.textContent = input.files.length ? "✓ " + input.files[0].name : "";
+  document.getElementById("file-label").textContent = input.files.length ? "✓ " + input.files[0].name : "";
 }
 
 function toggleSubmit() {
   document.getElementById("btn-submit").disabled = !document.getElementById("certified").checked;
 }
 
-document.getElementById("upload-form").addEventListener("submit", function(e) {
+function setStatus(id, text, ok) {
+  var el = document.getElementById(id);
+  el.className = "status " + (ok === true ? "ok" : ok === false ? "err" : "");
+  el.textContent = text || "";
+}
+
+function slugify(name) {
+  return String(name || "doc")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 48) || "doc";
+}
+
+function mapCredentialType(category) {
+  var map = {
+    degree: "degree",
+    transcript: "degree",
+    certification: "certification",
+    license: "license",
+    permit: "permit",
+    continuing_education: "training",
+    award: "award",
+    other: "other"
+  };
+  return map[category] || null;
+}
+
+function isEvidenceCategory(category) {
+  return category === "reference_letter" || category === "resume";
+}
+
+function yearFromDate(value) {
+  if (!value) return null;
+  return Number(String(value).slice(0, 4));
+}
+
+function fillProfileForm(p) {
+  document.getElementById("full_name").value = p.full_name || "";
+  document.getElementById("professional_title").value = p.professional_title || "";
+  document.getElementById("organization").value = p.organization || "";
+  document.getElementById("primary_discipline").value = p.primary_discipline || "";
+  document.getElementById("city").value = p.city || "";
+  document.getElementById("state").value = p.state || "";
+  document.getElementById("years_experience").value = p.years_experience != null ? p.years_experience : "";
+  document.getElementById("bio_summary").value = p.bio_summary || "";
+  document.getElementById("terms_accepted").checked = !!p.terms_accepted_at;
+  document.getElementById("terms-box").classList.toggle("hidden", !!p.terms_accepted_at);
+}
+
+function showIntakeSections(show) {
+  document.getElementById("upload-form").classList.toggle("hidden", !show);
+  document.getElementById("card-experience").classList.toggle("hidden", !show);
+  document.getElementById("card-submit-review").classList.toggle("hidden", !show);
+}
+
+async function refreshGate() {
+  if (!profile) return;
+  var sb = BioCred.supabase;
+  var creds = await sb.from("credential_record").select("id,credential_type,documentation_url").eq("profile_id", profile.id);
+  if (creds.error) throw creds.error;
+  var ev = await sb.from("experience_evidence").select("id").eq("profile_id", profile.id);
+  if (ev.error) throw ev.error;
+
+  var identity = (creds.data || []).filter(function (c) {
+    return c.credential_type === "degree" || c.credential_type === "license" || c.credential_type === "certification";
+  }).length;
+  var docs = (creds.data || []).filter(function (c) { return !!c.documentation_url; }).length;
+  var evidenceCount = (ev.data || []).length;
+
+  var { data: canSubmit, error } = await sb.rpc("can_submit_for_review", { p_profile_id: profile.id });
+  if (error) throw error;
+
+  document.getElementById("profile-pills").innerHTML =
+    '<span class="pill">registry ' + profile.registry_id + '</span>' +
+    '<span class="pill">' + profile.verification_status + '</span>' +
+    '<span class="pill">' + identity + ' identity creds</span>' +
+    '<span class="pill">' + evidenceCount + ' experience</span>' +
+    '<span class="pill">' + docs + ' docs</span>';
+
+  document.getElementById("gate-pills").innerHTML =
+    '<span class="pill' + (identity >= 1 ? '' : ' warn') + '">identity ≥1: ' + identity + '</span>' +
+    '<span class="pill' + (evidenceCount >= 3 ? '' : ' warn') + '">experience ≥3: ' + evidenceCount + '</span>' +
+    '<span class="pill' + (docs >= 1 ? '' : ' warn') + '">docs ≥1: ' + docs + '</span>' +
+    '<span class="pill' + (canSubmit ? '' : ' warn') + '">' + (canSubmit ? 'ready to submit' : 'not ready') + '</span>';
+
+  document.getElementById("btn-submit-review").disabled = !canSubmit || profile.verification_status === "pending_review";
+}
+
+async function init() {
+  var session = await BioCred.requireSession("login_v1.html");
+  if (!session) return;
+  document.getElementById("session-label").textContent = session.user.email;
+  await BioCred.ensureBiologistRole();
+  profile = await BioCred.getOwnProfile();
+  if (profile) {
+    fillProfileForm(profile);
+    showIntakeSections(true);
+    document.getElementById("btn-save-profile").textContent = "Update draft profile";
+    await refreshGate();
+  } else {
+    showIntakeSections(false);
+    setStatus("profile-status", "No draft profile yet — save one to unlock uploads.", null);
+  }
+}
+
+document.getElementById("btn-signout").onclick = async function () {
+  await BioCred.signOut();
+  location.href = "login_v1.html";
+};
+
+document.getElementById("profile-form").addEventListener("submit", async function (e) {
   e.preventDefault();
-  alert("Document submitted for review. You will be notified when it has been verified.");
+  var fields = {
+    full_name: document.getElementById("full_name").value.trim(),
+    professional_title: document.getElementById("professional_title").value.trim(),
+    organization: document.getElementById("organization").value.trim(),
+    primary_discipline: document.getElementById("primary_discipline").value.trim(),
+    city: document.getElementById("city").value.trim(),
+    state: document.getElementById("state").value.trim(),
+    years_experience: document.getElementById("years_experience").value,
+    bio_summary: document.getElementById("bio_summary").value.trim(),
+    terms_accepted: document.getElementById("terms_accepted").checked
+  };
+  try {
+    if (!profile && !fields.terms_accepted) {
+      throw new Error("Accept terms to create a draft profile.");
+    }
+    if (profile) {
+      profile = await BioCred.updateDraftProfile(profile.id, fields);
+      setStatus("profile-status", "Profile updated.", true);
+    } else {
+      profile = await BioCred.createDraftProfile(fields);
+      setStatus("profile-status", "Draft profile created (" + profile.registry_id + ").", true);
+      document.getElementById("btn-save-profile").textContent = "Update draft profile";
+      document.getElementById("terms-box").classList.add("hidden");
+    }
+    showIntakeSections(true);
+    await refreshGate();
+  } catch (err) {
+    setStatus("profile-status", err.message || String(err), false);
+  }
+});
+
+document.getElementById("upload-form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  if (!profile) return;
+  var category = document.getElementById("category").value;
+  var title = document.getElementById("document_title").value.trim();
+  var authority = document.getElementById("issuing_authority").value.trim();
+  var issueDate = document.getElementById("issue_date").value;
+  var file = document.getElementById("file-input").files[0];
+  if (!file) {
+    setStatus("upload-status", "Choose a PDF or image file.", false);
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    setStatus("upload-status", "File exceeds 10 MB.", false);
+    return;
+  }
+
+  var btn = document.getElementById("btn-submit");
+  btn.disabled = true;
+  setStatus("upload-status", "Uploading…", null);
+
+  try {
+    var sb = BioCred.supabase;
+    var today = new Date().toISOString().slice(0, 10);
+    var ext = (file.name.split(".").pop() || "pdf").toLowerCase();
+    var rowId = crypto.randomUUID();
+    var path = profile.id + "/" + rowId + "/" + today + "_" + slugify(title) + "." + ext;
+
+    if (isEvidenceCategory(category)) {
+      var { error: upErr } = await sb.storage.from("evidence_docs").upload(path, file, {
+        contentType: file.type || "application/pdf",
+        upsert: false
+      });
+      if (upErr) throw upErr;
+
+      var evidenceSource = path;
+      if (category === "reference_letter") {
+        var refName = document.getElementById("reference_name").value.trim();
+        var refOrg = document.getElementById("reference_org").value.trim();
+        evidenceSource = path + (refName || refOrg ? " | " + [refName, refOrg].filter(Boolean).join(" / ") : "");
+      }
+
+      var { error: evErr } = await sb.from("experience_evidence").insert({
+        id: rowId,
+        profile_id: profile.id,
+        domain_category: "leadership_scope",
+        activity_type: category === "resume" ? "CV / resume on file" : "Reference letter",
+        species_or_system: null,
+        habitat_context: null,
+        project_type: category,
+        years_applied: null,
+        role_level: "participant",
+        evidence_source: evidenceSource,
+        verification_status: "submitted"
+      });
+      if (evErr) throw evErr;
+    } else {
+      var credType = mapCredentialType(category);
+      if (!credType) throw new Error("Unsupported category");
+
+      var { error: upErr2 } = await sb.storage.from("credentials_docs").upload(path, file, {
+        contentType: file.type || "application/pdf",
+        upsert: false
+      });
+      if (upErr2) throw upErr2;
+
+      var expiry = document.getElementById("expiry_date").value || null;
+      var { error: crErr } = await sb.from("credential_record").insert({
+        id: rowId,
+        profile_id: profile.id,
+        credential_type: credType,
+        title: title,
+        issuing_authority: authority || document.getElementById("ce_provider").value.trim() || null,
+        year_issued: yearFromDate(issueDate),
+        expiration_date: expiry || null,
+        documentation_url: path,
+        verification_status: "submitted"
+      });
+      if (crErr) throw crErr;
+    }
+
+    setStatus("upload-status", "Saved to private storage and database.", true);
+    document.getElementById("upload-form").reset();
+    document.getElementById("file-label").textContent = "";
+    handleCategory("");
+    toggleSubmit();
+    await refreshGate();
+  } catch (err) {
+    setStatus("upload-status", err.message || String(err), false);
+    toggleSubmit();
+  } finally {
+    btn.disabled = !document.getElementById("certified").checked;
+  }
+});
+
+document.getElementById("experience-form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  if (!profile) return;
+  try {
+    var payload = {
+      profile_id: profile.id,
+      domain_category: document.getElementById("domain_category").value,
+      activity_type: document.getElementById("activity_type").value.trim(),
+      species_or_system: document.getElementById("species_or_system").value.trim() || null,
+      years_applied: document.getElementById("years_applied").value === ""
+        ? null
+        : Number(document.getElementById("years_applied").value),
+      role_level: document.getElementById("role_level").value,
+      evidence_source: document.getElementById("evidence_source_text").value.trim() || null,
+      verification_status: "submitted"
+    };
+    var { error } = await BioCred.supabase.from("experience_evidence").insert(payload);
+    if (error) throw error;
+    setStatus("experience-status", "Experience record added.", true);
+    document.getElementById("experience-form").reset();
+    await refreshGate();
+  } catch (err) {
+    setStatus("experience-status", err.message || String(err), false);
+  }
+});
+
+document.getElementById("btn-submit-review").onclick = async function () {
+  if (!profile) return;
+  try {
+    var { error } = await BioCred.supabase.rpc("submit_profile_for_review", {
+      p_profile_id: profile.id
+    });
+    if (error) throw error;
+    profile = await BioCred.getOwnProfile();
+    setStatus("submit-status", "Profile submitted — status is pending_review.", true);
+    await refreshGate();
+  } catch (err) {
+    setStatus("submit-status", err.message || String(err), false);
+  }
+};
+
+init().catch(function (err) {
+  document.getElementById("session-label").textContent = err.message || String(err);
 });
 </script>
 </body>
