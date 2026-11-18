@@ -15,6 +15,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .topbar .role-tag{font-size:11px;font-weight:600;background:rgba(255,255,255,.12);color:var(--g1);padding:3px 10px;border-radius:20px;letter-spacing:.5px}
 .topbar .spacer{flex:1}
 .topbar .user{font-size:12px;color:rgba(255,255,255,.5)}
+.topbar button{background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer}
+.topbar button:hover{background:rgba(255,255,255,.22)}
 
 /* ── LAYOUT ── */
 .layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 49px)}
@@ -28,6 +30,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .nav-item .badge{margin-left:auto;background:var(--g1);color:var(--g7);font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px}
 .nav-item .badge.urgent{background:#fef3c7;color:var(--amber)}
 .sidebar-sep{height:1px;background:var(--bd);margin:12px 16px}
+.sidebar-note{font-size:11px;color:var(--tm);padding:8px 20px;line-height:1.5}
 
 /* ── MAIN ── */
 .main{padding:32px;display:flex;flex-direction:column;gap:24px;overflow-y:auto}
@@ -56,46 +59,62 @@ tbody tr:last-child{border-bottom:none}
 tbody tr:hover{background:#f8fbf8}
 td{font-size:13px;padding:13px 16px;color:var(--t);vertical-align:middle}
 td.muted{color:var(--tm);font-size:12px}
+.empty{padding:36px;text-align:center;color:var(--tm);font-size:13px}
 
-/* status badges */
-.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px}
-.pill.submitted{background:#dbeafe;color:var(--blue)}
-.pill.under_review{background:#fef3c7;color:var(--amber)}
-.pill.approved{background:var(--g1);color:var(--g7)}
+/* status badges — real verification_status values */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;background:#f1f5f1;color:var(--ts)}
+.pill.submitted{background:#e5e7eb;color:#4b5563}
+.pill.pending_review{background:#dbeafe;color:var(--blue)}
+.pill.under_verification{background:#fef3c7;color:var(--amber)}
+.pill.verified{background:var(--g1);color:var(--g7)}
+.pill.partial{background:#fde8d8;color:#c2410c}
 .pill.rejected{background:#fee2e2;color:var(--red)}
-.pill.requires_resubmission{background:#fde8d8;color:#c2410c}
 .dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
-
-/* category tag */
 .cat-tag{background:#f1f5f1;color:var(--ts);font-size:11px;font-weight:500;padding:2px 8px;border-radius:6px}
+.cat-tag.redo{background:#fff2e2;color:#8a5210;font-weight:600}
 
 /* action buttons */
 .btn-sm{border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:background .15s}
-.btn-approve{background:var(--g1);color:var(--g7)}.btn-approve:hover{background:var(--g5);color:#fff}
-.btn-reject{background:#fee2e2;color:var(--red)}.btn-reject:hover{background:var(--red);color:#fff}
 .btn-view{background:#f1f5f1;color:var(--ts)}.btn-view:hover{background:var(--bd)}
+.btn-sm:disabled{opacity:.5;cursor:not-allowed}
 
 /* ── DETAIL PANEL ── */
 .detail-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:flex-start;justify-content:flex-end}
 .detail-overlay.open{display:flex}
-.detail-panel{background:var(--card);width:480px;height:100vh;overflow-y:auto;padding:32px;display:flex;flex-direction:column;gap:20px;box-shadow:-4px 0 24px rgba(0,0,0,.12)}
+.detail-panel{background:var(--card);width:520px;height:100vh;overflow-y:auto;padding:32px;display:flex;flex-direction:column;gap:20px;box-shadow:-4px 0 24px rgba(0,0,0,.12)}
 .dp-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .dp-header h2{font-size:18px;font-weight:700}
 .dp-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--tm);padding:2px 6px;border-radius:4px}
 .dp-close:hover{background:var(--g0)}
 .dp-section{display:flex;flex-direction:column;gap:8px}
 .dp-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tm)}
-.dp-row{display:flex;justify-content:space-between;font-size:13px;border-bottom:1px solid #f0f4f0;padding-bottom:7px}
-.dp-row .k{color:var(--ts)}.dp-row .v{font-weight:500;color:var(--t);text-align:right;max-width:60%}
+.dp-row{display:flex;justify-content:space-between;gap:12px;font-size:13px;border-bottom:1px solid #f0f4f0;padding-bottom:7px}
+.dp-row .k{color:var(--ts);flex-shrink:0}.dp-row .v{font-weight:500;color:var(--t);text-align:right;word-break:break-word}
 .dp-file{display:flex;align-items:center;gap:10px;padding:12px;background:var(--g0);border:1px solid var(--bd);border-radius:8px;font-size:13px}
-.dp-file .icon{font-size:20px}
+.dp-file .meta{flex:1;min-width:0}
+.dp-file .meta .t{font-weight:600}
+.dp-file .meta .s{font-size:11px;color:var(--tm);word-break:break-all}
 .dp-actions{display:flex;flex-direction:column;gap:10px}
 .dp-actions textarea{border:1px solid var(--bd);border-radius:8px;padding:10px;font-size:13px;font-family:inherit;color:var(--t);resize:vertical;min-height:72px;outline:none;width:100%}
 .dp-actions textarea:focus{border-color:var(--g5)}
 .dp-btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .btn-full{border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:600;cursor:pointer}
-.btn-full.approve{background:var(--g7);color:#fff}.btn-full.approve:hover{background:var(--g9)}
-.btn-full.reject{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}.btn-full.reject:hover{background:var(--red);color:#fff}
+.btn-full:disabled{opacity:.45;cursor:not-allowed}
+.btn-full.approve{background:var(--g7);color:#fff}.btn-full.approve:hover:not(:disabled){background:var(--g9)}
+.btn-full.partial{background:#fde8d8;color:#c2410c;border:1px solid #f5c9a8}.btn-full.partial:hover:not(:disabled){background:#c2410c;color:#fff}
+.btn-full.reject{background:#fee2e2;color:var(--red);border:1px solid #fca5a5}.btn-full.reject:hover:not(:disabled){background:var(--red);color:#fff}
+.btn-full.start{background:var(--g0);color:var(--g7);border:1px solid var(--bd)}.btn-full.start:hover:not(:disabled){background:var(--g1)}
+.audit-row{font-size:12px;border-bottom:1px solid #f0f4f0;padding:7px 0;display:flex;flex-direction:column;gap:2px}
+.audit-row .h{display:flex;justify-content:space-between;gap:8px}
+.audit-row .why{color:var(--ts);font-style:italic}
+.audit-row .who{color:var(--tm);font-size:11px;word-break:break-all}
+.status-msg{font-size:12px;min-height:16px}
+.status-msg.err{color:var(--red)}
+.status-msg.ok{color:var(--g7)}
+.gate{max-width:560px;margin:80px auto;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:32px;text-align:center}
+.gate h2{font-size:17px;margin-bottom:10px}
+.gate p{font-size:13px;color:var(--ts);line-height:1.6}
+.hidden{display:none!important}
 </style>
 </head>
 <body>
@@ -104,68 +123,73 @@ td.muted{color:var(--tm);font-size:12px}
   <div class="brand">BioCred Registry</div>
   <div class="role-tag">Agency Reviewer</div>
   <div class="spacer"></div>
-  <div class="user">Logged in as: reviewer@agency.gov</div>
+  <div class="user" id="who">…</div>
+  <button id="btn-signout">Sign out</button>
 </div>
 
-<div class="layout">
+<!-- Shown when the signed-in account is not a reviewer -->
+<div class="gate hidden" id="gate">
+  <h2>This account is not a reviewer</h2>
+  <p>
+    You're signed in, but no reviewer role is attached to this account, so the
+    review queue stays closed. This is the intended behaviour: reviewer access is
+    granted deliberately in the database and there is no way to give it to
+    yourself from this page.
+  </p>
+</div>
+
+<div class="layout hidden" id="app">
 
   <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-title">Review Queue</div>
-    <div class="nav-item active">📋 All Submissions <span class="badge">14</span></div>
-    <div class="nav-item">⏳ Pending Review <span class="badge urgent">9</span></div>
-    <div class="nav-item">🔍 Under Review <span class="badge">3</span></div>
-    <div class="nav-item">✅ Approved</div>
-    <div class="nav-item">❌ Rejected</div>
+    <div class="nav-item active" data-filter="pending_review">⏳ Pending Review <span class="badge urgent" id="c-pending">0</span></div>
+    <div class="nav-item" data-filter="under_verification">🔍 Under Review <span class="badge" id="c-under">0</span></div>
+    <div class="nav-item" data-filter="verified">✅ Verified <span class="badge" id="c-verified">0</span></div>
+    <div class="nav-item" data-filter="partial">◑ Partial <span class="badge" id="c-partial">0</span></div>
+    <div class="nav-item" data-filter="rejected">❌ Rejected <span class="badge" id="c-rejected">0</span></div>
+    <div class="nav-item" data-filter="">📋 All submissions <span class="badge" id="c-all">0</span></div>
     <div class="sidebar-sep"></div>
-    <div class="sidebar-title">Browse</div>
-    <div class="nav-item">👤 Biologist Profiles</div>
-    <div class="nav-item">📊 Audit Log</div>
+    <div class="sidebar-title">Note</div>
+    <div class="sidebar-note">
+      Documents open through short-lived signed links. The storage buckets stay
+      private — no permanent public URL is ever created.
+    </div>
   </div>
 
   <!-- MAIN CONTENT -->
   <div class="main">
     <div>
-      <div class="page-title">Document Submissions <span>Traditional review mode</span></div>
+      <div class="page-title">Submissions <span id="view-label">Pending review</span></div>
     </div>
 
     <div class="stats-row">
-      <div class="stat"><div class="num">14</div><div class="lbl">Total submissions</div></div>
-      <div class="stat"><div class="num" style="color:var(--amber)">9</div><div class="lbl">Awaiting review</div></div>
-      <div class="stat"><div class="num">3</div><div class="lbl">Approved this week</div></div>
-      <div class="stat"><div class="num" style="color:var(--red)">1</div><div class="lbl">Requires resubmission</div></div>
+      <div class="stat"><div class="num" id="s-total">0</div><div class="lbl">Submissions in registry</div></div>
+      <div class="stat"><div class="num" style="color:var(--amber)" id="s-await">0</div><div class="lbl">Awaiting a decision</div></div>
+      <div class="stat"><div class="num" id="s-verified">0</div><div class="lbl">Verified</div></div>
+      <div class="stat"><div class="num" style="color:var(--red)" id="s-rejected">0</div><div class="lbl">Rejected</div></div>
     </div>
 
     <div class="filter-bar">
-      <input type="text" placeholder="Search by name or document…" id="search-input" oninput="filterTable()">
-      <select id="filter-status" onchange="filterTable()">
+      <input type="text" placeholder="Search by name or registry ID…" id="search-input">
+      <select id="filter-status">
         <option value="">All statuses</option>
-        <option value="submitted">Submitted</option>
-        <option value="under_review">Under Review</option>
-        <option value="approved">Approved</option>
+        <option value="pending_review">Pending review</option>
+        <option value="under_verification">Under review</option>
+        <option value="verified">Verified</option>
+        <option value="partial">Partial</option>
         <option value="rejected">Rejected</option>
-        <option value="requires_resubmission">Requires Resubmission</option>
       </select>
-      <select id="filter-category" onchange="filterTable()">
-        <option value="">All categories</option>
-        <option value="Resume">Resume</option>
-        <option value="Transcript">Transcript</option>
-        <option value="Certification">Certification</option>
-        <option value="CE Credit">CE Credit</option>
-        <option value="Degree">Degree</option>
-        <option value="Reference Letter">Reference Letter</option>
-        <option value="License">License</option>
-        <option value="Permit">Permit</option>
-      </select>
+      <button class="btn-sm btn-view" id="btn-refresh">Refresh</button>
     </div>
 
     <div class="table-wrap">
-      <table id="submissions-table">
+      <table>
         <thead>
           <tr>
             <th>Biologist</th>
-            <th>Document</th>
-            <th>Category</th>
+            <th>Discipline</th>
+            <th>Evidence</th>
             <th>Submitted</th>
             <th>Status</th>
             <th>Actions</th>
@@ -178,134 +202,491 @@ td.muted{color:var(--tm);font-size:12px}
 </div>
 
 <!-- DETAIL PANEL -->
-<div class="detail-overlay" id="detail-overlay" onclick="closeDetail(event)">
+<div class="detail-overlay" id="detail-overlay">
   <div class="detail-panel" id="detail-panel">
     <div class="dp-header">
-      <h2 id="dp-title">Document Detail</h2>
-      <button class="dp-close" onclick="closeDetail()">✕</button>
+      <h2 id="dp-title">Submission</h2>
+      <button class="dp-close" id="dp-close">✕</button>
     </div>
+
     <div class="dp-section">
       <div class="dp-section-title">Biologist</div>
-      <div class="dp-row"><span class="k">Name</span><span class="v" id="dp-name"></span></div>
       <div class="dp-row"><span class="k">Registry ID</span><span class="v" id="dp-rid"></span></div>
+      <div class="dp-row"><span class="k">Title</span><span class="v" id="dp-title-field"></span></div>
+      <div class="dp-row"><span class="k">Organization</span><span class="v" id="dp-org"></span></div>
+      <div class="dp-row"><span class="k">Location</span><span class="v" id="dp-loc"></span></div>
+      <div class="dp-row"><span class="k">Years experience</span><span class="v" id="dp-years"></span></div>
       <div class="dp-row"><span class="k">Submitted</span><span class="v" id="dp-date"></span></div>
-    </div>
-    <div class="dp-section">
-      <div class="dp-section-title">Document</div>
-      <div class="dp-row"><span class="k">Category</span><span class="v" id="dp-cat"></span></div>
-      <div class="dp-row"><span class="k">Title</span><span class="v" id="dp-doc"></span></div>
-      <div class="dp-row"><span class="k">Issuing Authority</span><span class="v" id="dp-issuer"></span></div>
-      <div class="dp-row"><span class="k">Issue Date</span><span class="v" id="dp-idate"></span></div>
       <div class="dp-row"><span class="k">Status</span><span class="v" id="dp-status"></span></div>
     </div>
+
     <div class="dp-section">
-      <div class="dp-section-title">Attached File</div>
-      <div class="dp-file"><span class="icon">📄</span><span id="dp-file"></span></div>
+      <div class="dp-section-title">Credentials</div>
+      <div id="dp-credentials"></div>
     </div>
+
+    <div class="dp-section">
+      <div class="dp-section-title">Experience records</div>
+      <div id="dp-evidence"></div>
+    </div>
+
+    <div class="dp-section">
+      <div class="dp-section-title">Audit trail</div>
+      <div id="dp-audit"></div>
+    </div>
+
     <div class="dp-actions">
-      <div class="dp-section-title">Reviewer Notes</div>
-      <textarea id="dp-notes" placeholder="Add notes for the biologist (optional)…"></textarea>
+      <div class="dp-section-title">Decision</div>
+      <textarea id="dp-notes" placeholder="Reason for the decision. Required to reject or to verify only in part."></textarea>
+      <button class="btn-full start" id="btn-start">Start review</button>
       <div class="dp-btn-row">
-        <button class="btn-full approve" onclick="approveDoc()">✓ Approve</button>
-        <button class="btn-full reject" onclick="rejectDoc()">✕ Reject</button>
+        <button class="btn-full approve" id="btn-approve">✓ Verify</button>
+        <button class="btn-full reject" id="btn-reject">✕ Reject</button>
       </div>
+      <button class="btn-full partial" id="btn-partial">◑ Verify in part</button>
+      <p class="status-msg" id="dp-msg"></p>
     </div>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="js/biocred_auth.js"></script>
 <script>
-var SUBMISSIONS = [
-  { id:1, name:"Sarah Mitchell", rid:"BCR-042", doc:"Resume — Wildlife Biologist", category:"Resume",          date:"Apr 8, 2026",  status:"submitted",              issuer:"Self",          idate:"—",          file:"mitchell_resume_2026.pdf" },
-  { id:2, name:"David Okafor",   rid:"BCR-018", doc:"B.S. Conservation Biology",  category:"Degree",           date:"Apr 7, 2026",  status:"submitted",              issuer:"UC Santa Cruz", idate:"May 2019",   file:"okafor_degree_cert.pdf" },
-  { id:3, name:"Linda Reyes",    rid:"BCR-031", doc:"CDFW Scientific Collection Permit", category:"Permit",   date:"Apr 7, 2026",  status:"under_review",           issuer:"CDFW",          idate:"Jan 2024",   file:"reyes_permit_SC22143.pdf" },
-  { id:4, name:"James Thornton", rid:"BCR-009", doc:"GIS for Wildlife — Cornell Online", category:"CE Credit", date:"Apr 6, 2026",  status:"submitted",              issuer:"Cornell Online",idate:"Mar 2026",   file:"thornton_cornell_ce.pdf" },
-  { id:5, name:"Amy Chen",       rid:"BCR-057", doc:"CA Professional Biologist License", category:"License",  date:"Apr 5, 2026",  status:"approved",               issuer:"CBB",           idate:"Feb 2023",   file:"chen_cpb_license.pdf" },
-  { id:6, name:"Robert Nava",    rid:"BCR-023", doc:"M.S. Wildlife Ecology",       category:"Degree",           date:"Apr 4, 2026",  status:"approved",               issuer:"UC Davis",      idate:"Jun 2021",   file:"nava_ms_degree.pdf" },
-  { id:7, name:"Sarah Mitchell", rid:"BCR-042", doc:"Reference Letter — Dr. Park", category:"Reference Letter", date:"Apr 8, 2026", status:"submitted",              issuer:"USGS",          idate:"Apr 2026",   file:"mitchell_ref_park.pdf" },
-  { id:8, name:"Kevin Walsh",    rid:"BCR-065", doc:"Official Transcript",         category:"Transcript",       date:"Apr 3, 2026",  status:"requires_resubmission",  issuer:"Oregon State",  idate:"—",          file:"walsh_transcript.pdf" },
-  { id:9, name:"Priya Sharma",   rid:"BCR-011", doc:"NEPA Compliance Training",    category:"CE Credit",        date:"Apr 2, 2026",  status:"under_review",           issuer:"DOI Training",  idate:"Feb 2026",   file:"sharma_nepa_ce.pdf" }
-];
+(function () {
+  "use strict";
 
-var currentDoc = null;
+  var sb = BioCred.supabase;
+  var STATUS_LABELS = {
+    submitted: "Draft",
+    pending_review: "Pending review",
+    under_verification: "Under review",
+    verified: "Verified",
+    partial: "Partial",
+    rejected: "Rejected"
+  };
 
-function statusPill(s) {
-  var labels = { submitted:"Submitted", under_review:"Under Review", approved:"Approved", rejected:"Rejected", requires_resubmission:"Needs Resubmission" };
-  return '<span class="pill ' + s + '"><span class="dot"></span>' + (labels[s] || s) + '</span>';
-}
+  var profiles = [];
+  var credsByProfile = {};
+  var evidenceByProfile = {};
+  var rejectedBefore = {};
+  var current = null;
+  var activeFilter = "pending_review";
 
-function renderTable(data) {
-  var tbody = document.getElementById("table-body");
-  tbody.innerHTML = data.map(function(r) {
-    return '<tr onclick="openDetail(' + r.id + ')">' +
-      '<td><strong>' + r.name + '</strong><br><span style="font-size:11px;color:var(--tm)">' + r.rid + '</span></td>' +
-      '<td>' + r.doc + '</td>' +
-      '<td><span class="cat-tag">' + r.category + '</span></td>' +
-      '<td class="muted">' + r.date + '</td>' +
-      '<td>' + statusPill(r.status) + '</td>' +
-      '<td onclick="event.stopPropagation()">' +
-        '<button class="btn-sm btn-view" onclick="openDetail(' + r.id + ')">View</button> ' +
-        (r.status === 'submitted' || r.status === 'under_review'
-          ? '<button class="btn-sm btn-approve" onclick="quickApprove(' + r.id + ')">Approve</button>'
-          : '') +
-      '</td>' +
-    '</tr>';
-  }).join("");
-}
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
 
-function filterTable() {
-  var q     = document.getElementById("search-input").value.toLowerCase();
-  var st    = document.getElementById("filter-status").value;
-  var cat   = document.getElementById("filter-category").value;
-  var filtered = SUBMISSIONS.filter(function(r) {
-    return (!q  || r.name.toLowerCase().includes(q) || r.doc.toLowerCase().includes(q)) &&
-           (!st  || r.status === st) &&
-           (!cat || r.category === cat);
-  });
-  renderTable(filtered);
-}
+  function pill(status) {
+    return '<span class="pill ' + esc(status) + '"><span class="dot"></span>' +
+      esc(STATUS_LABELS[status] || status) + "</span>";
+  }
 
-function openDetail(id) {
-  currentDoc = SUBMISSIONS.find(function(r) { return r.id === id; });
-  if (!currentDoc) return;
-  document.getElementById("dp-title").textContent = currentDoc.doc;
-  document.getElementById("dp-name").textContent   = currentDoc.name;
-  document.getElementById("dp-rid").textContent    = currentDoc.rid;
-  document.getElementById("dp-date").textContent   = currentDoc.date;
-  document.getElementById("dp-cat").textContent    = currentDoc.category;
-  document.getElementById("dp-doc").textContent    = currentDoc.doc;
-  document.getElementById("dp-issuer").textContent = currentDoc.issuer;
-  document.getElementById("dp-idate").textContent  = currentDoc.idate;
-  document.getElementById("dp-status").innerHTML   = statusPill(currentDoc.status);
-  document.getElementById("dp-file").textContent   = currentDoc.file;
-  document.getElementById("dp-notes").value = "";
-  document.getElementById("detail-overlay").classList.add("open");
-}
+  function fmtDate(iso) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleDateString(undefined, {
+      year: "numeric", month: "short", day: "numeric"
+    });
+  }
 
-function closeDetail(e) {
-  if (!e || e.target === document.getElementById("detail-overlay"))
+  function fmtDateTime(iso) {
+    if (!iso) return "—";
+    return new Date(iso).toLocaleString(undefined, {
+      month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+    });
+  }
+
+  function msg(text, ok) {
+    var el = document.getElementById("dp-msg");
+    el.textContent = text || "";
+    el.className = "status-msg" + (text ? (ok ? " ok" : " err") : "");
+  }
+
+  // A stored evidence_source may be "path/to/file.pdf | Referee Name / Org".
+  // Only the leading path is a storage object.
+  function evidencePath(source) {
+    if (!source) return null;
+    var head = String(source).split(" | ")[0].trim();
+    return head.indexOf("/") > -1 ? head : null;
+  }
+
+  async function openDocument(bucket, path, button) {
+    var original = button.textContent;
+    button.disabled = true;
+    button.textContent = "Opening…";
+    try {
+      var res = await sb.storage.from(bucket).createSignedUrl(path, 300);
+      if (res.error) throw res.error;
+      window.open(res.data.signedUrl, "_blank", "noopener");
+    } catch (err) {
+      msg("Could not open document: " + (err.message || err), false);
+    } finally {
+      button.disabled = false;
+      button.textContent = original;
+    }
+  }
+
+  // ── data ──────────────────────────────────────────────────────────────
+
+  async function load() {
+    var res = await sb
+      .from("biologist_profile")
+      .select("id,registry_id,full_name,professional_title,organization,state,city,years_experience,primary_discipline,verification_status,visibility_status,created_at,updated_at")
+      .neq("verification_status", "submitted")
+      .order("updated_at", { ascending: false });
+    if (res.error) throw res.error;
+    profiles = res.data || [];
+
+    credsByProfile = {};
+    evidenceByProfile = {};
+    rejectedBefore = {};
+
+    var ids = profiles.map(function (p) { return p.id; });
+    if (ids.length) {
+      // Whether a file has been turned down before changes how it should be read,
+      // so it is worth knowing from the queue rather than after opening it.
+      var a = await sb
+        .from("verification_audit_log")
+        .select("profile_id")
+        .in("profile_id", ids)
+        .eq("new_status", "rejected");
+      if (!a.error) {
+        (a.data || []).forEach(function (row) { rejectedBefore[row.profile_id] = true; });
+      }
+
+      var c = await sb
+        .from("credential_record")
+        .select("id,profile_id,credential_type,title,issuing_authority,year_issued,documentation_url,verification_status")
+        .in("profile_id", ids);
+      if (c.error) throw c.error;
+      (c.data || []).forEach(function (row) {
+        (credsByProfile[row.profile_id] = credsByProfile[row.profile_id] || []).push(row);
+      });
+
+      var e = await sb
+        .from("experience_evidence")
+        .select("id,profile_id,domain_category,activity_type,species_or_system,years_applied,role_level,evidence_source,verification_status")
+        .in("profile_id", ids);
+      if (e.error) throw e.error;
+      (e.data || []).forEach(function (row) {
+        (evidenceByProfile[row.profile_id] = evidenceByProfile[row.profile_id] || []).push(row);
+      });
+    }
+
+    renderCounts();
+    renderTable();
+  }
+
+  function countBy(status) {
+    return profiles.filter(function (p) { return p.verification_status === status; }).length;
+  }
+
+  function renderCounts() {
+    document.getElementById("c-pending").textContent = countBy("pending_review");
+    document.getElementById("c-under").textContent = countBy("under_verification");
+    document.getElementById("c-verified").textContent = countBy("verified");
+    document.getElementById("c-partial").textContent = countBy("partial");
+    document.getElementById("c-rejected").textContent = countBy("rejected");
+    document.getElementById("c-all").textContent = profiles.length;
+
+    document.getElementById("s-total").textContent = profiles.length;
+    document.getElementById("s-await").textContent = countBy("pending_review") + countBy("under_verification");
+    document.getElementById("s-verified").textContent = countBy("verified");
+    document.getElementById("s-rejected").textContent = countBy("rejected");
+  }
+
+  function visibleRows() {
+    var q = document.getElementById("search-input").value.trim().toLowerCase();
+    var dropdown = document.getElementById("filter-status").value;
+    var status = dropdown || activeFilter;
+    return profiles.filter(function (p) {
+      var matchesStatus = !status || p.verification_status === status;
+      var matchesQuery = !q ||
+        (p.full_name || "").toLowerCase().indexOf(q) > -1 ||
+        (p.registry_id || "").toLowerCase().indexOf(q) > -1;
+      return matchesStatus && matchesQuery;
+    });
+  }
+
+  function renderTable() {
+    var rows = visibleRows();
+    var tbody = document.getElementById("table-body");
+
+    if (!rows.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="empty">Nothing here. When a biologist submits a profile it appears in Pending review.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = rows.map(function (p) {
+      var creds = (credsByProfile[p.id] || []).length;
+      var ev = (evidenceByProfile[p.id] || []).length;
+      var decidable = p.verification_status === "pending_review" || p.verification_status === "under_verification";
+      var redo = rejectedBefore[p.id] && p.verification_status !== "rejected";
+      return '<tr data-id="' + esc(p.id) + '">' +
+        "<td><strong>" + esc(p.full_name) + "</strong><br><span style=\"font-size:11px;color:var(--tm)\">" + esc(p.registry_id) + "</span></td>" +
+        "<td>" + esc(p.primary_discipline || "—") + "</td>" +
+        '<td>' + (redo ? '<span class="cat-tag redo">resubmitted</span> ' : "") +
+        '<span class="cat-tag">' + creds + " credential" + (creds === 1 ? "" : "s") + "</span> " +
+        '<span class="cat-tag">' + ev + " record" + (ev === 1 ? "" : "s") + "</span></td>" +
+        '<td class="muted">' + fmtDate(p.updated_at) + "</td>" +
+        "<td>" + pill(p.verification_status) + "</td>" +
+        '<td><button class="btn-sm btn-view" data-open="' + esc(p.id) + '">' +
+          (decidable ? "Review" : "View") + "</button></td>" +
+        "</tr>";
+    }).join("");
+  }
+
+  // ── detail panel ──────────────────────────────────────────────────────
+
+  async function openDetail(id) {
+    current = profiles.filter(function (p) { return p.id === id; })[0];
+    if (!current) return;
+
+    document.getElementById("dp-title").textContent = current.full_name;
+    document.getElementById("dp-rid").textContent = current.registry_id || "—";
+    document.getElementById("dp-title-field").textContent = current.professional_title || "—";
+    document.getElementById("dp-org").textContent = current.organization || "—";
+    document.getElementById("dp-loc").textContent =
+      [current.city, current.state].filter(Boolean).join(", ") || "—";
+    document.getElementById("dp-years").textContent =
+      current.years_experience == null ? "—" : current.years_experience;
+    document.getElementById("dp-date").textContent = fmtDate(current.updated_at);
+    document.getElementById("dp-status").innerHTML = pill(current.verification_status);
+    document.getElementById("dp-notes").value = "";
+    msg("");
+
+    renderCredentials();
+    renderEvidence();
+    renderActions();
+    document.getElementById("detail-overlay").classList.add("open");
+
+    await renderAudit(id);
+  }
+
+  function renderCredentials() {
+    var list = credsByProfile[current.id] || [];
+    var host = document.getElementById("dp-credentials");
+    if (!list.length) {
+      host.innerHTML = '<p class="dp-row"><span class="k">None recorded</span></p>';
+      return;
+    }
+    host.innerHTML = list.map(function (c) {
+      var hasDoc = !!c.documentation_url;
+      return '<div class="dp-file">' +
+        '<span class="icon">📄</span>' +
+        '<span class="meta"><span class="t">' + esc(c.title) + "</span><br>" +
+        '<span class="s">' + esc(c.credential_type) +
+        (c.issuing_authority ? " · " + esc(c.issuing_authority) : "") +
+        (c.year_issued ? " · " + esc(c.year_issued) : "") + "</span></span>" +
+        (hasDoc
+          ? '<button class="btn-sm btn-view" data-doc="' + esc(c.documentation_url) + '" data-bucket="credentials_docs">Open</button>'
+          : '<span class="s">no file</span>') +
+        "</div>";
+    }).join("");
+  }
+
+  function renderEvidence() {
+    var list = evidenceByProfile[current.id] || [];
+    var host = document.getElementById("dp-evidence");
+    if (!list.length) {
+      host.innerHTML = '<p class="dp-row"><span class="k">None recorded</span></p>';
+      return;
+    }
+    host.innerHTML = list.map(function (e) {
+      var path = evidencePath(e.evidence_source);
+      return '<div class="dp-file">' +
+        '<span class="icon">🗂</span>' +
+        '<span class="meta"><span class="t">' + esc(e.activity_type) + "</span><br>" +
+        '<span class="s">' + esc(e.domain_category) +
+        (e.species_or_system ? " · " + esc(e.species_or_system) : "") +
+        (e.years_applied != null ? " · " + esc(e.years_applied) + "y" : "") +
+        " · " + esc(e.role_level) + "</span></span>" +
+        (path
+          ? '<button class="btn-sm btn-view" data-doc="' + esc(path) + '" data-bucket="evidence_docs">Open</button>'
+          : "") +
+        "</div>";
+    }).join("");
+  }
+
+  async function renderAudit(profileId) {
+    var host = document.getElementById("dp-audit");
+    host.innerHTML = '<p class="dp-row"><span class="k">Loading…</span></p>';
+    var res = await sb
+      .from("verification_audit_log")
+      .select("previous_status,new_status,changed_by,change_reason,created_at")
+      .eq("profile_id", profileId)
+      .order("created_at", { ascending: false })
+      .limit(25);
+
+    if (res.error) {
+      host.innerHTML = '<p class="dp-row"><span class="k">Could not load: ' + esc(res.error.message) + "</span></p>";
+      return;
+    }
+    if (!res.data || !res.data.length) {
+      host.innerHTML = '<p class="dp-row"><span class="k">No entries yet</span></p>';
+      return;
+    }
+    host.innerHTML = res.data.map(function (a) {
+      return '<div class="audit-row">' +
+        '<div class="h"><span>' + esc(STATUS_LABELS[a.previous_status] || a.previous_status || "—") +
+        " → " + esc(STATUS_LABELS[a.new_status] || a.new_status) + "</span>" +
+        '<span class="who">' + esc(fmtDateTime(a.created_at)) + "</span></div>" +
+        (a.change_reason ? '<div class="why">“' + esc(a.change_reason) + "”</div>" : "") +
+        '<div class="who">by ' + esc(a.changed_by) + "</div>" +
+        "</div>";
+    }).join("");
+  }
+
+  function renderActions() {
+    var s = current.verification_status;
+    var decidable = s === "pending_review" || s === "under_verification";
+    document.getElementById("btn-start").disabled = s !== "pending_review";
+    document.getElementById("btn-approve").disabled = !decidable;
+    document.getElementById("btn-reject").disabled = !decidable;
+    document.getElementById("btn-partial").disabled = !decidable;
+  }
+
+  function closeDetail() {
     document.getElementById("detail-overlay").classList.remove("open");
-}
+    current = null;
+  }
 
-function approveDoc() {
-  if (!currentDoc) return;
-  currentDoc.status = "approved";
-  renderTable(SUBMISSIONS);
-  document.getElementById("detail-overlay").classList.remove("open");
-}
+  // ── decisions ─────────────────────────────────────────────────────────
 
-function rejectDoc() {
-  if (!currentDoc) return;
-  currentDoc.status = "rejected";
-  renderTable(SUBMISSIONS);
-  document.getElementById("detail-overlay").classList.remove("open");
-}
+  var FRIENDLY = {
+    not_a_reviewer: "This account is not a reviewer.",
+    reason_required: "A reason is required to reject or to verify in part.",
+    profile_not_pending: "This submission is no longer pending.",
+    profile_not_reviewable: "This submission has already been decided.",
+    invalid_decision: "Unknown decision.",
+    profile_not_found: "Profile not found."
+  };
 
-function quickApprove(id) {
-  var doc = SUBMISSIONS.find(function(r) { return r.id === id; });
-  if (doc) { doc.status = "approved"; renderTable(SUBMISSIONS); }
-}
+  function friendly(err) {
+    var raw = (err && err.message) || String(err);
+    var key = Object.keys(FRIENDLY).filter(function (k) { return raw.indexOf(k) > -1; })[0];
+    return key ? FRIENDLY[key] : raw;
+  }
 
-renderTable(SUBMISSIONS);
+  async function decide(decision) {
+    if (!current) return;
+    var reason = document.getElementById("dp-notes").value.trim();
+    if ((decision === "reject" || decision === "partial") && !reason) {
+      msg("A reason is required to reject or to verify in part.", false);
+      return;
+    }
+    setBusy(true);
+    try {
+      var res = await sb.rpc("review_decide", {
+        p_profile_id: current.id,
+        p_decision: decision,
+        p_reason: reason || null
+      });
+      if (res.error) throw res.error;
+      msg("Decision recorded.", true);
+      await load();
+      await openDetail(current.id);
+    } catch (err) {
+      msg(friendly(err), false);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function startReview() {
+    if (!current) return;
+    setBusy(true);
+    try {
+      var res = await sb.rpc("review_start", { p_profile_id: current.id });
+      if (res.error) throw res.error;
+      msg("Review started.", true);
+      await load();
+      await openDetail(current.id);
+    } catch (err) {
+      msg(friendly(err), false);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function setBusy(busy) {
+    ["btn-start", "btn-approve", "btn-reject", "btn-partial"].forEach(function (id) {
+      document.getElementById(id).disabled = busy;
+    });
+    if (!busy && current) renderActions();
+  }
+
+  // ── events ────────────────────────────────────────────────────────────
+
+  document.getElementById("table-body").addEventListener("click", function (e) {
+    var btn = e.target.closest("[data-open]");
+    var row = e.target.closest("tr[data-id]");
+    var id = btn ? btn.getAttribute("data-open") : (row ? row.getAttribute("data-id") : null);
+    if (id) openDetail(id);
+  });
+
+  document.getElementById("detail-panel").addEventListener("click", function (e) {
+    var docBtn = e.target.closest("[data-doc]");
+    if (docBtn) {
+      openDocument(docBtn.getAttribute("data-bucket"), docBtn.getAttribute("data-doc"), docBtn);
+    }
+  });
+
+  document.getElementById("detail-overlay").addEventListener("click", function (e) {
+    if (e.target === this) closeDetail();
+  });
+  document.getElementById("dp-close").addEventListener("click", closeDetail);
+  document.getElementById("btn-start").addEventListener("click", startReview);
+  document.getElementById("btn-approve").addEventListener("click", function () { decide("approve"); });
+  document.getElementById("btn-partial").addEventListener("click", function () { decide("partial"); });
+  document.getElementById("btn-reject").addEventListener("click", function () { decide("reject"); });
+  document.getElementById("search-input").addEventListener("input", renderTable);
+  document.getElementById("filter-status").addEventListener("change", renderTable);
+  document.getElementById("btn-refresh").addEventListener("click", function () {
+    load().catch(function (err) { alert(err.message || err); });
+  });
+  document.getElementById("btn-signout").addEventListener("click", async function () {
+    await BioCred.signOut();
+    location.href = "login_v1.html";
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".nav-item[data-filter]"), function (item) {
+    item.addEventListener("click", function () {
+      Array.prototype.forEach.call(document.querySelectorAll(".nav-item"), function (n) {
+        n.classList.remove("active");
+      });
+      item.classList.add("active");
+      activeFilter = item.getAttribute("data-filter");
+      document.getElementById("filter-status").value = "";
+      document.getElementById("view-label").textContent = item.textContent.replace(/\d+$/, "").trim();
+      renderTable();
+    });
+  });
+
+  // ── boot ──────────────────────────────────────────────────────────────
+
+  (async function boot() {
+    var session = await BioCred.requireSession("login_v1.html");
+    if (!session) return;
+
+    document.getElementById("who").textContent = session.user.email;
+
+    var roleRes = await sb.rpc("is_reviewer_or_admin");
+    if (roleRes.error || !roleRes.data) {
+      document.getElementById("gate").classList.remove("hidden");
+      return;
+    }
+
+    document.getElementById("app").classList.remove("hidden");
+    try {
+      await load();
+    } catch (err) {
+      alert("Could not load the queue: " + (err.message || err));
+    }
+  })();
+})();
 </script>
 </body>
 </html>

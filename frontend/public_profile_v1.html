@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BioCred — Sarah Mitchell · BCR-042</title>
+<title>BioCred — Public Profile</title>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -18,6 +18,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .topbar .logo{font-size:14px;font-weight:700;color:#fff;letter-spacing:-.2px}
 .topbar .sep{color:rgba(255,255,255,.2);font-size:16px}
 .topbar .breadcrumb{font-size:12px;color:rgba(255,255,255,.5)}
+.topbar .breadcrumb-link{font-size:12px;color:rgba(255,255,255,.72);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.25)}
+.topbar .breadcrumb-link:hover{color:#fff;border-bottom-color:rgba(255,255,255,.6)}
 .topbar .spacer{flex:1}
 .topbar .heatmap-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);font-size:12px;font-weight:500;padding:6px 14px;border-radius:20px;cursor:pointer;transition:background .15s}
 .topbar .heatmap-btn:hover{background:rgba(255,255,255,.18)}
@@ -33,7 +35,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .trust-block{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .verified-badge{display:inline-flex;align-items:center;gap:6px;background:var(--g1);border:1px solid var(--g3);color:var(--g7);font-size:12px;font-weight:700;padding:6px 14px;border-radius:20px}
 .verified-badge::before{content:"✓";font-weight:900}
+.verified-badge.partial-badge{background:#e0f2fe;border-color:#93c5fd;color:var(--blue)}
+.verified-badge.partial-badge::before{content:"◐"}
 .trust-meta{font-size:11px;color:var(--tm);text-align:right;line-height:1.8}
+.hidden{display:none!important}
+.empty-state{max-width:560px;margin:80px auto;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:36px;text-align:center}
+.empty-state h2{font-size:18px;margin-bottom:8px}
+.empty-state p{font-size:13px;color:var(--ts);line-height:1.6}
+.empty-cell{text-align:center;color:var(--tm);font-size:13px;padding:24px}
 
 /* ── MAIN ── */
 .main{max-width:1100px;margin:32px auto;padding:0 40px;display:flex;flex-direction:column;gap:24px}
@@ -112,32 +121,36 @@ td{font-size:13px;padding:12px 16px;color:var(--t);vertical-align:middle}
 <div class="topbar">
   <div class="logo">BioCred Registry</div>
   <div class="sep">/</div>
-  <div class="breadcrumb">Public Profile · BCR-042</div>
+  <a class="breadcrumb-link" href="directory_v1.html">Search</a>
+  <div class="sep">/</div>
+  <div class="breadcrumb" id="breadcrumb">Public Profile</div>
   <div class="spacer"></div>
-  <button class="heatmap-btn" onclick="toggleHeatmap()">⬡ View Experience Map</button>
+  <button type="button" class="heatmap-btn">⬡ View Experience Map</button>
 </div>
+
+<div id="state-loading" class="empty-state">
+  <h2>Loading profile</h2>
+  <p>Reading the public registry.</p>
+</div>
+
+<div id="state-missing" class="empty-state hidden">
+  <h2>This profile is not public</h2>
+  <p id="missing-detail">Registry ID <span id="missing-id"></span> is not in the public registry. Pending and rejected submissions never appear here.</p>
+</div>
+
+<div id="state-ready" class="hidden">
 
 <!-- IDENTITY HEADER (always above the fold) -->
 <div class="identity-header">
   <div class="identity-inner">
     <div>
-      <div class="id-name">Sarah Mitchell</div>
-      <div class="id-title">Wildlife Biologist · Field & Species Specialist</div>
-      <div class="id-meta">
-        <span>📍 <strong>California, USA</strong></span>
-        <span>📅 <strong>Practice span:</strong> 2010 – 2024</span>
-        <span>📄 <strong>63</strong> verified experience records</span>
-        <span>🎓 <strong>12</strong> verified credentials</span>
-        <span>🔄 Profile derived <strong>Apr 9, 2026</strong></span>
-      </div>
+      <div class="id-name" id="id-name"></div>
+      <div class="id-title" id="id-title"></div>
+      <div class="id-meta" id="id-meta"></div>
     </div>
     <div class="trust-block">
-      <div class="verified-badge">Documentation Verified</div>
-      <div class="trust-meta">
-        Last verification: Apr 8, 2026<br>
-        Registry ID: BCR-042<br>
-        Translation Engine: TE_v1.0
-      </div>
+      <div class="verified-badge" id="verified-badge">Documentation Verified</div>
+      <div class="trust-meta" id="trust-meta"></div>
     </div>
   </div>
 </div>
@@ -158,204 +171,45 @@ td{font-size:13px;padding:12px 16px;color:var(--t);vertical-align:middle}
     </p>
   </div>
 
-  <!-- PROFILE INSIGHTS -->
+  <!-- EXPERIENCE SUMMARY -->
   <div class="card">
     <div class="card-header">
-      <h2>Profile Insights</h2>
-      <span class="card-sub">Derived from verified documentation · No evaluative language</span>
+      <h2>Experience Summary</h2>
+      <span class="card-sub">Derived from verified documentation</span>
     </div>
     <div class="card-body">
-      <ul class="insights-list">
-        <li>Primary participation concentration in Field &amp; Applied Practice, spanning 14 years of documented fieldwork across terrestrial and hydrologic environments.</li>
-        <li>Secondary concentration in Species &amp; Habitat Specialization, with recurrent species interaction across four documented modes including capture, handling, monitoring, and behavioral observation.</li>
-        <li>Distributed participation in Knowledge &amp; Research, with documented analytical and methods contributions across seven projects.</li>
-        <li>Limited documented exposure in Leadership &amp; Operational Coordination; participation recorded at contributor level in three records.</li>
-        <li>Regulatory &amp; Policy participation sparse — four records with CEQA and permit compliance context.</li>
-        <li>Project environments concentrated in coastal sage scrub, riparian corridors, and freshwater wetlands.</li>
-      </ul>
+      <ul class="insights-list" id="insights-list"></ul>
     </div>
   </div>
 
   <!-- QUICK FILTERS -->
   <div class="card">
-    <div class="chips">
+    <div class="chips" id="chips">
       <span class="chip-label">Filter by:</span>
-      <span class="chip active" onclick="toggleChip(this)">All records</span>
-      <span class="chip" onclick="toggleChip(this)">Species handling</span>
-      <span class="chip" onclick="toggleChip(this)">CEQA / NEPA</span>
-      <span class="chip" onclick="toggleChip(this)">Aquatic</span>
-      <span class="chip" onclick="toggleChip(this)">Restoration</span>
-      <span class="chip" onclick="toggleChip(this)">Monitoring</span>
-      <span class="chip" onclick="toggleChip(this)">Verified only</span>
     </div>
 
-    <!-- CREDENTIAL TABLE -->
     <div class="card-header" style="border-top:1px solid var(--bd)">
       <h2>Credential History</h2>
-      <span class="card-sub">12 verified records</span>
+      <span class="card-sub" id="cred-sub"></span>
     </div>
     <table>
       <thead><tr>
-        <th>Type</th><th>Title</th><th>Issuer</th><th>Year</th><th>Status</th><th>Document</th>
+        <th>Type</th><th>Title</th><th>Issuer</th><th>Year</th><th>Status</th>
       </tr></thead>
-      <tbody>
-        <tr><td>Degree</td><td>B.S. Wildlife Biology</td><td>UC Davis</td><td>2010</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
-        <tr><td>Degree</td><td>M.S. Conservation Ecology</td><td>UC Santa Barbara</td><td>2013</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
-        <tr><td>License</td><td>CA Professional Biologist (CPB)</td><td>California Biologist Board</td><td>2014</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
-        <tr><td>Permit</td><td>Scientific Collection Permit</td><td>CDFW</td><td>2016</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
-        <tr><td>Permit</td><td>Section 10(a)(1)(A) ESA Take Permit</td><td>USFWS</td><td>2018</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
-        <tr><td>CE Credit</td><td>GIS for Wildlife Management · 24h</td><td>Cornell Online</td><td>2022</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
-        <tr><td>CE Credit</td><td>NEPA Compliance Training · 16h</td><td>DOI Training Center</td><td>2023</td><td><span class="pill partial">◐ Partial</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
-        <tr><td>Award</td><td>Outstanding Field Biologist Award</td><td>The Wildlife Society</td><td>2021</td><td><span class="pill verified">✓ Verified</span></td><td><a class="doc-link" href="#">View →</a></td></tr>
-      </tbody>
+      <tbody id="cred-body"></tbody>
     </table>
   </div>
 
-  <!-- EXPERIENCE EVIDENCE -->
   <div class="card">
     <div class="card-header">
       <h2>Experience Evidence</h2>
-      <span class="card-sub">63 records · grouped by domain · click any record to expand</span>
+      <span class="card-sub" id="ev-sub"></span>
     </div>
-
-    <div class="domain-group">
-      <button class="domain-toggle" onclick="toggleDomain(this)">
-        <span class="domain-name">Field &amp; Applied Practice</span>
-        <span class="domain-count">28 records</span>
-        <span class="domain-chevron">▶</span>
-      </button>
-      <div class="domain-records">
-        <div class="ev-item" onclick="toggleEvDetail(this)">
-          <span class="ev-icon">🌿</span>
-          <div class="ev-body">
-            <div class="ev-title">Breeding Bird Point Count Surveys — CDFW</div>
-            <div class="ev-meta">2014 – 2019 · Lead · Terrestrial monitoring</div>
-            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
-          </div>
-        </div>
-        <div class="ev-detail">
-          <p>Conducted systematic point count surveys for breeding passerines and raptors across 42 sites in the Central Valley. Designed field protocols, trained two junior biologists, and submitted annual reports to CDFW.</p>
-          <div class="ev-audit">Verification method: Document review + issuer confirmation · Verified Apr 2, 2026 · Audit ref: AUD-0241</div>
-        </div>
-        <div class="ev-item" onclick="toggleEvDetail(this)">
-          <span class="ev-icon">🐟</span>
-          <div class="ev-body">
-            <div class="ev-title">Salmonid Habitat Assessment — NOAA contract</div>
-            <div class="ev-meta">2016 – 2018 · Contributor · Aquatic / riparian</div>
-            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
-          </div>
-        </div>
-        <div class="ev-detail">
-          <p>Assisted in habitat suitability assessments for Coho salmon and steelhead in coastal streams. Collected substrate, canopy cover, and large woody debris data across 18 stream reaches.</p>
-          <div class="ev-audit">Verification method: Document review · Verified Mar 28, 2026 · Audit ref: AUD-0198</div>
-        </div>
-        <div class="ev-item" onclick="toggleEvDetail(this)">
-          <span class="ev-icon">🌾</span>
-          <div class="ev-body">
-            <div class="ev-title">Vernal Pool Botanical Surveys — Army Corps</div>
-            <div class="ev-meta">2019 – 2021 · Lead · Wetland / restoration</div>
-            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
-          </div>
-        </div>
-        <div class="ev-detail">
-          <p>Led protocol-level surveys for federally listed vernal pool plants including Orcuttia spp. and Navarretia spp. Produced delineation reports submitted to Army Corps of Engineers.</p>
-          <div class="ev-audit">Verification method: Document review · Verified Apr 1, 2026 · Audit ref: AUD-0217</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="domain-group">
-      <button class="domain-toggle" onclick="toggleDomain(this)">
-        <span class="domain-name">Species &amp; Habitat Specialization</span>
-        <span class="domain-count">18 records</span>
-        <span class="domain-chevron">▶</span>
-      </button>
-      <div class="domain-records">
-        <div class="ev-item" onclick="toggleEvDetail(this)">
-          <span class="ev-icon">🦅</span>
-          <div class="ev-body">
-            <div class="ev-title">Raptor Handling &amp; Banding — USFWS permit</div>
-            <div class="ev-meta">2015 – 2024 · Lead · Capture / handling</div>
-            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
-          </div>
-        </div>
-        <div class="ev-detail">
-          <p>Operated under federal banding permit to capture, band, and release raptors at three migration monitoring stations. Total of 340+ individuals processed across nine species.</p>
-          <div class="ev-audit">Verification method: Federal permit review · Verified Apr 3, 2026 · Audit ref: AUD-0229</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="domain-group">
-      <button class="domain-toggle" onclick="toggleDomain(this)">
-        <span class="domain-name">Knowledge &amp; Research</span>
-        <span class="domain-count">9 records</span>
-        <span class="domain-chevron">▶</span>
-      </button>
-      <div class="domain-records">
-        <div class="ev-item" onclick="toggleEvDetail(this)">
-          <span class="ev-icon">📊</span>
-          <div class="ev-body">
-            <div class="ev-title">Occupancy Modeling — M.S. thesis research</div>
-            <div class="ev-meta">2011 – 2013 · Principal · Statistical methods</div>
-            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
-          </div>
-        </div>
-        <div class="ev-detail">
-          <p>Designed and executed multi-season occupancy study for the California tiger salamander. Applied program MARK and R for detection-corrected occupancy estimates across 60 wetland sites.</p>
-          <div class="ev-audit">Verification method: Thesis document review · Verified Mar 30, 2026 · Audit ref: AUD-0204</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="domain-group">
-      <button class="domain-toggle" onclick="toggleDomain(this)">
-        <span class="domain-name">Regulation &amp; Policy</span>
-        <span class="domain-count">5 records</span>
-        <span class="domain-chevron">▶</span>
-      </button>
-      <div class="domain-records">
-        <div class="ev-item" onclick="toggleEvDetail(this)">
-          <span class="ev-icon">📋</span>
-          <div class="ev-body">
-            <div class="ev-title">CEQA Biological Resources Report — Caltrans</div>
-            <div class="ev-meta">2020 – 2021 · Contributor · Regulatory compliance</div>
-            <div class="ev-badges"><span class="pill verified">✓ Verified</span></div>
-          </div>
-        </div>
-        <div class="ev-detail">
-          <p>Contributed biological resources sections to CEQA Initial Study for SR-99 corridor project. Conducted focused surveys for special-status species and prepared mitigation measure summaries.</p>
-          <div class="ev-audit">Verification method: Document review · Verified Apr 4, 2026 · Audit ref: AUD-0233</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="domain-group">
-      <button class="domain-toggle" onclick="toggleDomain(this)">
-        <span class="domain-name">Leadership &amp; Operational Coordination</span>
-        <span class="domain-count">3 records</span>
-        <span class="domain-chevron">▶</span>
-      </button>
-      <div class="domain-records">
-        <div class="ev-item" onclick="toggleEvDetail(this)">
-          <span class="ev-icon">👥</span>
-          <div class="ev-body">
-            <div class="ev-title">Field Team Coordination — CDFW multi-site project</div>
-            <div class="ev-meta">2022 – 2023 · Lead · Team coordination</div>
-            <div class="ev-badges"><span class="pill partial">◐ Partial</span></div>
-          </div>
-        </div>
-        <div class="ev-detail">
-          <p>Coordinated scheduling and logistics for a 4-person field team across 12 survey sites. Managed data QA/QC and submitted weekly progress reports to agency project manager.</p>
-          <div class="ev-audit">Verification method: Document review (partial) · Audit ref: AUD-0251</div>
-        </div>
-      </div>
-    </div>
+    <div id="evidence-root"></div>
   </div>
 
 </div>
 
-<!-- DISCLAIMER -->
 <div class="disclaimer">
   BioCred Registry documents and organizes verified biological credentials and field experience for informational purposes only.
   This profile does not constitute an endorsement, ranking, or evaluation of any individual.
@@ -363,37 +217,12 @@ td{font-size:13px;padding:12px 16px;color:var(--t);vertical-align:middle}
   All information is derived from submitted and verified documentation.
 </div>
 
+</div><!-- /state-ready -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
 <script src="../renderer/biocred-geometry.js"></script>
 <script src="../renderer/biocred-renderer.js"></script>
-<script src="../renderer/profile_page_v1_demo.js"></script>
-<script>
-function toggleHeatmap() {
-  var panel = document.getElementById("heatmap-panel");
-  var btn = document.querySelector(".heatmap-btn");
-  var isVisible = panel.classList.toggle("visible");
-  btn.textContent = isVisible ? "✕ Hide Experience Map" : "⬡ View Experience Map";
-  if (isVisible && !document.getElementById("biocred-chart").hasChildNodes()) {
-    BioCred.renderFromPayload("biocred-chart", DEMO_PAYLOAD);
-  }
-}
-
-function toggleDomain(btn) {
-  var records = btn.nextElementSibling;
-  var chevron = btn.querySelector(".domain-chevron");
-  records.classList.toggle("open");
-  chevron.classList.toggle("open");
-}
-
-function toggleEvDetail(item) {
-  var detail = item.nextElementSibling;
-  if (detail && detail.classList.contains("ev-detail"))
-    detail.classList.toggle("open");
-}
-
-function toggleChip(chip) {
-  document.querySelectorAll(".chip").forEach(function(c) { c.classList.remove("active"); });
-  chip.classList.add("active");
-}
-</script>
+<script src="js/public_profile_page.js"></script>
 </body>
 </html>

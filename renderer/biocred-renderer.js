@@ -61,7 +61,10 @@
         axisRay:      "rgba(60,110,72,0.16)",
         labelText:    "#14301a",
         labelSub:     "#3d6b48",
-        density:      ["#0c281c", "#154a32", "#1a5c3d", "#247a50", "#3d9a62", "#6bc486", "#b8e8c4"],
+        // Ordered from least to most documented: white, pale mint, mid green,
+        // intense green, deep forest. Darker always means more evidence. Green only,
+        // so no zone reads as a warning or as the good one.
+        density:      ["#EEF8F0", "#CFEBD7", "#9DD8B0", "#5FB985", "#2A9460", "#17673F", "#0B3D26"],
         contour:      "rgba(45,120,68,0.28)",
         point:        "rgba(220,250,225,0.45)",
         pointStroke:  "rgba(50,110,60,0.22)",
@@ -70,7 +73,7 @@
         centroid:     "#1a1a1a",
         centroidRing: "rgba(255,255,255,0.92)"
       },
-      density: { gridSize: 360, bwFactor: 0.20, gamma: 0.48, centerBoost: 0, minA: 0.06, maxA: 0.82, thresh: 0.03 },
+      density: { gridSize: 360, bwFactor: 0.20, gamma: 0.62, centerBoost: 0, minA: 0.35, maxA: 0.95, thresh: 0.03 },
       points: { show: false, maxShown: 0 },
       contour: { show: true, width: 1, opacity: 0.28 },
       centroid: { outerR: 0.014, innerR: 0.009, dashThresh: 0.05, lineAlpha: 0.32 },
@@ -273,7 +276,10 @@
     ctx.globalAlpha = 1;
   }
 
-  function drawCentroid(ctx, points, cx, cy, radius) {
+  // The dot marks the geometric mean of the evidence points. The dashed line from
+  // the pentagon's centre to that dot is off unless asked for: on a broad profile it
+  // looks like it points at something, when it only measures an offset.
+  function drawCentroid(ctx, points, cx, cy, radius, showLine) {
     if (!points || points.length === 0) return;
     var c = Geo.centroid(points);
     if (!c) return;
@@ -290,7 +296,7 @@
     ctx.fill();
     var dx = c.x - cx, dy = c.y - cy;
     var dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist > radius * C.dashThresh) {
+    if (showLine && dist > radius * C.dashThresh) {
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.lineTo(c.x, c.y);
@@ -359,7 +365,7 @@
       drawDensity(ctx, points, verts, cx, cy, radius);
       drawContour(ctx, points);
       drawPoints(ctx, points, selectedIdx);
-      drawCentroid(ctx, points, cx, cy, radius);
+      drawCentroid(ctx, points, cx, cy, radius, options.centroidLine === true);
       drawLabels(ctx, verts, radius, width);
     }
 

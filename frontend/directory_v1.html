@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>BioCred — Search the registry</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --g9:#0E2F22;--g7:#1F6A46;--g5:#2d8a58;--g3:#7fcf8d;--g1:#d9f6df;--g0:#f0f9f2;
+  --t:#1a2e1a;--ts:#4a6a4a;--tm:#7a9a7a;--bd:#c8ddc8;--bg:#f4f6f4;--card:#fff;
+  --blue:#1d4ed8
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--t);line-height:1.5}
+a{color:inherit;text-decoration:none}
+.hidden{display:none!important}
+
+.topbar{background:var(--g9);padding:12px 40px;display:flex;align-items:center;gap:12px}
+.topbar .logo{font-size:14px;font-weight:700;color:#fff;letter-spacing:-.2px}
+.topbar .sep{color:rgba(255,255,255,.2)}
+.topbar .breadcrumb{font-size:12px;color:rgba(255,255,255,.5)}
+.topbar .spacer{flex:1}
+.topbar .tag{font-size:10.5px;font-weight:700;letter-spacing:.5px;background:rgba(255,255,255,.12);color:var(--g1);padding:4px 10px;border-radius:20px}
+
+.hero{background:var(--card);border-bottom:1px solid var(--bd);padding:30px 40px 24px}
+.hero-inner{max-width:1100px;margin:0 auto}
+.hero h1{font-size:25px;letter-spacing:-.3px}
+.hero p{font-size:13.5px;color:var(--ts);margin-top:6px;max-width:620px}
+
+.controls{max-width:1100px;margin:0 auto;padding:18px 0 0}
+.searchbar{display:flex;gap:10px;flex-wrap:wrap}
+.searchbar input[type=search]{flex:1 1 320px;min-width:240px;font:inherit;font-size:14px;padding:11px 14px;border:1px solid var(--bd);border-radius:9px;background:#fff}
+.searchbar input[type=search]:focus{outline:2px solid var(--g3);outline-offset:-1px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
+select{font:inherit;font-size:13px;padding:9px 11px;border:1px solid var(--bd);border-radius:9px;background:#fff;color:var(--t)}
+.btn-clear{font:inherit;font-size:13px;font-weight:600;padding:9px 13px;border-radius:9px;border:1px solid var(--bd);background:#fff;color:var(--g7);cursor:pointer}
+.btn-clear:hover{background:var(--g0)}
+.sortwrap{margin-left:auto;display:flex;align-items:center;gap:8px}
+.sortwrap label{font-size:12px;color:var(--tm)}
+
+.wrap{max-width:1100px;margin:0 auto;padding:22px 40px 70px}
+.resultbar{display:flex;align-items:baseline;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.count{font-size:14px;font-weight:600}
+.note{font-size:12px;color:var(--tm)}
+
+.results{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.result{display:block;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:18px 18px 14px;position:relative;transition:border-color .15s,transform .1s}
+.result:hover{border-color:var(--g5);transform:translateY(-1px)}
+.r-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.r-name{font-size:16px;font-weight:700;letter-spacing:-.2px}
+.r-title{font-size:12.5px;color:var(--ts);margin-top:3px}
+.r-org{color:var(--tm)}
+.r-badge{flex:none;font-size:10.5px;font-weight:700;background:var(--g1);border:1px solid var(--g3);color:var(--g7);padding:4px 9px;border-radius:20px;white-space:nowrap}
+.r-badge.partial{background:#e0f2fe;border-color:#93c5fd;color:var(--blue)}
+.r-meta{display:flex;gap:12px;flex-wrap:wrap;margin-top:11px}
+.r-meta span{font-size:11.5px;color:var(--tm)}
+.r-shape{display:flex;align-items:center;gap:10px;margin-top:12px}
+.r-glyph{width:52px;height:52px;flex:none}
+.glyph-frame{fill:none;stroke:var(--bd);stroke-width:1}
+.glyph-body{fill:var(--g7)}
+.r-shape-cap{font-size:12px;color:var(--ts);line-height:1.35}
+.chip.muted{display:inline-block;margin-top:12px;font-size:11px;font-weight:500;padding:4px 9px;border-radius:20px;background:#f3f4f6;color:#9ca3af;border:1px solid #e5e7eb}
+.r-id{position:absolute;right:16px;bottom:12px;font-size:10.5px;color:var(--tm);font-family:ui-monospace,Menlo,monospace}
+
+.state{max-width:560px;margin:60px auto;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:34px;text-align:center}
+.state h2{font-size:18px;margin-bottom:8px}
+.state p{font-size:13.5px;color:var(--ts)}
+@media (max-width:640px){.hero,.wrap{padding-left:20px;padding-right:20px}.topbar{padding:12px 20px}.sortwrap{margin-left:0}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">BioCred Registry</div>
+  <div class="sep">/</div>
+  <div class="breadcrumb">Search</div>
+  <div class="spacer"></div>
+  <div class="tag">TEST ENVIRONMENT</div>
+</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <h1>Search the registry</h1>
+    <p>Everyone listed here has had their documentation read and approved by a reviewer. Profiles that are still waiting, or that were rejected, do not appear — not on this page and not in any result below.</p>
+    <p>The green shape on each card shows where documented experience sits across the five domains. Every shape is the same size. A spike is a concentration, an even pentagon is a broad practice, and neither is a score.</p>
+
+    <form class="controls" id="search-form" autocomplete="off">
+      <div class="searchbar">
+        <input type="search" id="f-q" placeholder="Name, organisation, species, habitat, project type…" aria-label="Search the registry">
+      </div>
+      <div class="filters">
+        <select id="f-region" aria-label="Region"><option value="">Any region</option></select>
+        <select id="f-discipline" aria-label="Discipline"><option value="">Any discipline</option></select>
+        <select id="f-domain" aria-label="Experience domain"><option value="">Any experience domain</option></select>
+        <select id="f-years" aria-label="Minimum years">
+          <option value="">Any experience level</option>
+          <option value="2">2+ years documented</option>
+          <option value="5">5+ years documented</option>
+          <option value="10">10+ years documented</option>
+          <option value="15">15+ years documented</option>
+        </select>
+        <button type="button" class="btn-clear hidden" id="btn-clear">Clear filters</button>
+        <div class="sortwrap">
+          <label for="f-sort">Sort</label>
+          <select id="f-sort">
+            <option value="name">Name (A–Z)</option>
+            <option value="relevance">Best match for my search</option>
+            <option value="evidence">Most evidence</option>
+            <option value="years">Most years</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="state" id="state-loading">
+    <h2>Loading the registry…</h2>
+    <p>If this takes more than a few seconds, the test environment may be waking up.</p>
+  </div>
+
+  <div class="state hidden" id="state-error">
+    <h2>The registry could not be loaded</h2>
+    <p id="error-detail"></p>
+  </div>
+
+  <div class="hidden" id="state-ready">
+    <div class="resultbar">
+      <span class="count" id="count-label"></span>
+      <span class="note hidden" id="payload-note"></span>
+    </div>
+
+    <div class="state hidden" id="state-empty-registry">
+      <h2>Nothing is published yet</h2>
+      <p>No profile has been approved, so there is nothing to search. That is the registry behaving correctly rather than an error.</p>
+    </div>
+
+    <div class="state hidden" id="state-no-hits">
+      <h2>No profiles match those filters</h2>
+      <p>Try removing a filter, or searching a broader term. An empty result is not the same as an empty registry.</p>
+    </div>
+
+    <div class="results" id="results"></div>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="js/directory_page.js"></script>
+</body>
+</html>

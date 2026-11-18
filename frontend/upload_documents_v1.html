@@ -53,6 +53,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .pill-row{display:flex;flex-wrap:wrap;gap:8px}
 .pill{font-size:11px;font-weight:600;padding:6px 10px;border-radius:999px;background:var(--g0);color:var(--g7);border:1px solid var(--bd)}
 .pill.warn{background:#fff7e8;color:#8a5a10;border-color:#efd7a8}
+.gate-note{font-size:12.5px;line-height:1.55;background:#fff7e8;color:#7a5210;border:1px solid #efd7a8;border-radius:8px;padding:10px 12px;margin:10px 0 0}
+.reject-box{display:flex;flex-direction:column;gap:14px;background:#fdf3f2;border:1px solid #f0cdc8;border-radius:8px;padding:16px 18px}
+.reject-box.hidden{display:none !important}
+.reject-head{font-size:12px;font-weight:700;color:#8c2f22;margin:0}
+.reject-reason{font-size:12.5px;line-height:1.6;color:#6d3229;margin:0;white-space:pre-wrap}
+.reject-reason.empty{color:#9a7169;font-style:italic}
 .hidden{display:none !important}
 </style>
 </head>
@@ -215,10 +221,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
 
     <div class="card">
-      <div class="card-title">Certification</div>
+      <div class="card-title">Applicant Attestation</div>
       <div class="cert-box">
         <input type="checkbox" id="certified" name="certified" required onchange="toggleSubmit()">
-        <p>I certify that all information and documents submitted are <strong>true, accurate, and complete</strong> to the best of my knowledge.</p>
+        <p>I attest that the information and documents I have submitted are <strong>true, accurate, and complete</strong> to the best of my knowledge.</p>
       </div>
       <button type="submit" class="btn-submit" id="btn-submit" disabled>Save document</button>
       <p class="status" id="upload-status"></p>
@@ -281,6 +287,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="card-title">Submit for review</div>
     <div class="pill-row" id="gate-pills"></div>
     <p class="field hint">Unlocks when you have ≥1 identity credential (degree / license / certification), ≥3 experience records, and ≥1 document path stored.</p>
+    <p class="gate-note hidden" id="submit-gate-note"></p>
+    <div class="reject-box hidden" id="reject-box">
+      <p class="reject-head">A reviewer did not approve this submission</p>
+      <p class="reject-reason" id="reject-reason"></p>
+      <div class="field">
+        <label for="resubmit_note">What have you changed since?</label>
+        <textarea id="resubmit_note" placeholder="e.g. Replaced the licence scan, which was unreadable, and added the two survey reports that were missing."></textarea>
+        <p class="hint">Required. The reviewer reads this beside your file — without it they are opening the same submission again with nothing to look for.</p>
+      </div>
+    </div>
     <button type="button" class="btn-secondary" id="btn-submit-review" disabled>Submit profile for review</button>
     <p class="status" id="submit-status"></p>
   </div>
@@ -365,6 +381,51 @@ function showIntakeSections(show) {
   document.getElementById("card-submit-review").classList.toggle("hidden", !show);
 }
 
+// A submission may only be sent from a draft or after a rejection. Anything else
+// is either waiting on a reviewer or already decided — and resubmitting a decided
+// profile withdraws it from the public registry until it is approved again.
+// The database refuses these too; this only saves the user the round trip.
+var SUBMIT_BLOCKED = {
+  pending_review: "Already submitted. It is waiting in the reviewer's queue, and you'll hear back when there is a decision.",
+  under_verification: "A reviewer is looking at this now. There is nothing to do until they decide.",
+  verified: "This profile is approved and publicly listed. Submitting it again would take it off the public registry until a reviewer approved it a second time.",
+  partial: "This profile is partly approved and publicly listed. Submitting it again would take it off the public registry until it had been reviewed again."
+};
+
+var SUBMIT_ERRORS = {
+  resubmission_note_required: "Say what you have changed before sending it back.",
+  submit_requirements_not_met: "Some of the requirements above are no longer met.",
+  not_profile_owner: "This profile belongs to another account."
+};
+
+function submitErrorMessage(err) {
+  var raw = (err && err.message) || String(err);
+  for (var key in SUBMIT_ERRORS) {
+    if (raw.indexOf(key) !== -1) return SUBMIT_ERRORS[key];
+  }
+  if (raw.indexOf("not_submittable_from_") !== -1) {
+    return "This profile is no longer in a state that can be submitted. Reload the page to see where it stands.";
+  }
+  return raw;
+}
+
+// The reviewer's reason lives on the audit row. A biologist can read the rows for
+// their own profile, so a rejection can be shown as what it is rather than a status.
+async function latestRejectionReason(profileId) {
+  var { data, error } = await BioCred.supabase
+    .from("verification_audit_log")
+    .select("change_reason,created_at")
+    .eq("profile_id", profileId)
+    .eq("new_status", "rejected")
+    .order("created_at", { ascending: false })
+    .limit(1);
+  if (error) return null;
+  var row = (data || [])[0];
+  if (!row) return null;
+  var reason = (row.change_reason || "").trim();
+  return (!reason || reason === "auto_trigger") ? null : reason;
+}
+
 async function refreshGate() {
   if (!profile) return;
   var sb = BioCred.supabase;
@@ -382,6 +443,9 @@ async function refreshGate() {
   var { data: canSubmit, error } = await sb.rpc("can_submit_for_review", { p_profile_id: profile.id });
   if (error) throw error;
 
+  var blocked = SUBMIT_BLOCKED[profile.verification_status] || null;
+  var rejected = profile.verification_status === "rejected";
+
   document.getElementById("profile-pills").innerHTML =
     '<span class="pill">registry ' + profile.registry_id + '</span>' +
     '<span class="pill">' + profile.verification_status + '</span>' +
@@ -393,9 +457,24 @@ async function refreshGate() {
     '<span class="pill' + (identity >= 1 ? '' : ' warn') + '">identity ≥1: ' + identity + '</span>' +
     '<span class="pill' + (evidenceCount >= 3 ? '' : ' warn') + '">experience ≥3: ' + evidenceCount + '</span>' +
     '<span class="pill' + (docs >= 1 ? '' : ' warn') + '">docs ≥1: ' + docs + '</span>' +
-    '<span class="pill' + (canSubmit ? '' : ' warn') + '">' + (canSubmit ? 'ready to submit' : 'not ready') + '</span>';
+    '<span class="pill' + (canSubmit && !blocked ? '' : ' warn') + '">' +
+      (blocked ? 'locked' : (rejected ? 'needs correcting' : (canSubmit ? 'ready to submit' : 'not ready'))) + '</span>';
 
-  document.getElementById("btn-submit-review").disabled = !canSubmit || profile.verification_status === "pending_review";
+  var note = document.getElementById("submit-gate-note");
+  note.textContent = blocked || "";
+  note.classList.toggle("hidden", !blocked);
+
+  document.getElementById("reject-box").classList.toggle("hidden", !rejected);
+  if (rejected) {
+    var reason = await latestRejectionReason(profile.id);
+    var reasonEl = document.getElementById("reject-reason");
+    reasonEl.textContent = reason || "No reason was recorded. Ask the registry what needs correcting before sending it back.";
+    reasonEl.classList.toggle("empty", !reason);
+  }
+
+  var btn = document.getElementById("btn-submit-review");
+  btn.textContent = rejected ? "Resubmit corrected profile" : "Submit profile for review";
+  btn.disabled = !canSubmit || !!blocked;
 }
 
 async function init() {
@@ -576,16 +655,30 @@ document.getElementById("experience-form").addEventListener("submit", async func
 
 document.getElementById("btn-submit-review").onclick = async function () {
   if (!profile) return;
+  var wasRejected = profile.verification_status === "rejected";
+  var noteField = document.getElementById("resubmit_note");
+  var noteText = (noteField.value || "").trim();
+
+  if (wasRejected && !noteText) {
+    setStatus("submit-status", SUBMIT_ERRORS.resubmission_note_required, false);
+    noteField.focus();
+    return;
+  }
+
   try {
     var { error } = await BioCred.supabase.rpc("submit_profile_for_review", {
-      p_profile_id: profile.id
+      p_profile_id: profile.id,
+      p_note: noteText || null
     });
     if (error) throw error;
+    noteField.value = "";
     profile = await BioCred.getOwnProfile();
-    setStatus("submit-status", "Profile submitted — status is pending_review.", true);
+    setStatus("submit-status", wasRejected
+      ? "Correction sent — it is back in the reviewer's queue with your note attached."
+      : "Profile submitted — status is pending_review.", true);
     await refreshGate();
   } catch (err) {
-    setStatus("submit-status", err.message || String(err), false);
+    setStatus("submit-status", submitErrorMessage(err), false);
   }
 };
 
