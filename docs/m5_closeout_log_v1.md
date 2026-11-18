@@ -104,7 +104,36 @@ Result written into `BioCred_M5_Closeout_Package_v1.html` §6.
 
 ## Still open before sending the package
 
-- Push current code, the M5 database scripts, this test and the QA scripts to the
-  shared GitHub repository; then mark Exhibit A row G "met" in the package.
+- ~~Push to GitHub~~: done, see below.
 - Publish the package next to the other documents on the demo site and put the link
   in `mensaje-para-alex-m5-cierre.txt`.
+
+## 18 Nov 2026 — GitHub
+
+There are two remotes for BioCred: `Ainoafv/BioCred` (Ainoa) and
+`ecomimitech-cmyk/BioCredRegistry` (Alex). Both were at `52f58cc`
+(20 Aug, end of M2). Nothing from M3 to M5 had been pushed anywhere.
+
+Found while comparing: **the M3/M4 server code existed only in the 29 Aug backup**
+(`Copia-Toshiba/Ainoa-backup-2026-08-29/CARPETAS-MAC/Documents-al`). It was an unpushed
+local commit `1d21b39` ("checkpoint before checking out main", 28 Aug) plus one
+untracked file:
+`database/review_actions.sql`, `pipeline/refresh_render_cache.py`,
+`database/anon_grants_hardening.sql`, and two docs. The working folder
+`C:/Users/User/BioCred` does not contain them.
+
+Pushed branch `pilot-m3-m5` to `Ainoafv/BioCred` (5 commits, 29 files):
+
+1. M3 review actions and M4 publishing, recovered from the 28 Aug checkpoint
+2. Pilot pages through M5 (reviewer portal, public profile, directory, intake, login, renderer)
+3. M5 database changes, QA probes, end-to-end resubmission test
+4. Pilot documentation (guides, packages, walkthrough page, M5 records)
+5. Package Exhibit A row G marked "met"
+
+Deliberately not pushed: `.env.local`, `frontend/config.js` (gitignored);
+correspondence (`mensaje-*`, `respuesta-*`, `whatsapp-*`, one of which contains the test
+passwords); `Ainoa-F-ISA-Parts-Lab-Sample.html` (unrelated); `deploy/` (byte copy);
+macOS `._*` files; screenshots (gitignored). Secret scan before pushing: clean.
+Line endings normalised to LF to match the repository.
+
+Not done: the branch is not merged into `main`, and Alex's repository has not been updated.
