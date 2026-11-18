@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>BioCred Registry — Milestones 3 &amp; 4: Review Package</title>
+<style>
+  :root {
+    --ink: #142033;
+    --muted: #5a6b80;
+    --line: #d7deea;
+    --accent: #0a5c75;
+    --accent2: #1a7a5c;
+    --warn: #9a5b12;
+    --bg: #eef2f7;
+    --card: #ffffff;
+    --soft: #f5f8fb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Times New Roman", Times, serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.5;
+    font-size: 15px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px 80px; }
+  .sheet {
+    background: var(--card);
+    border: 1px solid var(--line);
+    box-shadow: 0 10px 40px rgba(20,32,51,.06);
+    padding: 42px 48px;
+  }
+  .eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin: 0 0 8px; }
+  h1 { font-size: 30px; line-height: 1.15; margin: 0 0 10px; font-weight: 700; }
+  h2 { font-size: 20px; margin: 38px 0 12px; padding-top: 8px; border-top: 1px solid var(--line); }
+  h3 { font-size: 15.5px; margin: 22px 0 8px; color: var(--accent); }
+  h4 { font-size: 13.5px; margin: 16px 0 6px; }
+  p, li { font-size: 14px; }
+  .note, .warn, .ok { font-size: 13px; padding: 12px 14px; margin: 14px 0; border-left: 3px solid; }
+  .note { background: #eef7fa; border-color: var(--accent); }
+  .warn { background: #fff6ea; border-color: var(--warn); }
+  .ok { background: #eef8f3; border-color: var(--accent2); }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0 18px; font-size: 12.5px; }
+  th, td { border: 1px solid var(--line); padding: 8px 9px; vertical-align: top; text-align: left; }
+  th { background: var(--soft); }
+  td.num { text-align: center; width: 26px; color: var(--muted); font-weight: 700; }
+  code, .path { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; background: #f0f3f7; padding: 1px 5px; }
+  a { color: var(--accent); }
+  .toc { columns: 2; font-size: 13px; background: var(--soft); padding: 14px 18px; border: 1px solid var(--line); list-style: none; margin: 0; }
+  .toc a { color: var(--accent); text-decoration: none; }
+  .toc li { margin: 4px 0; }
+  .status-pill { display: inline-block; font-size: 10.5px; letter-spacing: .02em; padding: 2px 7px; border-radius: 999px; border: 1px solid var(--line); white-space: nowrap; }
+  .s-built { background: #e7f6ee; }
+  .s-wire { background: #e8f1fb; }
+  .s-live { background: #fff0d9; }
+  .s-later { background: #f1f1f1; }
+  .tag-m2 { background: #eef7fa; }
+  .tag-m3 { background: #e7f6ee; }
+  .tag-m4 { background: #f3eefb; }
+
+  /* cover */
+  .cover { min-height: 940px; display: flex; flex-direction: column; justify-content: center; position: relative; padding: 60px 10px; }
+  .cover-mark { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 46px; }
+  .cover-mark .dot { width: 34px; height: 34px; border-radius: 50%; background: conic-gradient(from 200deg, var(--accent), var(--accent2), var(--accent)); box-shadow: 0 0 0 5px #eef8f3, 0 0 0 6px var(--line); flex: none; }
+  .cover-mark .word { font-weight: 800; font-size: 20px; color: var(--ink); }
+  .cover-mark .word span { color: var(--accent2); }
+  .cover-eyebrow { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin: 0 0 14px; font-weight: 600; }
+  .cover h1 { font-size: 40px; line-height: 1.14; margin: 0 0 20px; max-width: 660px; }
+  .cover .sub { font-size: 15px; color: var(--muted); max-width: 580px; margin: 0 0 40px; }
+  .cover-meta { font-size: 12.5px; border-top: 1px solid var(--line); padding-top: 20px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 24px; max-width: 660px; }
+  .cover-meta .k { color: var(--muted); text-transform: uppercase; font-size: 10.5px; letter-spacing: .08em; }
+  .cover-meta .v { color: var(--ink); font-weight: 600; margin-top: 2px; }
+
+  /* demo access box */
+  .demo-box { border: 2px solid var(--accent2); background: #f4fbf7; padding: 20px 22px; margin: 18px 0 24px; }
+  .demo-box h3 { margin-top: 0; color: var(--accent2); }
+  .demo-url { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; background: #fff; border: 1px dashed var(--accent2); padding: 10px 12px; margin: 10px 0; word-break: break-all; color: var(--accent2); text-decoration: none; }
+  .steps { counter-reset: step; list-style: none; padding-left: 0; }
+  .steps > li { counter-increment: step; position: relative; padding-left: 34px; margin: 12px 0; }
+  .steps > li::before { content: counter(step); position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--accent2); color: #fff; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .steps .mins { color: var(--muted); font-size: 12px; }
+
+  /* CSS-only flow diagram (no external renderer — prints reliably) */
+  .flow { display: flex; align-items: stretch; gap: 0; margin: 16px 0 22px; flex-wrap: wrap; }
+  .flow .node { flex: 1 1 150px; min-width: 150px; border: 1px solid var(--line); background: var(--soft); padding: 12px 12px; text-align: center; }
+  .flow .node .t { font-weight: 700; font-size: 12.5px; display: block; margin-bottom: 4px; }
+  .flow .node .d { font-size: 11.5px; color: var(--muted); }
+  .flow .arrow { flex: 0 0 26px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 16px; }
+  .flow .node.on { background: #eef8f3; border-color: var(--accent2); }
+
+  .screen { border: 1px solid var(--line); margin: 16px 0 22px; }
+  .screen .cap { background: var(--soft); border-bottom: 1px solid var(--line); padding: 8px 12px; font-size: 12px; font-weight: 700; }
+  .screen .body { padding: 14px 16px; font-size: 13px; }
+  .screen ul { margin: 6px 0 0 18px; padding: 0; }
+
+  .footer { margin-top: 36px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+
+  @media print {
+    @page { margin: 16mm 14mm 18mm; }
+    body { background: #fff; }
+    .wrap { padding: 0; max-width: none; }
+    .sheet { box-shadow: none; border: none; padding: 0; }
+    .cover { break-after: page; page-break-after: always; min-height: 0; padding: 20px 4px 0; }
+    h2 { break-before: page; page-break-before: always; }
+    h2:first-of-type { break-before: auto; page-break-before: auto; }
+    table, .note, .warn, .ok, .demo-box, .screen, .flow { break-inside: avoid; page-break-inside: avoid; }
+    a { color: var(--ink); text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="sheet">
+
+<section class="cover">
+  <div class="cover-mark">
+    <span class="dot"></span>
+    <span class="word">Bio<span>Cred</span> Registry</span>
+  </div>
+  <p class="cover-eyebrow">EcoMimiTech LLC · Staging pilot · Confidential</p>
+  <h1>Milestones 3 &amp; 4 — what works, what you can click, and how it was built</h1>
+  <p class="sub">The review layer and the public profile are built and running on staging — a private test copy of the system, separate from your domain and holding made-up data. This package is written so you can verify them yourself as an operator, with nothing to install.</p>
+  <div class="cover-meta">
+    <div><div class="k">Prepared for</div><div class="v">Alexander Funk · EcoMimiTech LLC</div></div>
+    <div><div class="k">Prepared by</div><div class="v">Ainoa Figueroa Vidal</div></div>
+    <div><div class="k">Version</div><div class="v">1.0 — 9 September 2026</div></div>
+    <div><div class="k">Environment</div><div class="v">biocred-staging · test data only</div></div>
+  </div>
+</section>
+
+<div class="note">
+  <strong>How to read this.</strong> Section 2 is the twenty minutes of clicking. Section 4 answers,
+  one by one, the ten things you asked to be shown on 26 August. Everything else is background you can
+  read at your own pace or skip entirely.
+  <br><br>
+  <strong>Status language, unchanged from the July package:</strong>
+  <em>core foundation built</em> · <em>ready for production wiring</em> ·
+  <em>requires live integration</em> · <em>requires production hardening</em>.
+  Nothing here is “production complete.”
+  <br><br>
+  <strong>Neutrality:</strong> BioCred does not rank, score, certify, endorse or recommend anyone.
+  The badge on a public profile reads <strong>“Documentation Verified”</strong> — never “Verified Biologist.”
+</div>
+
+<ol class="toc">
+  <li><a href="#s1">1. Where the project stands</a></li>
+  <li><a href="#s2">2. The demo — how to open it</a></li>
+  <li><a href="#s3">3. What you will see, screen by screen</a></li>
+  <li><a href="#s4">4. Your ten checks, answered</a></li>
+  <li><a href="#s5">5. Who can see what</a></li>
+  <li><a href="#s6">6. Milestone 3 — what was built and how</a></li>
+  <li><a href="#s7">7. Milestone 4 — what was built and how</a></li>
+  <li><a href="#s8">8. Evidence: the verification runs</a></li>
+  <li><a href="#s9">9. What this package does not claim</a></li>
+  <li><a href="#s10">10. Known limitations</a></li>
+  <li><a href="#s11">11. What I need from you</a></li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="s1">1. Where the project stands</h2>
+
+<p>The chain the product depends on — a biologist submits, a reviewer decides, and only then does anything become public — now runs end to end on staging. Until Milestone 3 there was no reviewer on the other end of a submission, and until Milestone 4 an approved profile still did not appear publicly. Both of those gaps are closed.</p>
+
+<div class="flow">
+  <div class="node on"><span class="t">M1 · Access</span><span class="d">Repo, staging database, you as Owner</span></div>
+  <div class="arrow">&rarr;</div>
+  <div class="node on"><span class="t">M2 · Intake</span><span class="d">Profile, documents, submit for review</span></div>
+  <div class="arrow">&rarr;</div>
+  <div class="node on"><span class="t">M3 · Review</span><span class="d">Queue, decision, audit trail</span></div>
+  <div class="arrow">&rarr;</div>
+  <div class="node on"><span class="t">M4 · Public</span><span class="d">Shareable profile + experience map</span></div>
+</div>
+
+<table>
+  <tr><th style="width:15%">Milestone</th><th style="width:12%">Vesting</th><th style="width:18%">State</th><th>What that means in practice</th></tr>
+  <tr>
+    <td><strong>M1</strong><br>Access &amp; handoff</td>
+    <td>10%</td>
+    <td><span class="status-pill s-built">closed</span><br>6 Aug 2026</td>
+    <td>Staging database created, Block 1 schema deployed, you accepted the Owner invitation. GitHub access confirmed in both directions.</td>
+  </tr>
+  <tr>
+    <td><strong>M2</strong><br>Evidence intake</td>
+    <td>10%</td>
+    <td><span class="status-pill s-built">built &amp; demonstrated</span><br>awaiting your acceptance</td>
+    <td>A biologist can create an account, build a draft profile, enter credentials, upload documents into private storage, add experience records, and submit. The submission then sits as <em>waiting for review</em> — <code>pending_review</code> in your own wording from 26 August.</td>
+  </tr>
+  <tr>
+    <td><strong>M3</strong><br>Admin review</td>
+    <td>10%</td>
+    <td><span class="status-pill s-built">built &amp; verified</span><br>19/19 checks, 27 Aug</td>
+    <td>A reviewer sees the queue, opens private documents through short-lived links, and approves, partially approves or rejects — with a reason recorded on every decision.</td>
+  </tr>
+  <tr>
+    <td><strong>M4</strong><br>Public profile</td>
+    <td>10%</td>
+    <td><span class="status-pill s-built">built &amp; verified</span><br>closed on staging 28 Aug</td>
+    <td>An approved profile is publicly viewable at a shareable address with its experience map. A pending or rejected profile is not — and I show you that below rather than assert it.</td>
+  </tr>
+  <tr>
+    <td>Production on your domain</td>
+    <td>—</td>
+    <td><span class="status-pill s-later">not started</span></td>
+    <td><code>biocredregistry.com</code> is untouched. Everything here is staging with test data.</td>
+  </tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s2">2. The demo — how to open it</h2>
+
+<p>Nothing to install and nothing to configure. You open a web address, and you use two test logins I will send separately from this document.</p>
+
+<div class="demo-box">
+  <h3>Start here</h3>
+  <a class="demo-url" href="https://biocred-staging-demo.netlify.app/">https://biocred-staging-demo.netlify.app</a>
+  <p style="margin:6px 0 0"><strong>Two logins, sent separately:</strong> one biologist account and one reviewer account. They are staging test users and can be deleted at any time. Credentials never travel in the same message as the link.</p>
+</div>
+
+<p>Each step below is a direct link. About twenty minutes end to end, and you can stop after step 2 and still have seen the thing that matters.</p>
+
+<ol class="steps">
+  <li><strong><a href="https://biocred-staging-demo.netlify.app/frontend/public_profile_v1.html?id=SM7523">Open the approved public profile</a></strong> <span class="mins">· 3 min</span><br>Registry ID <code>SM7523</code>. The name reads “M2 Smoke Biologist” and the entries are called things like “Survey 1” — that is a test account, and the wording is deliberately made up. What is <em>not</em> made up is the path: every field on that page was entered by a user, read by a reviewer, approved, and published by the system. None of it is typed into the page.</li>
+  <li><strong><a href="https://biocred-staging-demo.netlify.app/frontend/public_profile_v1.html?id=PEND99">Open <code>PEND99</code></a></strong> <span class="mins">· 1 min</span><br>It must refuse. A profile that has not been approved does not exist publicly, and seeing that refusal is more informative than seeing the profile that works.</li>
+  <li><strong><a href="https://biocred-staging-demo.netlify.app/frontend/login_v1.html?next=agency_review_v1.html">Sign in as the reviewer</a></strong> <span class="mins">· 8 min · use the <em>reviewer</em> account</span><br>The queue loads. Open a submission, open one of its documents, and look at the record of decisions underneath.</li>
+  <li><strong><a href="https://biocred-staging-demo.netlify.app/frontend/login_v1.html?next=agency_review_v1.html">Sign in again as the biologist</a></strong>, then open that same reviewer page <span class="mins">· 2 min · use the <em>biologist</em> account</span><br>You get a locked gate and no data. That is the access model doing its job, and it is worth thirty seconds of your time.</li>
+  <li><strong>Optional — <a href="https://biocred-staging-demo.netlify.app/frontend/login_v1.html?next=upload_documents_v1.html">submit a fresh draft as the biologist</a></strong> <span class="mins">· 10 min · use the <em>biologist</em> account</span><br>Then approve it as the reviewer and watch it appear publicly. That full loop is the product.</li>
+</ol>
+
+<div class="warn">
+  <strong>Please do not sign up anyone real yet</strong> — your supervisor included. This is staging, populated with test records, and I would rather your first real user arrived on a production environment with your domain on it.
+</div>
+
+<div class="note">
+  <strong>If a page looks broken.</strong> The staging database is on the free plan and goes to sleep after a quiet stretch. The first visit after that can fail or hang. It is not a fault in the system and nothing is lost — tell me and I will wake it, which takes under a minute. I checked every link in this document on the day I sent it.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s3">3. What you will see, screen by screen</h2>
+
+<div class="screen">
+  <div class="cap">Screen 1 · Public profile — the thing a firm or an agency would look at</div>
+  <div class="body">
+    <p style="margin-top:0">Opened with a registry ID in the address, e.g. <code>?id=SM7523</code>. Live data, read straight from the registry.</p>
+    <ul>
+      <li>Name, title, location, and the <strong>“Documentation Verified”</strong> badge</li>
+      <li>The experience map across the five domains, with the standing caveat that <em>it is not a score</em></li>
+      <li>Profile insights in plain sentences — for this profile, experience concentrated in Field &amp; Applied Practice, sparse in Knowledge &amp; Research</li>
+      <li>Credential history: 3 verified credentials, each with issuer and year</li>
+      <li>Experience evidence: 8 verified records, grouped by domain</li>
+      <li>No documents, no personal contact details, no date of birth — none of that is exposed publicly by design</li>
+    </ul>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="cap">Screen 2 · Reviewer portal — the queue and the decision</div>
+  <div class="body">
+    <p style="margin-top:0">Reached by signing in with the reviewer account. A biologist signing into the same address sees a locked gate instead.</p>
+    <ul>
+      <li>The queue of people waiting to be reviewed</li>
+      <li>The submission itself: profile fields, credentials, experience records</li>
+      <li><strong>Open</strong> on a document produces a link that works for five minutes and then stops working. The storage stays private throughout; the reviewer never receives a permanent address for a biologist's file</li>
+      <li><strong>Start review</strong> moves the submission to <em>under verification</em></li>
+      <li><strong>Verify / Partial / Reject.</strong> A rejection with an empty reason box is refused — not by the page being polite, but by the database declining to perform it</li>
+      <li>The audit trail beneath: one row per record changed, each carrying who decided, what changed, when, and the reason they gave</li>
+    </ul>
+  </div>
+</div>
+
+<div class="screen">
+  <div class="cap">Screen 3 · Biologist intake — how a submission gets there in the first place</div>
+  <div class="body">
+    <p style="margin-top:0">This is Milestone 2, included so the chain is walkable in one sitting.</p>
+    <ul>
+      <li>Create an account or sign in</li>
+      <li>Fill the draft profile and save it</li>
+      <li>Add credentials, and upload a document for one of them</li>
+      <li>Add experience records</li>
+      <li><strong>Submit for review</strong> — the status becomes <code>pending_review</code> and the submission appears in the reviewer's queue</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s4">4. Your ten checks, answered</h2>
+
+<p>On 26 August you listed ten things you wanted demonstrated before accepting Milestone 2, and asked for written confirmation that the reviewer queue, signed links, decisions, audit and public refresh would stay in Milestone 3. Here is each one, and where you now see it yourself rather than watching me.</p>
+
+<table>
+  <tr><th class="num">#</th><th style="width:26%">What you asked for</th><th style="width:16%">Milestone</th><th>Where you see it</th></tr>
+  <tr><td class="num">1</td><td>Signup and login</td><td><span class="status-pill tag-m2">M2</span></td><td>The biologist sign-in link in step 5. Creating an account gives you the biologist role and nothing more.</td></tr>
+  <tr><td class="num">2</td><td>Draft profile created and updated</td><td><span class="status-pill tag-m2">M2</span></td><td>The intake form. Saving twice updates the same record rather than creating a second one.</td></tr>
+  <tr><td class="num">3</td><td>Credential entry</td><td><span class="status-pill tag-m2">M2</span></td><td>Same form — type, issuing body, year.</td></tr>
+  <tr><td class="num">4</td><td>A dummy PDF into private storage</td><td><span class="status-pill tag-m2">M2</span></td><td>Same form. The file goes to a private area filed under the profile, and only the stored path is kept on the record.</td></tr>
+  <tr><td class="num">5</td><td>Three or more experience records</td><td><span class="status-pill tag-m2">M2</span></td><td>Same form. The submit button stays disabled until the requirement is met — and the requirement is checked by the database, not by the page.</td></tr>
+  <tr><td class="num">6</td><td>Submit for review</td><td><span class="status-pill tag-m2">M2</span></td><td>Same form. Requires at least one identity credential, three experience records and one stored document.</td></tr>
+  <tr><td class="num">7</td><td>Status becomes <code>pending_review</code></td><td><span class="status-pill tag-m2">M2</span></td><td>On screen, and then visible in the reviewer's queue as the same submission.</td></tr>
+  <tr><td class="num">8</td><td>Where the records and the file live</td><td><span class="status-pill tag-m2">M2</span></td><td>The Supabase dashboard, where you are already an Owner. Tables for profiles, credentials and experience; two storage areas, both marked private.</td></tr>
+  <tr><td class="num">9</td><td>Proof the PDF is not publicly exposed</td><td><span class="status-pill tag-m2">M2</span> <span class="status-pill tag-m3">M3</span></td><td>Two ways now. As a reviewer, the document opens through a link that expires in five minutes; strip the signature from that link and it is refused. And nothing about documents appears on the public profile at all.</td></tr>
+  <tr><td class="num">10</td><td>Written confirmation that the queue, signed links, decisions, audit and public refresh stay M3</td><td><span class="status-pill tag-m3">M3</span> <span class="status-pill tag-m4">M4</span></td><td>They did stay there — and they are now built. The queue, the signed links, the decisions and the audit are Milestone 3; the public refresh is Milestone 4. Sections 6 and 7 describe each.</td></tr>
+</table>
+
+<div class="ok">
+  <strong>The short version.</strong> Items 1 to 9 are the intake path you asked to review as an operator, and you can now walk it yourself instead of watching a recording. Item 10 was a boundary I asked you to hold me to — and rather than merely confirm it in writing, the work behind it is finished and verifiable at the same address.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s5">5. Who can see what</h2>
+
+<p>This is the part I would most like you to test adversarially, because a credentials registry is worth exactly as much as its access rules. Every rule below is enforced in the database, not in the page. That distinction matters: a hidden button is a courtesy, whereas a database rule holds even against someone bypassing the interface entirely.</p>
+
+<table>
+  <tr>
+    <th style="width:18%">Who</th>
+    <th>Can see</th>
+    <th>Cannot see or do</th>
+  </tr>
+  <tr>
+    <td><strong>Anyone, not signed in</strong></td>
+    <td>Approved public profiles only, and only the public-safe fields: name, title, location, credentials, experience summary, the map.</td>
+    <td>Any pending, rejected or draft profile. Any uploaded document. The audit log. Anything about who reviewed what.</td>
+  </tr>
+  <tr>
+    <td><strong>Biologist</strong></td>
+    <td>Their own profile, their own documents, their own submission status.</td>
+    <td>Anyone else's submission or documents. The reviewer queue. Any decision at all — attempting one comes back refused, for the stated reason that they are not a reviewer. And they cannot make themselves one.</td>
+  </tr>
+  <tr>
+    <td><strong>Reviewer</strong></td>
+    <td>The queue of submitted profiles, their credentials and experience, and their documents through five-minute links. The audit trail.</td>
+    <td>Rewriting or deleting an audit entry — the log accepts inserts and reads, and nothing else. Deciding twice on the same submission. Rejecting without stating a reason.</td>
+  </tr>
+  <tr>
+    <td><strong>Owner (you and I)</strong></td>
+    <td>The Supabase dashboard: tables, storage, users, logs.</td>
+    <td>Nothing is hidden from an owner — which is precisely why reviewer status is granted deliberately, from the dashboard, and there is no path from any web page to becoming one.</td>
+  </tr>
+</table>
+
+<div class="ok">
+  <strong>Worth testing yourself:</strong> sign in as the biologist and open the reviewer address directly. You should get the gate and nothing else. That single check tells you more about the system than the approved profile does.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s6">6. Milestone 3 — what was built and how</h2>
+
+<p>The security half of this milestone already existed from earlier work: the roles table, the rule that decides whether someone is a reviewer, the read and write permissions on submitted work, and an audit log deliberately built so that entries can be added and read but never edited or removed. What was missing was the screen. The reviewer page was three hundred lines of prototype with invented rows in it and no connection to the database at all.</p>
+
+<h3>What I added</h3>
+
+<table>
+  <tr><th style="width:32%">Piece</th><th>What it does</th></tr>
+  <tr><td><strong>Picking up a file</strong></td><td>Moves a submission from <em>waiting for review</em> to <em>being checked</em>, so two reviewers cannot silently work the same file at once.</td></tr>
+  <tr><td><strong>Making the decision</strong></td><td>Approve, partly approve, or reject. It refuses someone who is not a reviewer. It refuses a rejection with no reason written. It refuses a file that was already decided. And it makes a profile public <em>only</em> on approval — no other route sets that.</td></tr>
+  <tr><td><strong>Granting reviewer status</strong></td><td>Makes someone a reviewer. Deliberately available to nobody through the website, so it runs only from the dashboard. There is no path from any page to promoting yourself.</td></tr>
+  <tr><td><strong>The reviewer page itself</strong></td><td>Rebuilt against real data: the real queue, the real submission, five-minute document links, the decision record, and the locked gate for everyone else.</td></tr>
+</table>
+
+<h3>A bug found on the way, worth your attention</h3>
+
+<p>The audit log was recording <em>that</em> a status had changed but not <em>why</em> — every entry carried the placeholder text <code>auto_trigger</code>. For a registry whose value to an agency is the paper trail, an audit log that cannot say why a decision was made is most of the point missing.</p>
+
+<p>Decisions now carry the reviewer's actual stated reason onto the audit row. And a status changed by any route <em>other</em> than the proper review path still records as unexplained — which is the right outcome, because it means an auditor can tell the difference between a decision somebody justified and a change nobody did.</p>
+
+<!-- ============================================================ -->
+<h2 id="s7">7. Milestone 4 — what was built and how</h2>
+
+<p>Two halves of this system had never been introduced to each other. The engine that computes a profile's experience map from its evidence existed and was tested, but had never written to the database. The public page existed but was a mockup with a verification date typed into the markup by hand. Milestone 4 is the join.</p>
+
+<div class="flow">
+  <div class="node on"><span class="t">Approved submission</span><span class="d">Reviewer verifies it</span></div>
+  <div class="arrow">&rarr;</div>
+  <div class="node on"><span class="t">Publishing step</span><span class="d">Rebuilds the public version</span></div>
+  <div class="arrow">&rarr;</div>
+  <div class="node on"><span class="t">Public version</span><span class="d">Stored, ready to show</span></div>
+  <div class="arrow">&rarr;</div>
+  <div class="node on"><span class="t">Public profile</span><span class="d">Shareable address + map</span></div>
+</div>
+
+<table>
+  <tr><th style="width:32%">Piece</th><th>What it does</th></tr>
+  <tr><td><strong>The publishing step</strong></td><td>Takes every profile allowed to be published, runs it through the engine that turns evidence into a map, and stores the result. Run against staging, it published six profiles including <code>SM7523</code>. Running it a second time changes nothing — which is the behaviour you want from something that may run on a schedule.</td></tr>
+  <tr><td><strong>The public page, wired to real data</strong></td><td>It now reads the actual profile, credentials, experience and map from the registry. The verification date that used to be typed in by hand is gone.</td></tr>
+  <tr><td><strong>Knowing when to republish, without new machinery</strong></td><td>A stored public version counts as out of date when it is missing, or older than the profile it came from — and a review decision already touches the profile. So approving something marks it for republishing as a side effect. No waiting list to maintain, no extra moving parts to go wrong.</td></tr>
+  <tr><td><strong>A second lock on the same door</strong></td><td>A visitor who is not signed in can now read the public views and do nothing else. Trying to give themselves a role, or to read the decision record, is refused outright. The protective rules were already there; this simply makes the refusal explicit rather than incidental.</td></tr>
+</table>
+
+<div class="note">
+  <strong>On the engine staying where it is.</strong> The engine that turns evidence into an experience map stays on the server rather than being rewritten to run inside the visitor's browser. That keeps one version of the rules and the tests already written against them, and it honours the promise made in July. It also means the rules that decide what a map looks like cannot be read, copied or altered by whoever opens the page — they never leave the server.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s8">8. Evidence: the verification runs</h2>
+
+<p>I would rather show you the checks than tell you it works.</p>
+
+<h3>27 August — Milestone 3, nineteen checks, all passing</h3>
+
+<p>Run against the real submission from August, with 3 credentials and 8 experience records attached.</p>
+
+<table>
+  <tr><th style="width:70%">Check</th><th>Result</th></tr>
+  <tr><td>Reviewer sees the queue; biologist sees nothing</td><td>pass</td></tr>
+  <tr><td>Reviewer opens a private document through a five-minute link</td><td>pass</td></tr>
+  <tr><td>The same document, with the signature removed, is refused</td><td>pass</td></tr>
+  <tr><td>A biologist attempting to approve their own submission is blocked</td><td>pass</td></tr>
+  <tr><td>A rejection with no reason is refused</td><td>pass</td></tr>
+  <tr><td>Approval carries the profile and all its records to verified, and only then makes it visible</td><td>pass</td></tr>
+  <tr><td>Thirteen audit entries written, each with the reviewer's real reason and identity</td><td>pass</td></tr>
+  <tr><td>Deciding a second time on the same submission is refused</td><td>pass</td></tr>
+</table>
+
+<p>One check initially read as a failure. It was the check that was wrong, not the system: it looked back far enough to include entries written in August, before the reason-recording existed, which legitimately still say <code>auto_trigger</code>. Scoped to the decisions actually made in that run, every entry carries a stated reason. I am leaving this in the record because it is exactly the distinction the audit log is meant to draw — old unexplained changes stay visible as unexplained rather than being quietly rewritten.</p>
+
+<h3>28 August — Milestone 4 closed on staging</h3>
+
+<table>
+  <tr><th style="width:70%">Check</th><th>Result</th></tr>
+  <tr><td>Refresh job runs against staging and publishes six profiles</td><td>pass</td></tr>
+  <tr><td>Running it a second time changes nothing</td><td>pass</td></tr>
+  <tr><td><code>SM7523</code> renders publicly with 3 credentials, 8 evidence records and its map</td><td>pass</td></tr>
+  <tr><td><code>PEND99</code> — a profile that was never approved — refuses to appear</td><td>pass</td></tr>
+  <tr><td>An anonymous request cannot write a role or read the audit log</td><td>pass</td></tr>
+</table>
+
+<h3>9 September — re-checked before sending you this</h3>
+
+<p>Staging had gone to sleep, as it does on the free plan after a quiet stretch. Woken up and re-verified from the public address in this document, not from my own machine: <code>SM7523</code> loads with its badge, credentials, evidence and experience map; <code>PEND99</code> answers, correctly, that it is not in the public registry. So what this document describes is what is running right now, not what was running a fortnight ago.</p>
+
+<!-- ============================================================ -->
+<h2 id="s9">9. What this package does not claim</h2>
+
+<p>The same discipline as the Milestone 2 package, because the value of these documents depends on their being trustworthy about their own limits.</p>
+
+<table>
+  <tr><th style="width:34%">Demonstrated</th><th>Not demonstrated</th></tr>
+  <tr>
+    <td>Real accounts, going through the real browser pages, against the real staging database and real private storage — with the rules enforced in the database rather than in the page.</td>
+    <td>Load, many users at once, hostile input, or production hardening. This is staging on a free plan with test data, and it should keep being described that way to anyone outside the two of us.</td>
+  </tr>
+</table>
+
+<p>Nothing in this package makes anyone employable, certified or endorsed. A public profile says that documentation was submitted and checked. It does not say the person is good at their job, and the wording on every screen is chosen to keep that line clear.</p>
+
+<!-- ============================================================ -->
+<h2 id="s10">10. Known limitations</h2>
+
+<p>Stated plainly, because you will find them anyway and I would rather you heard them from me.</p>
+
+<table>
+  <tr><th style="width:34%">Limitation</th><th>What it means for you</th></tr>
+  <tr><td>A rejected submission cannot be resubmitted</td><td>The biologist cannot currently reopen and correct a rejected profile. It is a real workflow gap and belongs in the next milestone.</td></tr>
+  <tr><td>Decisions apply to the whole submission</td><td>A reviewer cannot approve two credentials and reject a third. It is one verdict per submission for now.</td></tr>
+  <tr><td>File checking is by extension only</td><td>The system trusts that a file named as a PDF is one. Real content inspection is production hardening, not staging work.</td></tr>
+  <tr><td>Publishing is a job, not an instant</td><td>Approval marks a profile as needing recomputation; the refresh job performs it. On staging I run it by hand. In production it would run on a schedule, so a public profile could lag its approval by minutes.</td></tr>
+  <tr><td>Staging sleeps</td><td>Free plan. After a quiet period the database pauses and the first visit fails until it wakes. If a link ever looks broken, that is almost always why — tell me and I will wake it.</td></tr>
+  <tr><td>New signups may need confirming</td><td>Staging may ask a new account to confirm its email. For test accounts I confirm them from the dashboard.</td></tr>
+  <tr><td>No production environment yet</td><td>Your domain is untouched. Moving to production is its own piece of work: a paid database, a real address, and hardening before any real person signs up.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s11">11. What I need from you</h2>
+
+<ol class="steps">
+  <li><strong>Walk the demo.</strong> Twenty minutes, no preparation. The five steps in section 2 are the whole of it.</li>
+  <li><strong>Accept Milestone 2 and Milestone 3</strong> if what you see matches what this document says. Milestone 2 is the intake path you asked to be shown as an operator; Milestone 3 is the review layer you are now able to operate yourself. Milestone 4 is finished on staging and I am content for you to take it in the same pass or hold it until you have clicked it.</li>
+  <li><strong>Tell me the questions the demo raises.</strong> I will record the walkthrough afterwards rather than before — you will have sharper questions once you have clicked through, and I would rather answer those than narrate something you have already seen.</li>
+  <li><strong>Decide on production.</strong> Your supervisor's interest is the first real demand signal this project has had. Turning that into a signup means a production environment on your domain, and that is a conversation about scope and timing rather than something I should quietly start.</li>
+</ol>
+
+<div class="footer">
+  BioCred Registry · EcoMimiTech LLC · Confidential — staging pilot, test data only.<br>
+  Prepared by Ainoa Figueroa Vidal · 9 September 2026 · Milestones 3 &amp; 4 review package v1.0
+</div>
+
+</div>
+</div>
+</body>
+</html>

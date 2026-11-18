@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>BioCred Registry — Operator guide</title>
+<style>
+  :root{--ink:#142033;--muted:#5a6b80;--line:#d7deea;--accent:#0a5c75;--accent2:#1a7a5c;--warn:#9a5b12;--red:#a3302a;--bg:#eef2f7;--card:#fff;--soft:#f5f8fb;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Times New Roman",Times,serif;color:var(--ink);background:var(--bg);line-height:1.55;font-size:15px}
+  .wrap{max-width:900px;margin:0 auto;padding:28px 18px 80px}
+  .sheet{background:var(--card);border:1px solid var(--line);box-shadow:0 10px 40px rgba(20,32,51,.06);padding:42px 48px}
+  h1{font-size:29px;line-height:1.18;margin:0 0 12px}
+  h2{font-size:20px;margin:36px 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+  h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+  p,li{font-size:14.5px}
+  .cover-mark{display:inline-flex;align-items:center;gap:10px;margin-bottom:28px}
+  .cover-mark .dot{width:32px;height:32px;border-radius:50%;background:conic-gradient(from 200deg,var(--accent),var(--accent2),var(--accent));box-shadow:0 0 0 5px #eef8f3,0 0 0 6px var(--line)}
+  .cover-mark .word{font-weight:800;font-size:19px}
+  .cover-mark .word span{color:var(--accent2)}
+  .eyebrow{font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin:0 0 12px;font-weight:600}
+  .sub{font-size:15px;color:var(--muted);max-width:620px;margin:0 0 24px}
+  .note,.warn,.ok,.stop{font-size:13.5px;padding:13px 15px;margin:15px 0;border-left:3px solid}
+  .note{background:#eef7fa;border-color:var(--accent)}
+  .warn{background:#fff6ea;border-color:var(--warn)}
+  .ok{background:#eef8f3;border-color:var(--accent2)}
+  .stop{background:#fdf0ef;border-color:var(--red)}
+  table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+  th{background:var(--soft)}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:#f0f3f7;padding:1px 5px}
+  pre{background:#0f1b2a;color:#e6edf3;padding:12px 14px;border-radius:6px;overflow-x:auto;font-family:ui-monospace,Menlo,monospace;font-size:12px;line-height:1.6;margin:10px 0}
+  ol.steps{counter-reset:step;list-style:none;padding-left:0}
+  ol.steps>li{counter-increment:step;position:relative;padding-left:34px;margin:14px 0}
+  ol.steps>li::before{content:counter(step);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;background:var(--accent2);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .toc{background:var(--soft);border:1px solid var(--line);padding:14px 20px;list-style:none;margin:0 0 8px;columns:2;font-size:13.5px}
+  .toc li{margin:4px 0}
+  .toc a{color:var(--accent);text-decoration:none}
+  .footer{margin-top:34px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  @media print{@page{margin:16mm 14mm}body{background:#fff}.sheet{box-shadow:none;border:none;padding:0}.wrap{padding:0;max-width:none}table,.note,.warn,.ok,.stop,pre{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="sheet">
+
+<div class="cover-mark"><span class="dot"></span><span class="word">Bio<span>Cred</span> Registry</span></div>
+<p class="eyebrow">EcoMimiTech LLC · Operator guide · v1.0</p>
+<h1>Running the registry yourself</h1>
+<p class="sub">Everything you need to operate BioCred without me: making someone a reviewer, reviewing a submission, rejecting one properly, and knowing what to do when something looks wrong. Written for the staging environment, which is the only one that exists today.</p>
+
+<div class="note">
+  <strong>You asked for this on 13 August.</strong> I held it back deliberately until the reviewer side existed, because a guide to a workflow with nothing on the other end would have been out of date within weeks. It exists now, so here it is.
+</div>
+
+<ol class="toc">
+  <li><a href="#s1">1. What you can do, and what still needs me</a></li>
+  <li><a href="#s2">2. Waking the system up</a></li>
+  <li><a href="#s3">3. Making someone a reviewer</a></li>
+  <li><a href="#s4">4. Reviewing a submission</a></li>
+  <li><a href="#s5">5. Rejecting one properly</a></li>
+  <li><a href="#s6">6. What happens after you approve</a></li>
+  <li><a href="#s7">7. Where everything lives</a></li>
+  <li><a href="#s8">8. When something looks wrong</a></li>
+  <li><a href="#s9">9. Four things not to do</a></li>
+</ol>
+
+<h2 id="s1">1. What you can do, and what still needs me</h2>
+
+<p>Stated first, so you are never stuck wondering whether a thing is your job or mine.</p>
+
+<table>
+  <tr><th style="width:50%">You can do this yourself</th><th>This still needs me</th></tr>
+  <tr>
+    <td>
+      Wake the system when it has gone to sleep.<br><br>
+      Make someone a reviewer.<br><br>
+      Review a submission end to end: read it, open its documents, approve, partly approve or reject.<br><br>
+      Look at any record in the database, including the decision history.<br><br>
+      Confirm a new account's email so the person can sign in.
+    </td>
+    <td>
+      <strong>Publishing an approved profile.</strong> Approval marks a profile as needing its public version rebuilt, but the job that rebuilds it is run by hand on staging. Until it runs, an approved profile will not appear publicly. Tell me and it takes a minute. <em>This is the one gap that matters day to day, and it closes when we go to production.</em><br><br>
+      Anything involving code, the database structure, or the domain.
+    </td>
+  </tr>
+</table>
+
+<h2 id="s2">2. Waking the system up</h2>
+
+<p>Staging runs on a free plan and pauses itself after a quiet stretch. The first visit after that fails or hangs. Nothing is lost — it is asleep, not broken.</p>
+
+<ol class="steps">
+  <li>Go to <a href="https://supabase.com/dashboard/project/wmwzqnzyhiyhfzncuxkc">the project dashboard</a> and sign in. You are an Owner, so you have full access.</li>
+  <li>If it is paused, the dashboard says so and offers a <strong>Restore</strong> or <strong>Resume</strong> button. Press it.</li>
+  <li>Wait a minute or two, then reload the registry page. It will load normally.</li>
+</ol>
+
+<div class="ok">If a link ever looks broken, this is almost always the reason. Check here before assuming anything is wrong.</div>
+
+<h2 id="s3">3. Making someone a reviewer</h2>
+
+<p>There is no button for this anywhere in the website, and that is deliberate. If a person could make themselves a reviewer from a web page, the registry would be worthless — anyone could approve their own credentials. Reviewer status is granted from the database, by an owner, on purpose.</p>
+
+<p>The person must have signed up first, so that an account exists to attach the role to.</p>
+
+<ol class="steps">
+  <li>Ask them to create an account at the sign-in page and tell you the email address they used.</li>
+  <li>In the dashboard, open <strong>SQL Editor</strong> in the left-hand menu, then <strong>New query</strong>.</li>
+  <li>Paste this, replacing the address with theirs, and press <strong>Run</strong>:</li>
+</ol>
+
+<pre>SELECT grant_role_by_email('their.address@example.com', 'reviewer');</pre>
+
+<p>It returns an identifier, which is simply confirmation that it worked. If it returns an error saying no user was found, they have not finished signing up yet.</p>
+
+<p>To check who currently holds which role:</p>
+
+<pre>SELECT u.email, r.role
+FROM user_roles r
+JOIN auth.users u ON u.id = r.user_id
+ORDER BY r.role, u.email;</pre>
+
+<div class="warn">
+  <strong>Grant this sparingly.</strong> A reviewer can see every submitted profile and every private document attached to it. That is the whole point of the role, and it is also the reason it should belong to as few people as the work allows.
+</div>
+
+<h2 id="s4">4. Reviewing a submission</h2>
+
+<ol class="steps">
+  <li><strong>Sign in as the reviewer.</strong> Use the reviewer sign-in link. The sign-in page for reviewers does not offer a "create account" option, because reviewer access cannot be self-assigned.</li>
+  <li><strong>The queue loads.</strong> Down the left you have Pending Review, Under Review, Verified, Partial and Rejected, with a count against each. Pending Review is where new work arrives.</li>
+  <li><strong>Open a submission.</strong> You see the profile's own details, its credentials and its experience records — everything the person submitted.</li>
+  <li><strong>Press "Start review"</strong> when you actually begin. This moves it to Under Review, which tells any other reviewer that somebody has it. It is not a formality: it is what stops two people working the same file and reaching different conclusions.</li>
+  <li><strong>Open the documents.</strong> Each document has an Open button. The file opens through a link that stops working after five minutes. This is intentional — a link forwarded to the wrong person, or left in a browser history, is worthless the next morning. If you need it again, press Open again.</li>
+  <li><strong>Read the decision history</strong> underneath. Every decision anyone has made on this profile is there, with who made it, when, and the reason they gave. Nothing in that list can be edited or deleted, by you, by a reviewer, or by me.</li>
+  <li><strong>Decide:</strong> Verify, Verify in part, or Reject.</li>
+</ol>
+
+<div class="note">
+  <strong>What "Verify" is actually saying.</strong> Not that the person is good at their job. It says the documentation they submitted was read and is consistent with what they claimed. That distinction is the product, and it is why every profile is badged <strong>Documentation Verified</strong> and never "Verified Biologist".
+</div>
+
+<h2 id="s5">5. Rejecting one properly</h2>
+
+<p>A rejection needs a written reason. The system will refuse an empty one — and that refusal comes from the database, not from the page being polite, so there is no way around it.</p>
+
+<p>The reason is not paperwork. It is the only thing the person has to work from, and it is what an auditor would read if anyone ever asked why this registry turned someone down. A reason like "insufficient" helps nobody. A reason like "the survey experience claimed for 2019–2021 is not supported by any of the three documents attached" is defensible and actionable.</p>
+
+<p>A rejection is no longer the end of the road. The person sees your reason on their own page, corrects what you asked for, and sends it back — and they cannot send it back without writing what they changed. That note arrives attached to the submission, so you are not re-reading the whole file trying to spot the difference.</p>
+
+<p>Anything that has been turned down before is tagged <strong>resubmitted</strong> in the queue, so you know it is a second look before you open it. The full history sits in the decision trail underneath: your reason, their answer, in order.</p>
+
+<div class="warn">
+  <strong>What this means for how you word a rejection.</strong> Your reason is now an instruction someone will act on, not just a record of a decision. "Insufficient" gives them nothing to fix and you will get the same submission back. Name the specific document or the specific claim, and you will get a corrected one.
+</div>
+
+<h2 id="s6">6. What happens after you approve</h2>
+
+<ol class="steps">
+  <li>The profile and its records move to verified, and the profile becomes eligible to be public. <strong>Only an approval does this</strong> — there is no other route in the system that makes a profile public.</li>
+  <li>It is marked as needing its public version rebuilt.</li>
+  <li>The rebuild job runs, and the public page and the search results appear.</li>
+</ol>
+
+<p>On staging, step 3 is run by hand — by me. So after you approve something, tell me and I will publish it. In production this would run on a schedule and a profile would appear within minutes without anyone asking.</p>
+
+<div class="ok">
+  If you approve a profile and it does not show up publicly, this is why. It is not a failure, and nothing is lost — the approval is recorded and the publish is pending.
+</div>
+
+<h2 id="s7">7. Where everything lives</h2>
+
+<table>
+  <tr><th style="width:32%">What</th><th>Where in the dashboard</th></tr>
+  <tr><td>Profiles, credentials, experience records</td><td><strong>Table Editor</strong> → <code>biologist_profile</code>, <code>credential_record</code>, <code>experience_evidence</code></td></tr>
+  <tr><td>Uploaded documents</td><td><strong>Storage</strong> → <code>credentials_docs</code> and <code>evidence_docs</code>. Both are marked Private, and both should stay that way.</td></tr>
+  <tr><td>The decision history</td><td><strong>Table Editor</strong> → <code>verification_audit_log</code>. Add-only: no one can edit or remove a row.</td></tr>
+  <tr><td>Accounts</td><td><strong>Authentication</strong> → Users. This is also where you confirm a new signup's email if they are stuck.</td></tr>
+  <tr><td>Who is a reviewer</td><td><strong>Table Editor</strong> → <code>user_roles</code></td></tr>
+</table>
+
+<h2 id="s8">8. When something looks wrong</h2>
+
+<table>
+  <tr><th style="width:40%">What you see</th><th>What it usually is</th></tr>
+  <tr><td>A page hangs, loads blank, or says it cannot reach the registry</td><td>Staging is asleep. Section 2.</td></tr>
+  <tr><td>Someone signed up but cannot sign in</td><td>Their email is unconfirmed. Authentication → Users → confirm them.</td></tr>
+  <tr><td>You approved a profile and it is not public</td><td>The publish job has not run. Section 6. Tell me.</td></tr>
+  <tr><td>A document link says it has expired</td><td>Working as designed — five minutes. Press Open again.</td></tr>
+  <tr><td>A reviewer signs in and gets "this account is not a reviewer"</td><td>The role was never granted, or was granted to a different email than the one they signed in with. Section 3.</td></tr>
+  <tr><td>The queue is empty</td><td>Nobody has submitted anything, or everything has been decided. Check the Verified and Rejected counts before assuming it is broken.</td></tr>
+  <tr><td>A profile is public but looks out of date</td><td>Its public version was built before the latest change. Tell me and I will rebuild it.</td></tr>
+</table>
+
+<h2 id="s9">9. Four things not to do</h2>
+
+<div class="stop">
+  <p style="margin-top:0"><strong>Do not sign up real people yet.</strong> This is staging, with test data, on a free plan that pauses itself. The first real person should arrive on a production environment with your domain on it.</p>
+  <p><strong>Do not grant reviewer status to anyone who does not need to read private documents.</strong> The role is not a courtesy or a job title. It is access to other people's evidence.</p>
+  <p><strong>Do not edit verification status directly in the Table Editor.</strong> You can — you are an owner. But a change made that way bypasses the review path, so the decision history records it as unexplained. That is the system working correctly, and it is exactly the entry that would look worst if anyone audited this registry. Use the reviewer screen.</p>
+  <p style="margin-bottom:0"><strong>Do not make either storage area public.</strong> Both hold people's personal documents. Everything the public is meant to see is already exposed through the public profile, and documents are deliberately not part of it.</p>
+</div>
+
+<div class="footer">
+  BioCred Registry · EcoMimiTech LLC · Confidential — staging environment, test data only.<br>
+  Prepared by Ainoa Figueroa Vidal · 18 September 2026 · Operator guide v1.0
+</div>
+
+</div></div>
+</body>
+</html>

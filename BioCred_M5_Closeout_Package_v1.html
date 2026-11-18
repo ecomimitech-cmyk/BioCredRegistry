@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>BioCred Registry — Milestone 5: Closeout Package</title>
+<style>
+  :root{--ink:#142033;--muted:#5a6b80;--line:#d7deea;--accent:#0a5c75;--accent2:#1a7a5c;--warn:#9a5b12;--bg:#eef2f7;--card:#fff;--soft:#f5f8fb;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Times New Roman",Times,serif;color:var(--ink);background:var(--bg);line-height:1.5;font-size:15px}
+  .wrap{max-width:980px;margin:0 auto;padding:28px 18px 80px}
+  .sheet{background:var(--card);border:1px solid var(--line);box-shadow:0 10px 40px rgba(20,32,51,.06);padding:42px 48px}
+  h1{font-size:30px;line-height:1.15;margin:0 0 10px}
+  h2{font-size:20px;margin:38px 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+  h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+  p,li{font-size:14px}
+  .note,.warn,.ok{font-size:13px;padding:12px 14px;margin:14px 0;border-left:3px solid}
+  .note{background:#eef7fa;border-color:var(--accent)}
+  .warn{background:#fff6ea;border-color:var(--warn)}
+  .ok{background:#eef8f3;border-color:var(--accent2)}
+  table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:12.5px}
+  th,td{border:1px solid var(--line);padding:8px 9px;vertical-align:top;text-align:left}
+  th{background:var(--soft)}
+  td.num{text-align:center;width:26px;color:var(--muted);font-weight:700}
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11.5px;background:#f0f3f7;padding:1px 5px}
+  a{color:var(--accent)}
+  .toc{columns:2;font-size:13px;background:var(--soft);padding:14px 18px;border:1px solid var(--line);list-style:none;margin:0}
+  .toc a{text-decoration:none}
+  .toc li{margin:4px 0}
+  .pill{display:inline-block;font-size:10.5px;padding:2px 7px;border-radius:999px;border:1px solid var(--line);white-space:nowrap}
+  .p-ok{background:#e7f6ee}.p-open{background:#fff0d9}.p-later{background:#f1f1f1}
+  .cover{padding:40px 6px 20px}
+  .cover-mark{display:inline-flex;align-items:center;gap:10px;margin-bottom:36px}
+  .cover-mark .dot{width:34px;height:34px;border-radius:50%;background:conic-gradient(from 200deg,var(--accent),var(--accent2),var(--accent));box-shadow:0 0 0 5px #eef8f3,0 0 0 6px var(--line)}
+  .cover-mark .word{font-weight:800;font-size:20px}
+  .cover-mark .word span{color:var(--accent2)}
+  .eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin:0 0 14px;font-weight:600}
+  .cover h1{font-size:38px;max-width:680px;margin-bottom:18px}
+  .sub{font-size:15px;color:var(--muted);max-width:600px;margin:0 0 32px}
+  .cover-meta{font-size:12.5px;border-top:1px solid var(--line);padding-top:18px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px 24px;max-width:660px}
+  .cover-meta .k{color:var(--muted);text-transform:uppercase;font-size:10.5px;letter-spacing:.08em}
+  .cover-meta .v{font-weight:600;margin-top:2px}
+  .demo-box{border:2px solid var(--accent2);background:#f4fbf7;padding:18px 22px;margin:18px 0 22px}
+  .demo-box h3{margin-top:0;color:var(--accent2)}
+  .demo-url{display:block;font-family:ui-monospace,Menlo,monospace;font-size:14px;background:#fff;border:1px dashed var(--accent2);padding:10px 12px;margin:10px 0;word-break:break-all;color:var(--accent2);text-decoration:none}
+  ol.steps{counter-reset:step;list-style:none;padding-left:0}
+  ol.steps>li{counter-increment:step;position:relative;padding-left:34px;margin:12px 0}
+  ol.steps>li::before{content:counter(step);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;background:var(--accent2);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .mins{color:var(--muted);font-size:12px}
+  .footer{margin-top:34px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  @media (max-width:640px){.sheet{padding:26px 18px}.toc{columns:1}.cover-meta{grid-template-columns:1fr}}
+  @media print{@page{margin:16mm 14mm}body{background:#fff}.wrap{padding:0;max-width:none}.sheet{box-shadow:none;border:none;padding:0}table,.note,.warn,.ok,.demo-box{break-inside:avoid}a{color:var(--ink);text-decoration:none}}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="sheet">
+
+<section class="cover">
+  <div class="cover-mark"><span class="dot"></span><span class="word">Bio<span>Cred</span> Registry</span></div>
+  <p class="eyebrow">EcoMimiTech LLC · Staging pilot · Confidential</p>
+  <h1>Milestone 5: the Functional Pilot, ready for your acceptance</h1>
+  <p class="sub">This is the last of the five milestones. The package shows what was built, lets you check it yourself against the test we agreed in September, and lists honestly what is still limited, so that accepting it is an informed decision rather than a leap.</p>
+  <div class="cover-meta">
+    <div><div class="k">Prepared for</div><div class="v">Alexander Funk · EcoMimiTech LLC</div></div>
+    <div><div class="k">Prepared by</div><div class="v">Ainoa Figueroa Vidal</div></div>
+    <div><div class="k">Version</div><div class="v">1.0 · November 2026</div></div>
+    <div><div class="k">Environment</div><div class="v">biocred-staging · test data only</div></div>
+  </div>
+</section>
+
+<div class="note">
+  <strong>How to read this.</strong> Section 2 is the clicking, about twenty minutes. Section 3 answers the four-sentence test from the M5 scope note one sentence at a time. Section 5 is the agreement's own acceptance checklist (Exhibit A), item by item. Everything else is reference.
+  <br><br>
+  <strong>Neutrality, unchanged:</strong> BioCred does not rank, score, certify, endorse or recommend anyone. The public badge reads <strong>“Documentation Verified”</strong>, and the experience map carries the line “It is not a score.”
+</div>
+
+<ol class="toc">
+  <li><a href="#s1">1. Where the project stands</a></li>
+  <li><a href="#s2">2. The demo: how to walk it</a></li>
+  <li><a href="#s3">3. The agreed test, answered</a></li>
+  <li><a href="#s4">4. What Milestone 5 added</a></li>
+  <li><a href="#s5">5. Exhibit A, item by item</a></li>
+  <li><a href="#s6">6. Evidence: the checks</a></li>
+  <li><a href="#s7">7. Dependencies and third-party tools</a></li>
+  <li><a href="#s8">8. Known limitations</a></li>
+  <li><a href="#s9">9. Recommended next steps</a></li>
+  <li><a href="#s10">10. What I am asking of you</a></li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="s1">1. Where the project stands</h2>
+
+<table>
+  <tr><th style="width:18%">Milestone</th><th style="width:10%">Vesting</th><th style="width:20%">State</th><th>In practice</th></tr>
+  <tr><td><strong>M1</strong> Access &amp; handoff</td><td>10%</td><td><span class="pill p-ok">accepted</span></td><td>Staging database, you as Owner, shared access.</td></tr>
+  <tr><td><strong>M2</strong> Evidence intake</td><td>10%</td><td><span class="pill p-ok">accepted 13 Sep</span></td><td>A biologist builds a profile, uploads documents to private storage and submits.</td></tr>
+  <tr><td><strong>M3</strong> Admin review</td><td>10%</td><td><span class="pill p-ok">accepted 13 Sep</span></td><td>Queue, five-minute document links, decisions with reasons, audit trail.</td></tr>
+  <tr><td><strong>M4</strong> Public profile</td><td>10%</td><td><span class="pill p-ok">accepted 13 Sep</span></td><td>Approved profiles appear publicly with the experience map.</td></tr>
+  <tr><td><strong>M5</strong> Functional Pilot</td><td>10%</td><td><span class="pill p-open">submitted for acceptance</span></td><td>Search and filtering, QA, correction after rejection, documentation. This package.</td></tr>
+  <tr><td>Production</td><td>—</td><td><span class="pill p-later">not started</span></td><td>Your domain is untouched. Production is its own piece of work, outside the five milestones.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s2">2. The demo: how to walk it</h2>
+
+<div class="demo-box">
+  <h3>Start here</h3>
+  <a class="demo-url" href="https://biocred-staging-demo.netlify.app/">https://biocred-staging-demo.netlify.app</a>
+  <p style="margin:6px 0 0">The same two test logins you already have: one reviewer, one biologist. Nothing has changed about them.</p>
+</div>
+
+<ol class="steps">
+  <li><strong><a href="https://biocred-staging-demo.netlify.app/frontend/directory_v1.html">Open the directory</a></strong> <span class="mins">· 4 min</span><br>No login. Profiles are listed A to Z. Type a word, or filter by region, discipline, experience domain or years, and the order switches to relevance to what you typed. Each card carries the small five-domain pentagon.</li>
+  <li><strong>Open any profile from the results, then press “View Experience Map”</strong> <span class="mins">· 4 min</span><br>Read the page once with the map off and once with it on. Under the map: “Experience Summary · Derived from verified documentation”.</li>
+  <li><strong><a href="https://biocred-staging-demo.netlify.app/frontend/public_profile_v1.html?id=PEND01">Open <code>PEND01</code></a></strong> <span class="mins">· 1 min</span><br>It must refuse. It is a profile that is waiting for review, and it should not exist publicly, in the directory or anywhere else. (<code>PEND99</code>, which used to play this role, was marked partial on 14 October and is now public. That decision was left as it was.)</li>
+  <li><strong><a href="https://biocred-staging-demo.netlify.app/frontend/login_v1.html?next=agency_review_v1.html">Sign in as the reviewer</a></strong> <span class="mins">· 6 min · reviewer account</span><br>The queue, a submission, a document through a five-minute link, the decision record. A profile that was rejected and sent back carries a <em>resubmitted</em> tag, with both sides of the exchange in its history.</li>
+  <li><strong>Optional: <a href="https://biocred-staging-demo.netlify.app/BioCred_Operator_Guide_v1.html">follow the operator guide</a> on your own</strong> <span class="mins">· 10 min</span><br>Part of the test is that the guide is enough for you to run every reviewer step without asking me anything. If at any point it is not, that is a defect in the guide and I would like to know.</li>
+</ol>
+
+<div class="note">
+  <strong>If a page looks broken:</strong> staging is on the free plan and sleeps after a quiet stretch. The first visit can fail until it wakes. Nothing is lost. Tell me and I will wake it.
+</div>
+
+<!-- ============================================================ -->
+<h2 id="s3">3. The agreed test, answered</h2>
+
+<p>In the M5 scope note of 13 September I proposed four sentences as the test of “done”, so you could judge the milestone against something agreed in advance rather than against an impression. Here they are, with where you can see each one.</p>
+
+<table>
+  <tr><th class="num">#</th><th style="width:44%">The test</th><th>Where you see it</th></tr>
+  <tr><td class="num">1</td><td>A person who has never seen the system signs up, builds a profile, submits it, and is reviewed by a reviewer who is not me. Their profile then appears publicly with its experience map.</td><td>Signup, intake and submission are the M2 path. Review is the reviewer account, which is not mine. Approval publishes the profile with its map (M4). New accounts can sign up on their own, and a rejected person can now correct and resubmit (section 4).</td></tr>
+  <tr><td class="num">2</td><td>A second person finds them through search, by filtering on an experience domain and a region, without knowing their registry ID.</td><td>Step 1 of the demo. Domain and region filters are both on the directory page, and results link straight to the profile.</td></tr>
+  <tr><td class="num">3</td><td>A profile that has not been approved is invisible to the public page and absent from every search result.</td><td>Step 3 of the demo, and the security run in section 6: the public views return only approved profiles, and the underlying tables refuse anonymous reads outright.</td></tr>
+  <tr><td class="num">4</td><td>The operator guide is enough for you to run every reviewer step yourself without asking me anything.</td><td>Step 5 of the demo. This one only you can confirm.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s4">4. What Milestone 5 added</h2>
+
+<table>
+  <tr><th style="width:30%">Piece</th><th>What it does</th></tr>
+  <tr><td><strong>Directory and search</strong></td><td>A public directory of approved profiles. Text search across name, title, organisation, discipline, species, habitats and credentials. Filters for region, discipline, experience domain and minimum years. A to Z when nobody is searching; relevance to the words and filters actually used once they are. Relevance never reads the experience map.</td></tr>
+  <tr><td><strong>Result cards</strong></td><td>Each card carries the five-domain pentagon. Every pentagon has the same size and only its shape varies, so no profile can look “bigger” or better than another.</td></tr>
+  <tr><td><strong>Correction after rejection</strong></td><td>A rejected biologist sees the reviewer's written reason, corrects the profile and sends it back. They cannot resend without saying what changed. Records already verified stay verified.</td></tr>
+  <tr><td><strong>The submit rule moved into the database</strong></td><td>Submission is now refused from any state other than draft or rejected. Before this, an approved profile could be pulled back into the queue by pressing a button. The button is gone, and the database rule stays in place even if someone gets past the page.</td></tr>
+  <tr><td><strong>Document paths closed to the public</strong></td><td>Found during the adversarial pass in September: the storage path of each uploaded document (which, with real users, would carry a person's name and qualification in the filename) was readable anonymously. The files were always shut. The paths now are too.</td></tr>
+  <tr><td><strong>Your notes from 15 October</strong></td><td>“Experience Summary · Derived from verified documentation”; no “sparse” or “limited”; “Documented experience concentrated in…” instead of titles like Specialist; A to Z by default; “Applicant Attestation”; Sign in / Create account shown as tabs; centroid line hidden on the public map; stronger green contrast.</td></tr>
+  <tr><td><strong>Documentation</strong></td><td>The Operator Guide (for you), the Participant Guide (for the first pilot users), the walkthrough page, and this package.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s5">5. Exhibit A, item by item</h2>
+
+<p>The Development Agreement's own acceptance checklist, so nothing depends on my summary.</p>
+
+<table>
+  <tr><th style="width:24%">Exhibit A</th><th style="width:12%">State</th><th>Where</th></tr>
+  <tr><td><strong>A. Profile workflow</strong></td><td><span class="pill p-ok">met</span></td><td>Create, save, edit, persist after refresh and logout, view as a structured page (M2, M4).</td></tr>
+  <tr><td><strong>B. Credential / evidence</strong></td><td><span class="pill p-ok">met</span></td><td>Added to a profile, categorised, reviewed through the traditional path, status stored and retrievable (M2, M3).</td></tr>
+  <tr><td><strong>C. Admin review</strong></td><td><span class="pill p-ok">met</span></td><td>Reviewer access, status changes, audit log that cannot be edited, and verified profiles protected from being resubmitted (M3, M5).</td></tr>
+  <tr><td><strong>D. Public profile</strong></td><td><span class="pill p-ok">met</span></td><td>Public page with structured information and credential summaries. No private documents, ever (M4).</td></tr>
+  <tr><td><strong>E. Summary and map</strong></td><td><span class="pill p-ok">met</span></td><td>Experience Summary, a map rendered from evidence, off by default and switched on by the reader, underlying evidence always visible, “It is not a score.”</td></tr>
+  <tr><td><strong>F. Search / filter</strong></td><td><span class="pill p-ok">met</span></td><td>Directory, filters and links to profiles (M5).</td></tr>
+  <tr><td><strong>G. Access / handoff</strong></td><td><span class="pill p-open">confirm</span></td><td>You are Owner of the Supabase project and have the staging details. <strong>[Before sending: push the current code, the three M5 database scripts and the QA scripts to the shared GitHub repository, then mark this “met”.]</strong></td></tr>
+  <tr><td><strong>H. Documentation</strong></td><td><span class="pill p-ok">met</span></td><td>Status (section 1), dependencies and third-party tools (section 7), known bugs and limits (section 8), next steps (section 9).</td></tr>
+  <tr><td><strong>I. Major defect standard</strong></td><td><span class="pill p-ok">none open</span></td><td>None of the ten listed major defects is present. The evidence is in section 6.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s6">6. Evidence: the checks</h2>
+
+<h3>18 November 2026: the stranger's view, 22 of 22 passing</h3>
+
+<p>Run against staging with nothing but the public key that ships in the page, i.e. the position of anyone who reads the page source.</p>
+
+<table>
+  <tr><th style="width:70%">Check</th><th>Result</th></tr>
+  <tr><td>The five underlying tables refuse anonymous reads (profiles, credentials, evidence, audit log, roles)</td><td>pass</td></tr>
+  <tr><td>Document storage paths are no longer readable anonymously</td><td>pass</td></tr>
+  <tr><td>Anonymous writes refused, including making yourself an admin</td><td>pass</td></tr>
+  <tr><td>All privileged functions refuse an anonymous caller</td><td>pass</td></tr>
+  <tr><td><code>PEND01</code>, pending review, is absent from the public views even with the filters removed</td><td>pass</td></tr>
+  <tr><td><code>SM7523</code>, approved, is present</td><td>pass</td></tr>
+  <tr><td>Stored public versions of profiles cannot be read raw</td><td>pass</td></tr>
+  <tr><td>Storage serves nothing without a signed link, and the bucket cannot be listed</td><td>pass</td></tr>
+  <tr><td>The correction-and-resubmission function is installed and refuses anyone who does not own the profile</td><td>pass</td></tr>
+</table>
+
+<h3>Correction after rejection, end to end</h3>
+
+<p>Run on 18 November 2026 against <code>SM7523</code>, playing each of the three real roles (reviewer, biologist, anonymous visitor) with exactly the permissions the pages have. The whole run happened inside one database transaction that was then undone, so the demo, the audit trail and the public page were left exactly as you know them. The script is <code>database/m5_resubmission_e2e_test_v1.sql</code> and can be re-run at any time.</p>
+
+<table>
+  <tr><th class="num">#</th><th style="width:62%">Step</th><th>Result</th></tr>
+  <tr><td class="num">1</td><td>Reviewer starts the review and rejects, with a written reason</td><td>pass · rejected</td></tr>
+  <tr><td class="num">2</td><td>The rejected profile disappears from the public view</td><td>pass</td></tr>
+  <tr><td class="num">3</td><td>The biologist tries to resubmit without saying what changed</td><td>pass · refused</td></tr>
+  <tr><td class="num">4</td><td>The biologist resubmits with a note. The note is recorded in the decision trail as “resubmitted after rejection: Replaced the licence scan with a legible copy.”</td><td>pass · pending review</td></tr>
+  <tr><td class="num">5</td><td>The earlier rejection is on record, so the queue shows the <em>resubmitted</em> tag</td><td>pass</td></tr>
+  <tr><td class="num">6</td><td>Reviewer starts a fresh review and approves</td><td>pass · verified</td></tr>
+  <tr><td class="num">7</td><td>The profile is back on the public view</td><td>pass</td></tr>
+  <tr><td class="num">8</td><td>An approved profile cannot be sent back to the queue</td><td>pass · refused</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s7">7. Dependencies and third-party tools</h2>
+
+<table>
+  <tr><th style="width:28%">Tool</th><th style="width:22%">Used for</th><th>Note</th></tr>
+  <tr><td><strong>Supabase</strong></td><td>Database, sign-in, private file storage</td><td>Free plan on staging. Production needs a paid plan (it does not sleep, and it has backups).</td></tr>
+  <tr><td><strong>Netlify</strong></td><td>Hosting the pages</td><td>Static pages only. There is no server code of ours running there.</td></tr>
+  <tr><td><strong>supabase-js v2</strong></td><td>The pages talking to the database</td><td>Loaded from the jsDelivr CDN. MIT licence.</td></tr>
+  <tr><td>BioCred renderer</td><td>Experience map and pentagon</td><td>Our own code. No charting library.</td></tr>
+  <tr><td>Fonts</td><td>—</td><td>The visitor's system font. Nothing to license.</td></tr>
+</table>
+
+<p>Nothing here restricts commercial operation, private ownership, sale or transfer.</p>
+
+<!-- ============================================================ -->
+<h2 id="s8">8. Known limitations</h2>
+
+<p>As before, stated plainly so you hear them from me first. None of them is one of the major defects in Exhibit A.</p>
+
+<table>
+  <tr><th style="width:34%">Limitation</th><th>What it means</th></tr>
+  <tr><td>One decision per submission</td><td>A reviewer cannot approve two credentials and reject a third in the same pass.</td></tr>
+  <tr><td>No reopening of a verification yet</td><td>Once verified, a record cannot be put back under review from the reviewer page. This is the “Reopen Verification” idea from your October note, on the production list.</td></tr>
+  <tr><td>File type checked by extension</td><td>A file named as a PDF is trusted to be one. Checking the content is production hardening.</td></tr>
+  <tr><td>Publishing is a job, run by hand on staging</td><td>In production it would run on a schedule, so a public profile could take a few minutes to appear after approval.</td></tr>
+  <tr><td>Staging sleeps</td><td>Free plan. The first visit after a quiet period can fail until it wakes.</td></tr>
+  <tr><td>Search runs in the browser</td><td>Right for a pilot of tens of profiles. With hundreds or more it should move to the database.</td></tr>
+  <tr><td>Library version not pinned</td><td>supabase-js is loaded as “latest v2”. Production should fix an exact version.</td></tr>
+  <tr><td>Colours defined page by page</td><td>The palette is consistent, but each page carries its own copy. Bringing it together in one place is worth doing before anyone else touches the code.</td></tr>
+  <tr><td>No production environment</td><td>Your domain, a paid database, email confirmation, scheduled publishing and backups are all production work.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s9">9. Recommended next steps</h2>
+
+<p>The same three groups we agreed on 25 October. None of them is a condition of this milestone.</p>
+
+<table>
+  <tr><th style="width:26%">When</th><th>What</th></tr>
+  <tr><td><strong>Production</strong>, if the pilot draws real interest</td><td>biocredregistry.com for the public pages and app.biocredregistry.com for signed-in tools; paid database; email confirmation; scheduled publishing; backups; real terms and privacy policy; claimed years shown apart from documented years; reopening a verification; the dated evidence package.</td></tr>
+  <tr><td><strong>Later</strong>, once someone asks</td><td>AI assistance in intake and review, the detailed species layer, several activity types per record, the map as a way into the evidence, contact credits, company accounts.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="s10">10. What I am asking of you</h2>
+
+<ol class="steps">
+  <li><strong>Walk the demo</strong> in section 2, at whatever pace suits you.</li>
+  <li><strong>Accept Milestone 5</strong> if what you see matches this document. The agreement gives a fourteen-day review window (section 11), and you are welcome to all of it. If anything does not match, tell me which item and I will fix it within the cure period.</li>
+  <li><strong>Once it is accepted</strong>, we sign the Functional Pilot Completion and 50% Vesting Acknowledgment you drafted on 9 November.</li>
+</ol>
+
+<div class="ok">
+  Thank you for the care you have put into reviewing each milestone. It has made the system better every time, and this one is no exception.
+</div>
+
+<div class="footer">
+  BioCred Registry · EcoMimiTech LLC · Confidential: staging pilot, test data only.<br>
+  Prepared by Ainoa Figueroa Vidal · November 2026 · Milestone 5 closeout package v1.0
+</div>
+
+</div></div>
+</body>
+</html>

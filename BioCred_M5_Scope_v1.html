@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex,nofollow" />
+<title>BioCred Registry — Milestone 5: scope before it starts</title>
+<style>
+  :root{--ink:#142033;--muted:#5a6b80;--line:#d7deea;--accent:#0a5c75;--accent2:#1a7a5c;--warn:#9a5b12;--bg:#eef2f7;--card:#fff;--soft:#f5f8fb;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Times New Roman",Times,serif;color:var(--ink);background:var(--bg);line-height:1.55;font-size:15px}
+  .wrap{max-width:900px;margin:0 auto;padding:28px 18px 80px}
+  .sheet{background:var(--card);border:1px solid var(--line);box-shadow:0 10px 40px rgba(20,32,51,.06);padding:42px 48px}
+  h1{font-size:29px;line-height:1.18;margin:0 0 12px}
+  h2{font-size:20px;margin:36px 0 12px;padding-top:8px;border-top:1px solid var(--line)}
+  h3{font-size:15.5px;margin:22px 0 8px;color:var(--accent)}
+  p,li{font-size:14.5px}
+  .cover{padding:26px 0 10px}
+  .cover-mark{display:inline-flex;align-items:center;gap:10px;margin-bottom:30px}
+  .cover-mark .dot{width:32px;height:32px;border-radius:50%;background:conic-gradient(from 200deg,var(--accent),var(--accent2),var(--accent));box-shadow:0 0 0 5px #eef8f3,0 0 0 6px var(--line)}
+  .cover-mark .word{font-weight:800;font-size:19px}
+  .cover-mark .word span{color:var(--accent2)}
+  .eyebrow{font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin:0 0 12px;font-weight:600}
+  .sub{font-size:15px;color:var(--muted);max-width:620px;margin:0 0 26px}
+  .cover-meta{font-size:12.5px;border-top:1px solid var(--line);padding-top:18px;display:grid;grid-template-columns:repeat(2,1fr);gap:10px 24px;max-width:640px}
+  .cover-meta .k{color:var(--muted);text-transform:uppercase;font-size:10.5px;letter-spacing:.08em}
+  .cover-meta .v{font-weight:600;margin-top:2px}
+  .note,.warn,.ok{font-size:13.5px;padding:13px 15px;margin:15px 0;border-left:3px solid}
+  .note{background:#eef7fa;border-color:var(--accent)}
+  .warn{background:#fff6ea;border-color:var(--warn)}
+  .ok{background:#eef8f3;border-color:var(--accent2)}
+  table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:13px}
+  th,td{border:1px solid var(--line);padding:8px 10px;vertical-align:top;text-align:left}
+  th{background:var(--soft)}
+  td.num{text-align:center;width:26px;color:var(--muted);font-weight:700}
+  code{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;background:#f0f3f7;padding:1px 5px}
+  .footer{margin-top:34px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+  ol.steps{counter-reset:step;list-style:none;padding-left:0}
+  ol.steps>li{counter-increment:step;position:relative;padding-left:34px;margin:12px 0}
+  ol.steps>li::before{content:counter(step);position:absolute;left:0;top:1px;width:22px;height:22px;border-radius:50%;background:var(--accent2);color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  @media print{@page{margin:16mm 14mm}body{background:#fff}.sheet{box-shadow:none;border:none;padding:0}.wrap{padding:0;max-width:none}table,.note,.warn,.ok{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="sheet">
+
+<section class="cover">
+  <div class="cover-mark"><span class="dot"></span><span class="word">Bio<span>Cred</span> Registry</span></div>
+  <p class="eyebrow">EcoMimiTech LLC · Milestone 5 · Scope before the work starts</p>
+  <h1>Milestone 5 — what I plan to build, and what “done” will mean</h1>
+  <p class="sub">Written before starting rather than after finishing, so you can change it while changing it is still cheap — and so you know in advance exactly what you would be accepting.</p>
+  <div class="cover-meta">
+    <div><div class="k">Prepared for</div><div class="v">Alexander Funk · EcoMimiTech LLC</div></div>
+    <div><div class="k">Prepared by</div><div class="v">Ainoa Figueroa Vidal</div></div>
+    <div><div class="k">Version</div><div class="v">1.0 — 13 September 2026</div></div>
+    <div><div class="k">Milestones 1–4</div><div class="v">Accepted 13 September 2026</div></div>
+  </div>
+</section>
+
+<div class="note">
+  <strong>How to read this.</strong> Section 2 is the one that matters — it is the test you would run to decide whether Milestone 5 is finished. Everything else explains how I get there. If you only read one section, read that one, and tell me if it is the wrong test.
+</div>
+
+<h2>1. What Milestone 5 is</h2>
+
+<p>The agreement calls it the Functional Pilot: the registry usable privately, end to end, by people who are not us — with search and filtering, quality checking, and the documentation to run it. And it is explicit that mockups, static pages and disconnected demos do not count.</p>
+
+<p>In practical terms, everything you clicked through this week proves the chain <em>works</em> for one person at a time, if you already know their registry ID. A registry nobody can search is an archive. Milestone 5 is what turns it into something a person can actually use to find someone.</p>
+
+<div class="ok">
+  <strong>Where this leaves the schedule.</strong> With Milestones 1 to 4 accepted, four of the five are done. Milestone 5 is the last one, and it is also the one the Functional Pilot Completion document depends on.
+</div>
+
+<h2 id="s2">2. What “done” will mean</h2>
+
+<p>This is the acceptance test. I would rather you judged the milestone against a written test we agreed beforehand than against an impression afterwards.</p>
+
+<div class="ok">
+<p style="margin-top:0"><strong>A person who has never seen the system</strong> signs up, builds a profile, submits it, and is reviewed by a reviewer who is not me. Their profile then appears publicly with its experience map.</p>
+<p><strong>A second person finds them through search</strong> — by filtering on an experience domain and a region, without knowing their registry ID.</p>
+<p><strong>A profile that has not been approved is invisible</strong> to the public page and absent from every search result.</p>
+<p style="margin-bottom:0"><strong>And the operator guide is enough for you</strong> to run every reviewer step yourself without asking me anything.</p>
+</div>
+
+<p>If any of those four is not true, Milestone 5 is not done and I would not ask you to accept it.</p>
+
+<h2>3. What I will build</h2>
+
+<h3>Search and filtering — the genuinely new part</h3>
+
+<p>There is no search anywhere in the system today. Not a weak one: none. So this is the only part of the project so far that is built from nothing rather than wired together.</p>
+
+<table>
+  <tr><th style="width:30%">Piece</th><th>What it does</th></tr>
+  <tr><td><strong>A directory</strong></td><td>A page listing published profiles, instead of needing a registry ID to see anyone.</td></tr>
+  <tr><td><strong>Text search</strong></td><td>Name, title, organisation, discipline.</td></tr>
+  <tr><td><strong>Filters</strong></td><td>Region, discipline, years of experience, and the five experience domains.</td></tr>
+  <tr><td><strong>Search by where the experience actually sits</strong></td><td>“Show me people whose experience is concentrated in Regulation &amp; Policy.” This uses the same analysis that draws the experience map, so it searches on what somebody has <em>documented</em> rather than on what they happened to type. It is the part of this product that would be hardest for anyone else to copy.</td></tr>
+  <tr><td><strong>Nothing unapproved is findable</strong></td><td>Search is a new way into the same data, and a new way in is exactly where an access rule that was right yesterday quietly stops being right. It gets tested the way the private documents were tested.</td></tr>
+</table>
+
+<h3>Quality checking — a different kind from last time</h3>
+
+<p>The checks behind Milestones 2 and 3 confirmed that the right things work. These will confirm that the wrong things are prevented, which is not the same exercise and does not find the same problems.</p>
+
+<p>The two rough edges I wrote to you about on 13 September are the evidence for that. Nineteen checks passed cleanly in August, and the biologist account can still press a button that would pull an approved profile off the public page. That is the class of defect this work exists to catch: not something broken, something insufficiently forbidden.</p>
+
+<h3>Realistic pilot data</h3>
+
+<p>Search across six profiles with near-identical test data proves nothing — every result looks the same and a filter has nothing to distinguish. Before the search can be shown to anyone, the registry needs a seed set with plausible names, real credential types, and experience genuinely spread across the five domains, so that changing a filter visibly changes the answer.</p>
+
+<h3>Documentation, including the guide you asked for</h3>
+
+<p>You asked on 13 August to learn to operate the system yourself. I deferred it deliberately, because teaching a workflow that had no reviewer behind it would have gone stale within weeks. The reviewer side now exists, so it belongs here.</p>
+
+<table>
+  <tr><th style="width:38%">Document</th><th>For</th></tr>
+  <tr><td>Operator guide — how to grant a reviewer, run a review, handle a rejection, and wake the system when it sleeps</td><td>You</td></tr>
+  <tr><td>Participant guide — how a biologist submits</td><td>The first pilot users</td></tr>
+  <tr><td>A written check record, the same format as the previous two milestones</td><td>The acceptance record</td></tr>
+  <tr><td>A short walkthrough video series, recorded once the above is stable</td><td>You</td></tr>
+</table>
+
+<h3>The minimum to put it in front of real people</h3>
+
+<p>One gap matters more than it sounds: <strong>a rejected submission currently cannot be corrected and resubmitted.</strong> For a demo that was irrelevant. For a pilot it is not — a pilot where a rejected person is stuck forever is not a pilot. New accounts also need to be able to sign up without me confirming them by hand.</p>
+
+<h2>4. What Milestone 5 is not</h2>
+
+<p>Stated plainly, because this is the last milestone and the edges are where scope quietly expands. Each of these is real work and worth doing. None is part of the five-milestone schedule, and you separated them yourself in your acceptance note.</p>
+
+<table>
+  <tr><th style="width:36%">Not included</th><th>Why</th></tr>
+  <tr><td>Deploying to <code>biocredregistry.com</code></td><td>Production is its own piece of work and its own decision.</td></tr>
+  <tr><td>Production hardening — rate limits, real file-content checking, backups, key rotation</td><td>The standing language since May has been “requires production hardening”, and it still applies.</td></tr>
+  <tr><td>Payments and Stripe</td><td>The agreed path is unpaid validation first, then a manual pilot, then payments. Unchanged.</td></tr>
+  <tr><td>Onboarding the general public</td><td>A private pilot is a handful of known people. A launch is a different thing with different obligations.</td></tr>
+</table>
+
+<h2>5. One question I need answered, and one I do not</h2>
+
+<p><strong>The one I need:</strong> who is the search for?</p>
+
+<table>
+  <tr><th style="width:34%">If it is…</th><th>Then the search is built around…</th></tr>
+  <tr><td>An agency looking up biologists</td><td>Domain, region and credential. Results laid out for comparing candidates.</td></tr>
+  <tr><td>Biologists finding each other</td><td>Species, habitat and project type. Results laid out for making contact.</td></tr>
+</table>
+
+<p>These are different products behind the same search box. Your answer changes the defaults and the result card, not the foundations — so it does not hold me up, but the sooner it lands the less I build twice. If I hear nothing, I will build for the agency case, because that is where the only real interest this project has had came from: your supervisor, on 5 August.</p>
+
+<p><strong>The one I do not need an answer to, but do need started:</strong> the Conversion Agreement has been in draft awaiting your legal and tax review since 25 July, and the Functional Pilot Completion document is still blank. Milestone 5 is the one that brings both into play. It would be worth those moving in parallel with the build rather than after it, so that finishing does not then wait on paperwork.</p>
+
+<h2>6. What I need from you</h2>
+
+<ol class="steps">
+  <li><strong>Tell me if the test in section 2 is the wrong test.</strong> That is the one thing here I would genuinely rather hear now than at the end.</li>
+  <li><strong>Answer the search question</strong> — agency, biologists, or both with one taking priority.</li>
+  <li><strong>Start the legal and tax review</strong> of the conversion paperwork, so it moves while I build.</li>
+  <li><strong>Keep telling me who is asking.</strong> Your supervisor's interest shaped this scope. Anyone else who asks will shape it further, and I would rather build for someone real than for an average.</li>
+</ol>
+
+<div class="warn">
+  <strong>What I am not asking for.</strong> Nothing here needs a decision about production, a domain, or money. Those come after the pilot, and I would rather we scoped them deliberately then than let them arrive by accident now.
+</div>
+
+<div class="footer">
+  BioCred Registry · EcoMimiTech LLC · Confidential — staging pilot, test data only.<br>
+  Prepared by Ainoa Figueroa Vidal · 13 September 2026 · Milestone 5 scope v1.0
+</div>
+
+</div></div>
+</body>
+</html>

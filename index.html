@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>BioCred Registry — See it for yourself</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --g9:#0E2F22;--g7:#1F6A46;--g5:#2d8a58;--g1:#d9f6df;--g0:#f2faf4;
+  --t:#17251c;--ts:#4c6355;--tm:#83988a;--bd:#dbe7de;--bg:#f6f8f6;--card:#fff;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--t);line-height:1.62;-webkit-font-smoothing:antialiased}
+
+.topbar{background:var(--g9);padding:15px 28px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.topbar .brand{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.2px}
+.topbar .tag{font-size:10.5px;font-weight:700;letter-spacing:.6px;background:rgba(255,255,255,.13);color:var(--g1);padding:4px 10px;border-radius:20px}
+
+.wrap{max-width:760px;margin:0 auto;padding:44px 22px 72px}
+
+.hero h1{font-size:31px;line-height:1.22;letter-spacing:-.6px;margin-bottom:14px}
+.hero .lead{font-size:16.5px;color:var(--ts);margin-bottom:10px}
+.hero .lead strong{color:var(--t);font-weight:600}
+.meta{font-size:13px;color:var(--tm);margin-top:18px}
+
+.box{border-radius:12px;padding:18px 20px;margin:26px 0;font-size:14px}
+.box h3{font-size:13px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;margin-bottom:9px}
+.box p+p{margin-top:9px}
+.box.keys{background:#fff;border:1px solid var(--bd);border-left:3px solid var(--g7)}
+.box.keys h3{color:var(--g7)}
+.box.keys .who{display:flex;gap:12px;align-items:baseline;padding:9px 0;border-top:1px solid #eef4f0}
+.box.keys .who:first-of-type{border-top:none}
+.box.keys .role{font-weight:600;min-width:78px;color:var(--t)}
+.box.keys .desc{color:var(--ts);font-size:13.5px}
+.box.warn{background:#fffaf0;border:1px solid #f0d9a6;color:#7a5a14}
+.box.warn h3{color:#8a6410}
+
+.steps{list-style:none;margin:34px 0 0;counter-reset:s}
+.step{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:24px 24px 22px;margin-bottom:16px;position:relative}
+.step .head{display:flex;gap:15px;align-items:flex-start}
+.num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--g7);color:#fff;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-top:1px}
+.step.optional .num{background:#fff;color:var(--g7);border:1.5px solid var(--g7)}
+.step h2{font-size:19px;line-height:1.32;letter-spacing:-.3px;margin-bottom:3px}
+.time{font-size:12.5px;color:var(--tm);font-weight:500}
+.body{padding-left:49px}
+.step p{font-size:14.5px;color:var(--ts);margin-top:10px}
+.notice{background:var(--g0);border:1px solid #cfe8d8;border-radius:9px;padding:12px 14px;margin-top:14px;font-size:13.5px;color:#2a4a37}
+.notice strong{color:var(--g9)}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px;align-items:center}
+a.btn{display:inline-flex;align-items:center;background:var(--g7);color:#fff;text-decoration:none;font-size:14px;font-weight:600;padding:11px 17px;border-radius:9px;transition:background .15s}
+a.btn:hover{background:var(--g5)}
+a.btn.ghost{background:#fff;color:var(--g7);border:1px solid #b9d6c4}
+a.btn.ghost:hover{background:var(--g0)}
+.signin{font-size:12.5px;color:var(--tm);padding-left:3px}
+
+.closing{margin-top:46px;border-top:1px solid var(--bd);padding-top:30px}
+.closing h2{font-size:20px;letter-spacing:-.3px;margin-bottom:8px}
+.closing p{font-size:14.5px;color:var(--ts);margin-bottom:14px}
+.readmore{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:6px}
+@media (max-width:620px){.readmore{grid-template-columns:1fr}.body{padding-left:0}.wrap{padding-top:32px}.hero h1{font-size:26px}}
+a.tile{display:block;background:#fff;border:1px solid var(--bd);border-radius:11px;padding:15px 16px;text-decoration:none;transition:border-color .15s}
+a.tile:hover{border-color:var(--g5)}
+a.tile .tt{display:block;font-size:14.5px;font-weight:600;color:var(--g7);margin-bottom:3px}
+a.tile .td{display:block;font-size:13px;color:var(--ts);line-height:1.5}
+
+.foot{margin-top:34px;font-size:12.5px;color:var(--tm);line-height:1.7}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">BioCred Registry</div>
+  <div class="tag">TEST ENVIRONMENT</div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <h1>See it for yourself</h1>
+    <p class="lead">A biologist submits their evidence. A reviewer reads it and decides. <strong>Only then</strong> does a public profile exist. That chain is now built, and this page walks you through it one step at a time.</p>
+    <p class="lead">Nothing to install and nothing to set up. Every step below is a link you click.</p>
+    <p class="meta">Five steps · about 20 minutes · you can stop after step 2 and still have seen the important part</p>
+  </div>
+
+  <div class="box keys">
+    <h3>Your two logins</h3>
+    <p>Two of the steps ask you to sign in. I sent both accounts in a <strong>separate email</strong> — keep it open in another tab as you go.</p>
+    <div class="who"><span class="role">Biologist</span><span class="desc">The person applying to the registry. Can submit their own evidence, and nothing else.</span></div>
+    <div class="who"><span class="role">Reviewer</span><span class="desc">The person who decides. Can read submissions and approve or reject them.</span></div>
+    <p>Each step below tells you which of the two to use. They are throwaway test accounts — you cannot break anything by clicking around.</p>
+  </div>
+
+  <div class="box warn">
+    <h3>Please read before you start</h3>
+    <p>This is a test environment holding made-up data, not the real registry. <strong>Please don't sign up your supervisor or anyone else real yet.</strong></p>
+    <p>It also goes to sleep when unused. If a page ever looks blank or broken, that is almost always why — tell me and I'll wake it up.</p>
+  </div>
+
+  <ol class="steps">
+
+    <li class="step">
+      <div class="head">
+        <div class="num">1</div>
+        <div>
+          <h2>Look at a finished, approved profile</h2>
+          <div class="time">3 minutes</div>
+        </div>
+      </div>
+      <div class="body">
+        <p>This is what the public sees: credentials, experience, and where the person has worked. It is real data from the submission that had been waiting in the queue since 11 August — not a mock-up or a screenshot.</p>
+        <div class="notice"><strong>What to notice:</strong> there is nothing here about documents. The evidence behind this profile was read by a reviewer, but it is never shown to the public.</div>
+        <div class="notice"><strong>Don't miss the Experience Map.</strong> Top right of the dark bar, the button reading <em>⬡ View Experience Map</em>. It starts closed on purpose: you read the credentials and the records first, the way you would read anyone's file, and only then turn on the map as an extra layer. Read the page once without it, then press it and read the same page again — the difference between those two readings is the point of the product.</div>
+        <div class="notice"><strong>Why the name looks odd.</strong> It reads "M2 Smoke Biologist", and the entries are named things like "Survey 1" — because this is a test environment and that was a test account. The made-up part is the wording. What is real is the path: every field on this page was entered by a user, read by a reviewer, approved, and then published by the system. Nothing here was typed into the page by me.</div>
+        <div class="actions">
+          <a class="btn" href="frontend/public_profile_v1.html?id=SM7523">Open this profile</a>
+          <a class="btn ghost" href="frontend/public_profile_v1.html?id=FC2401">See a second one</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="head">
+        <div class="num">2</div>
+        <div>
+          <h2>Now check that an unapproved profile stays hidden</h2>
+          <div class="time">1 minute</div>
+        </div>
+      </div>
+      <div class="body">
+        <p>There is a profile in the system that nobody has approved. Try to open it the same way you just opened the first one. The registry ID is <code>PEND01</code>.</p>
+        <div class="notice"><strong>What to notice:</strong> it refuses. This is the single most important click on the page. Anyone can build a page that shows a profile; a registry is only worth something if a profile nobody vouched for cannot appear. If this one is sitting in the reviewer queue, leave it — approving it would take the check away.</div>
+        <div class="actions">
+          <a class="btn" href="frontend/public_profile_v1.html?id=PEND01">Try to open it</a>
+        </div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="head">
+        <div class="num">3</div>
+        <div>
+          <h2>Sit in the reviewer's chair</h2>
+          <div class="time">8 minutes</div>
+        </div>
+      </div>
+      <div class="body">
+        <p>Sign in and you get the queue of people waiting to be reviewed. Open one, read what they submitted, open one of their documents, and then approve or reject it.</p>
+        <p>If you reject, you have to say why — the system will not let you refuse someone without a stated reason.</p>
+        <div class="notice"><strong>What to notice:</strong> underneath each submission there is a record of who decided what, when, and why. That record can be added to, but it can never be edited or deleted afterwards — not by a reviewer, and not by me. And the documents open through a link that stops working after five minutes, so a link forwarded to the wrong person is worthless the next morning.</div>
+        <div class="actions">
+          <a class="btn" href="frontend/login_v1.html?next=agency_review_v1.html">Open the reviewer sign-in</a>
+          <span class="signin">Use the <strong>reviewer</strong> account</span>
+        </div>
+      </div>
+    </li>
+
+    <li class="step">
+      <div class="head">
+        <div class="num">4</div>
+        <div>
+          <h2>Try to do the reviewer's job as a biologist</h2>
+          <div class="time">2 minutes</div>
+        </div>
+      </div>
+      <div class="body">
+        <p>Sign out, sign back in with the <em>biologist</em> account, and then open that same reviewer link from step 3.</p>
+        <div class="notice"><strong>What to notice:</strong> you get a locked gate and no data at all. Not a greyed-out button — nothing loads, because the rule lives in the database rather than in the page. Hiding a button is a courtesy; this holds even against someone who skips the web page entirely. There is also no way to make yourself a reviewer from any screen: I grant that by hand.</div>
+        <div class="actions">
+          <a class="btn ghost" href="frontend/login_v1.html?next=agency_review_v1.html">Sign in again, as the biologist</a>
+          <span class="signin">Use the <strong>biologist</strong> account</span>
+        </div>
+      </div>
+    </li>
+
+    <li class="step optional">
+      <div class="head">
+        <div class="num">5</div>
+        <div>
+          <h2>Optional — walk the whole loop yourself</h2>
+          <div class="time">10 minutes</div>
+        </div>
+      </div>
+      <div class="body">
+        <p>As the biologist, fill in a profile from scratch: add your credentials, add three pieces of experience, upload any PDF you have lying around, and submit it. Then sign back in as the reviewer, approve it, and watch it appear publicly.</p>
+        <div class="notice"><strong>What to notice:</strong> the submit button stays locked until the requirements are met — and if you were to get around that button, the database would still refuse the submission. This is the complete product in one sitting.</div>
+        <div class="actions">
+          <a class="btn ghost" href="frontend/login_v1.html?next=upload_documents_v1.html">Start a new submission</a>
+          <span class="signin">Use the <strong>biologist</strong> account</span>
+        </div>
+      </div>
+    </li>
+
+  </ol>
+
+  <div class="closing">
+    <h2>Once you've clicked through</h2>
+    <p>There is a written package covering what was built and how, in the same plain terms as this page. Two parts of it are worth your time in particular.</p>
+    <div class="readmore">
+      <a class="tile" href="BioCred_M3_M4_Review_Package_v1.html#s4">
+        <span class="tt">The ten things you asked for</span>
+        <span class="td">Your list from 26 August, one by one, and exactly where you can now see each of them yourself.</span>
+      </a>
+      <a class="tile" href="BioCred_M3_M4_Review_Package_v1.html#s10">
+        <span class="tt">What still doesn't work</span>
+        <span class="td">The honest limitations. Worth reading before you accept anything.</span>
+      </a>
+      <a class="tile" href="BioCred_M3_M4_Review_Package_v1.html#s5">
+        <span class="tt">Who can see what</span>
+        <span class="td">Every access rule in a single table — what each kind of person can and cannot do.</span>
+      </a>
+      <a class="tile" href="BioCred_M3_M4_Review_Package_v1.html">
+        <span class="tt">The full package</span>
+        <span class="td">Everything above, plus how each milestone was built and how it was verified.</span>
+      </a>
+    </div>
+    <p class="foot">
+      I'd rather record a walkthrough video <em>after</em> you've clicked through than before — you'll have much sharper questions once you've used it, and I'd rather answer those.<br><br>
+      Steps 1, 2 and 5 cover Milestone 4 and the public side. Steps 3 and 4 are Milestone 3, the review layer. Step 5 also re-walks the Milestone 2 intake you asked to see.<br>
+      Profiles are marked <em>Documentation Verified</em> — never "Verified Biologist". The registry vouches for the paperwork it read, not for the person.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
