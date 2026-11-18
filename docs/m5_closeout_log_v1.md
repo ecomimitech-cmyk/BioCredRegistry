@@ -136,4 +136,8 @@ passwords); `Ainoa-F-ISA-Parts-Lab-Sample.html` (unrelated); `deploy/` (byte cop
 macOS `._*` files; screenshots (gitignored). Secret scan before pushing: clean.
 Line endings normalised to LF to match the repository.
 
-Not done: the branch is not merged into `main`, and Alex's repository has not been updated.
+Then pushed the same branch `pilot-m3-m5` to Alex's repository
+`ecomimitech-cmyk/BioCredRegistry` (Ainoa's account has write access). Both
+repositories now hold identical M3–M5 history on that branch.
+
+Not done: the branch is not merged into `main` in either repository.
